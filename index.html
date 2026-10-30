@@ -19,7 +19,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,800&family=IBM+Plex+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 <style>
 /* Hallmark · shape: Manifesto (draw a385b3) · genre: modern-minimal · theme: brand · redesign: full · job: attend
- * paper: #f6f8fb · accent: #0071f3 (brand) · display: Archivo 800 wide · body: IBM Plex Sans KR · hero: Ledge · nav: slab · footer: mast · signature: the brand-blue flow ribbon over "GO LIVE", passing into dots, then code, back, then apart into particles and gathered again (44s cycle, focus drifts in every phase, pausable)
+ * paper: #f6f8fb · accent: #0071f3 (brand) · display: Archivo 800 wide · body: IBM Plex Sans KR · hero: Ledge · nav: slab · footer: mast · signature: scattered particles gather into the brand-blue ribbon as "GO LIVE" rises (once), then a 30s loop: dots light up left to right like a vote count, a number ticker, back to the ribbon; each new minute pulses it (pausable)
  * axes: light/display-heavy/chromatic-blue · posture: committed (the hero ribbon carries the brand blue; elsewhere the blue is a signal) · imagery: none, the ribbon and the venue sketch are canvas · contrast: pass · fold: pass · v2.0.0 */
 /* Hallmark · pre-emit critique: P4 H5 E4 S4 R4 V4 · weakest: P, a seminar page argues little; led with the owner's own claim ("준비의 시간은 끝났습니다") as a statement right under the hero */
 /* Hallmark · dropped "프로필 사진 수령 예정", the JYI/JYK/SYP initials · placeholder notes, not content; speakers are set in type until photos arrive */
@@ -76,6 +76,12 @@ b, strong{ font-weight: inherit; }
 .hero h1{ max-width: none; font-weight: 800; letter-spacing: 0; line-height: 1; }
 .hero h1 .l1{ display: block; font-size: var(--text-section); font-stretch: 100%; margin-bottom: var(--space-sm); }
 .hero h1 .l2{ display: block; font-size: clamp(3.5rem, 9vw, 8rem); font-stretch: 125%; text-transform: uppercase; }
+.gl-live .hero h1 .l2{ animation: rise .8s var(--ease-out) 3s both; }
+@keyframes rise{ from{ opacity: 0; transform: translateY(16px); } to{ opacity: 1; transform: none; } }
+#cd-m.tick{ animation: tick .6s var(--ease-out); }
+@keyframes tick{ 30%{ transform: translateY(-4px); } }
+.count b{ display: block; }
+@media (prefers-reduced-motion: reduce){ .gl-live .hero h1 .l2, #cd-m.tick{ animation: none; } }
 .hero .lead{ margin-top: var(--space-lg); color: var(--color-ink-2); font-weight: 700; }
 .hero .actions{ margin-top: var(--space-xl); }
 .meta{ margin: 0; display: grid; border-top: 2px solid var(--color-ink); }
@@ -516,10 +522,12 @@ footer{ padding-block: var(--space-3xl) var(--space-2xl); border-top: 1px solid 
     const d=Math.floor(ms/864e5),h=Math.floor(ms/36e5)%24,m=Math.floor(ms/6e4)%60;
     document.getElementById('cd-d').textContent=d;
     document.getElementById('cd-h').textContent=p(h);
-    document.getElementById('cd-m').textContent=p(m);
+    const cm=document.getElementById('cd-m');
+    if(cm.textContent!==p(m)&&tick.ran){cm.classList.remove('tick');void cm.offsetWidth;cm.classList.add('tick');document.dispatchEvent(new Event('minute'));}
+    cm.textContent=p(m);tick.ran=true;
     document.getElementById('dday').textContent=d>0?'D-'+d:'D-DAY';
   }
-  tick();setInterval(tick,30000);
+  tick();setInterval(tick,1000);
 })();
 
 /* ---------- Count-up (numbers rest at final value) ---------- */
@@ -592,7 +600,7 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
   const gl=cv.getContext('webgl',{antialias:false,alpha:false,premultipliedAlpha:false,preserveDrawingBuffer:true});
   if(!gl){btn.hidden=true;return;}
   // glyph atlas for the code phase: 16 characters in one row
-  const GL='01{}<>/=;:+*#AFX',at=document.createElement('canvas');at.width=512;at.height=64;
+  const GL='0123456789%₩+▲▼.',at=document.createElement('canvas');at.width=512;at.height=64;
   const ax=at.getContext('2d');ax.fillStyle='#fff';ax.font='700 44px ui-monospace,Consolas,"Courier New",monospace';ax.textAlign='center';ax.textBaseline='middle';
   [...GL].forEach((ch,i)=>ax.fillText(ch,i*32+16,34));
   const tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);
@@ -644,6 +652,7 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
     return vec2((1.-exp(-tot*1.6))*calm,clamp(vsub/tot,0.,1.));
   }
   // a soft wipe that sweeps left to right, each cell a little early or late
+  float tally(float w,vec2 cell,float ux){float q=clamp(.5+.35*ux+.06*(h(cell)-.5),0.,1.);return smoothstep(0.,1.,clamp((w*1.4-q)/.22,0.,1.));}
   float wipe(float w,vec2 cell,float ux){float q=clamp(.5+.35*ux+.35*(h(cell)-.5),0.,1.);return smoothstep(0.,1.,clamp((w*1.9-q)/.9,0.,1.));}
   // the same sweep without per-cell jitter, for fading the ribbon itself (no blocks)
   float sweep(float w,float ux){float q=clamp(.5+.35*ux,0.,1.);return smoothstep(0.,1.,clamp((w*1.9-q)/.9,0.,1.));}
@@ -660,7 +669,7 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
       // dots grow out of the ribbon, then shrink away as the code arrives
       vec2 cell=floor(fc/CELL),ctr=(cell+.5)*CELL;
       vec2 g=field(ctr);
-      float l=wipe(MD,cell,ux)*(1.-wipe(MC,cell,ux));
+      float l=tally(MD,cell,ux)*(1.-wipe(MC,cell,ux));
       float r=CELL*.5*sqrt(g.x)*.92*l,sf=.8+bz*CELL*.45;
       float dm=smoothstep(r+sf,r-sf,length(fc-ctr))*step(.03,g.x)*mix(1.,.7,bz);
       ink+=mix(C,C2,g.y)*dm;ws+=dm;cov=max(cov,dm);
@@ -670,7 +679,7 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
       vec2 cs=vec2(CELL*1.05,CELL*1.7),cell=floor(fc/cs),ctr=(cell+.5)*cs;
       vec2 g=field(ctr);
       float l=wipe(MC,cell,ux);
-      float k=floor(mod(h(cell)*16.+floor(TM*(1.2+h(cell+7.)*3.)),16.));
+      float k=floor(mod(h(cell)*16.+floor(TM*(.8+h(cell+7.)*2.)),16.));
       vec2 lp=(fc-cell*cs)/cs;
       float ga=texture2D(GT,vec2((k+mix(.1,.9,lp.x))/16.,mix(.92,.08,lp.y)*.75+.06)).a;
       float sf=.12+bz*.5,gm=smoothstep(.5-sf,.5+sf,ga)*mix(1.,.6,bz);
@@ -708,12 +717,15 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
   gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
   const U={};['R','PH','RA','OA','KA','BA','SA','TWK','OFF','MD','MC','MP','TM','CELL','GT'].forEach(n=>U[n]=gl.getUniformLocation(pr,n));
   gl.uniform1i(U.GT,0);
-  const D=Math.PI/180,LOOP=19,CYCLE=44;
-  // one cycle (44s): ribbon, into dots 8-11, dots to 16, into code 16-19, code to 24, back to the ribbon 24-27,
-  // ribbon, apart into particles 33-37, gathered again 37-41, ribbon
+  const D=Math.PI/180,LOOP=19,CYCLE=30,INTRO=4.5,START=6.5;
+  // on load (once): scattered particles gather into the ribbon, 0.3-3.8s, and "GO LIVE" rises as it closes.
+  // then a 30s loop: ribbon, dots light up left to right 6-9 (a count), dots to 13, numbers come in 13-16, numbers to 20,
+  // back to the ribbon 20-23, ribbon. Each new minute on the countdown sends one pulse through the ribbon.
   const ease=(a,b,t)=>{const u=Math.min(1,Math.max(0,(t-a)/(b-a)));return u*u*(3-2*u);};
-  function modes(sec){const t=sec%CYCLE;return [t<19?ease(8,11,t):0,ease(16,19,t)-ease(24,27,t),ease(33,37,t)-ease(37,41,t)];}
-  let last=6.5,dpr=1;
+  function modes(sec){const el=sec-START;if(el<INTRO)return [0,0,1-ease(.3,3.8,el)];const t=(el-INTRO)%CYCLE;return [t<16?ease(6,9,t):0,ease(13,16,t)-ease(20,23,t),0];}
+  let pulseAt=-9;document.addEventListener('minute',()=>{pulseAt=last;});
+  const pulse=sec=>{const u=(sec-pulseAt)/.9;return u<0||u>1?0:Math.sin(u*Math.PI);};
+  let last=START,dpr=1;
   function frame(sec,still){
     last=sec;
     const ph=(sec/LOOP)%1,t=ph*Math.PI*2,asp=cv.width/cv.height,m=still?[0,0,0]:modes(sec);
@@ -721,7 +733,7 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
     gl.uniform1f(U.RA,(14+12*Math.sin(t)+6*Math.sin(2*t+.4))*D);
     gl.uniform1f(U.OA,.05*Math.sin(t+1));
     gl.uniform1f(U.KA,-.55+.28*Math.sin(t+2));
-    gl.uniform1f(U.BA,.12+.38*Math.pow(.5+.5*Math.sin(t-1.2),2));
+    gl.uniform1f(U.BA,.12+.38*Math.pow(.5+.5*Math.sin(t-1.2),2)+.3*pulse(sec));
     gl.uniform1f(U.SA,1.7+.5*Math.sin(t+.7));
     gl.uniform1f(U.TWK,.8+.25*Math.sin(t+1.3)); // at most one or two twists across the screen
     gl.uniform1f(U.MD,m[0]);gl.uniform1f(U.MC,m[1]);gl.uniform1f(U.MP,m[2]);gl.uniform1f(U.TM,sec);gl.uniform1f(U.CELL,11*dpr);
@@ -737,6 +749,7 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
   size();addEventListener('resize',size);
   if(reduce){btn.hidden=true;return;}
   // the loop runs past 5s, so it pauses on request and stops off-screen
+  document.documentElement.classList.add('gl-live');
   let visible=true,held=false,clock=last,prev=performance.now();
   new IntersectionObserver(e=>{visible=e[0].isIntersecting;}).observe(cv);
   btn.addEventListener('click',()=>{held=!held;btn.setAttribute('aria-pressed',held);btn.textContent=held?'재생':'일시정지';});
