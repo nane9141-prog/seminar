@@ -9,7 +9,7 @@
 ## 구조
 
 ```
-index.html      단일 페이지 (히어로는 WebGL Flow Line → 도트 → 코드 전환)
+index.html      단일 페이지 (히어로는 WebGL Flow Line → 도트 → 코드 → 파티클 분해·재조립)
 tokens.css      색·서체·간격 토큰 (브랜드 블루 #0071F3)
 base.css        공통 기본 스타일
 assets/         KSMP 로고(ksmp-logo.svg), OG 이미지, 연사 사진, 협력사 로고
