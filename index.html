@@ -61,10 +61,12 @@ b, strong{ font-weight: inherit; }
 .brand .lg-b{ fill: var(--color-accent); }
 .brand .lg-t{ fill: currentColor; }
 .gnb nav{ display: flex; gap: var(--space-lg); margin-left: auto; }
-.gnb nav a{ font-size: var(--text-sm); color: var(--color-on-ink-muted); text-decoration: none; transition: color var(--dur-short) var(--ease-out); }
+.gnb nav a{ font-size: var(--text-md); color: var(--color-on-ink-muted); text-decoration: none; transition: color var(--dur-short) var(--ease-out); }
 .gnb nav a:hover{ color: var(--color-on-ink); }
 .gnb a:focus-visible, .gnb .btn:focus-visible{ outline-color: var(--color-focus-on-ink); }
-.dday{ display: inline-flex; align-items: center; min-height: 40px; padding: 0 var(--space-md); border: 2px solid var(--color-focus-on-ink); border-radius: var(--radius-pill); font: 800 1.375rem/1 var(--font-display); font-stretch: 112%; font-variant-numeric: tabular-nums; color: var(--color-focus-on-ink); white-space: nowrap; }
+.gnb .btn--ghost{ background: transparent; color: var(--color-on-ink); border-color: var(--color-on-ink-muted); }
+.gnb .btn--ghost:hover{ background: var(--color-rule-on-ink); border-color: var(--color-on-ink); }
+.dday{ display: inline-flex; align-items: center; min-height: 32px; padding: 0 var(--space-sm); border: 1px solid var(--color-focus-on-ink); border-radius: var(--radius-pill); font: 800 var(--text-md)/1 var(--font-display); font-stretch: 108%; font-variant-numeric: tabular-nums; color: var(--color-focus-on-ink); white-space: nowrap; }
 
 /* Hero: a ledge */
 .hero{ position: relative; isolation: isolate; min-height: calc(100svh - var(--nav-h)); display: flex; align-items: flex-end; }
@@ -263,7 +265,6 @@ footer{ padding-block: var(--space-3xl) var(--space-2xl); border-top: 1px solid 
 @media (max-width: 40rem){
   .gnb .btn{ display: none; }
   .brand svg{ height: 36px; }
-  .dday{ font-size: 1.125rem; }
   .steps{ grid-template-columns: minmax(0, 1fr); }
   .stats{ grid-template-columns: minmax(0, 1fr); }
   .stat{ padding: var(--space-md) 0; border-left: 0; border-top: 1px solid var(--color-rule); }
@@ -288,7 +289,7 @@ footer{ padding-block: var(--space-3xl) var(--space-2xl); border-top: 1px solid 
       <a href="#about">About</a><a href="#program">Program</a><a href="#speakers">Speakers</a><a href="#location">Location</a><a href="#faq">FAQ</a>
     </nav>
     <span class="dday" id="dday">D-31</span>
-    <a class="btn btn--sm" href="#register">사전등록</a>
+    <a class="btn btn--sm btn--ghost" href="#register">사전등록</a>
   </div>
 </header>
 
