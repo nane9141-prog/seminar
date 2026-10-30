@@ -19,7 +19,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,800&family=IBM+Plex+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 <style>
 /* Hallmark · shape: Manifesto (draw a385b3) · genre: modern-minimal · theme: brand · redesign: full · job: attend
- * paper: #f6f8fb · accent: #0071f3 (brand) · display: Archivo 800 wide · body: IBM Plex Sans KR · hero: Ledge · nav: slab · footer: mast · signature: dots stream in to spell "GO LIVE", then scatter as the heading rises and the ribbon arrives (once), then a 30s loop: dots light up left to right like a vote count, a number ticker, back to the ribbon; each new minute pulses it (pausable)
+ * paper: #f6f8fb · accent: #0071f3 (brand) · display: Archivo 800 wide · body: IBM Plex Sans KR · hero: Ledge · nav: slab · footer: mast · signature: dots pop in on the heading's own letters and the solid "GO LIVE" settles over them as the ribbon arrives (once), then a 30s loop: dots light up left to right like a vote count, a number ticker, back to the ribbon; each new minute pulses it (pausable)
  * axes: light/display-heavy/chromatic-blue · posture: committed (the hero ribbon carries the brand blue; elsewhere the blue is a signal) · imagery: none, the ribbon and the venue sketch are canvas · contrast: pass · fold: pass · v2.0.0 */
 /* Hallmark · pre-emit critique: P4 H5 E4 S4 R4 V4 · weakest: P, a seminar page argues little; led with the owner's own claim ("준비의 시간은 끝났습니다") as a statement right under the hero */
 /* Hallmark · dropped "프로필 사진 수령 예정", the JYI/JYK/SYP initials · placeholder notes, not content; speakers are set in type until photos arrive */
@@ -76,8 +76,8 @@ b, strong{ font-weight: inherit; }
 .hero h1{ max-width: none; font-weight: 800; letter-spacing: 0; line-height: 1; }
 .hero h1 .l1{ display: block; font-size: var(--text-section); font-stretch: 100%; margin-bottom: var(--space-sm); }
 .hero h1 .l2{ display: block; font-size: clamp(3.5rem, 9vw, 8rem); font-stretch: 125%; text-transform: uppercase; }
-.gl-live .hero h1 .l2{ animation: rise .8s var(--ease-out) 2.5s both; }
-@keyframes rise{ from{ opacity: 0; transform: translateY(16px); } to{ opacity: 1; transform: none; } }
+.gl-live .hero h1 .l2{ animation: settle .9s var(--ease-out) 1.6s both; }
+@keyframes settle{ from{ opacity: 0; } to{ opacity: 1; } }
 #cd-m.tick{ animation: tick .6s var(--ease-out); }
 @keyframes tick{ 30%{ transform: translateY(-4px); } }
 .count b{ display: block; }
@@ -607,20 +607,24 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
   gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,at);
   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
-  // "GO LIVE" drawn once into a texture: the intro's dots take this shape
-  const tt=document.createElement('canvas'),tx=tt.getContext('2d'),ttex=gl.createTexture();let tAsp=4.6;
-  function drawWord(){
-    const f='800 200px Archivo, "Arial Black", sans-serif';tx.font=f;if('fontStretch' in tx)tx.fontStretch='expanded';
-    const m=tx.measureText('GO LIVE'),w=Math.ceil(m.width)+16,hh=Math.ceil(m.actualBoundingBoxAscent+m.actualBoundingBoxDescent)+16;
-    tt.width=w;tt.height=hh;tx.font=f;if('fontStretch' in tx)tx.fontStretch='expanded';
-    tx.fillStyle='#fff';tx.textBaseline='alphabetic';tx.fillText('GO LIVE',8,8+m.actualBoundingBoxAscent);tAsp=w/hh;
+  // the heading "GO LIVE" redrawn into a texture at its exact place on the canvas: the intro's dots land on its letters
+  const head=document.querySelector('.hero h1 .l2'),tt=document.createElement('canvas'),tx=tt.getContext('2d'),ttex=gl.createTexture();
+  let box=[0,0,0,0];
+  function placeWord(){
+    const d=Math.min(devicePixelRatio||1,1.5),cr=cv.getBoundingClientRect(),r=head.getBoundingClientRect(),st=getComputedStyle(head);
+    const fs=parseFloat(st.fontSize)*d,lh=(parseFloat(st.lineHeight)||parseFloat(st.fontSize))*d;
+    tt.width=Math.max(1,Math.ceil(r.width*d));tt.height=Math.max(1,Math.ceil(r.height*d));
+    const font='800 '+fs+'px '+st.fontFamily;tx.font=font;if('fontStretch' in tx)tx.fontStretch='expanded';
+    const m=tx.measureText('GO LIVE'),base=(lh-(m.fontBoundingBoxAscent+m.fontBoundingBoxDescent))/2+m.fontBoundingBoxAscent;
+    tx.fillStyle='#fff';tx.fillText('GO LIVE',0,base);
     gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,ttex);
     gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,tt);
     gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
     gl.activeTexture(gl.TEXTURE0);
+    // a heading that wraps onto two lines gets no dot intro
+    box=r.height>lh/d*1.4?[0,0,0,0]:[(r.left-cr.left)*d,(cr.bottom-r.bottom)*d,tt.width,tt.height];
   }
-  drawWord();if(document.fonts)document.fonts.load('800 200px Archivo').then(()=>{drawWord();frame(last,reduce);});
   const vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
   // C = --color-accent #0071f3, C2 = a lighter step of the same hue, BG = --color-paper #f6f8fb
   const fs=`precision highp float;
@@ -707,19 +711,21 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
       vis=min(vis,1.-.82*sweep(MC,ux));
     }
     if(IT>=0.){
-      // intro: dots stream in from three sides to spell GO LIVE, hold, then scatter up and right as the ribbon arrives
+      // intro: each dot of the heading's letters pops in on its own (left leaning, random timing) and settles into place,
+      // then they drift off a little and fade as the solid heading fades in over them
       vec2 wd=normalize(vec2(.85,.55));
-      float g=smoothstep(0.,1.7,IT),sc=smoothstep(2.3,3.9,IT),cs=max(TB.w/22.,4.);
-      for(int i=0;i<3;i++){
-        float fi=float(i),a=3.4+fi*2.1;
-        vec2 sh=vec2(cos(a),sin(a))*(1.-g)*(1.-g)*(.55+.2*fi)*R.y+wd*sc*sc*(.22+.14*fi)*R.y;
-        vec2 q=fc-sh,cell=floor(q/cs),ctr=(cell+.5)*cs;
-        float own=1.-step(.5,abs(floor(h(cell+.37)*3.)-fi));
-        float r=cs*.42*mix(1.,.45,sc);
-        float pm=smoothstep(r+.9,r-.9,length(q-ctr))*own*step(.5,word(ctr))*smoothstep(0.,.3,g)*(1.-.9*sc);
-        ink+=mix(C,C2,h(cell)*.6)*pm;ws+=pm;cov=max(cov,pm);
+      float sc=smoothstep(1.8,3.2,IT),cs=max(TB.w/24.,3.);
+      vec2 base=floor(fc/cs);
+      for(int j=0;j<9;j++){
+        vec2 cell=base+vec2(mod(float(j),3.)-1.,floor(float(j)/3.)-1.),ctr=(cell+.5)*cs;
+        float hv=h(cell+.37),ta=.1+hv*.9+.35*clamp((ctr.x-TB.x)/max(TB.z,1.),0.,1.);
+        float p=smoothstep(ta,ta+.45,IT);
+        vec2 pos=ctr+vec2(cos(hv*19.),sin(hv*19.))*(1.-p)*1.3*cs+wd*sc*(.3+hv)*cs;
+        float r=cs*.42*p*(1.-.45*sc);
+        float pm=smoothstep(r+.9,r-.9,length(fc-pos))*step(.5,word(ctr))*p*(1.-sc);
+        ink+=mix(C,C2,hv*.6)*pm;ws+=pm;cov=max(cov,pm);
       }
-      vis=min(vis,smoothstep(2.6,4.4,IT));
+      vis=min(vis,smoothstep(2.2,4.,IT));
     }
     vec3 col=mix(mix(BG,rib,f.x*vis),ink/max(ws,1e-4),cov);
     col+=(h(fc+fract(PH*97.)*100.)-.5)*.02;
@@ -734,8 +740,8 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
   const U={};['R','PH','RA','OA','KA','BA','SA','TWK','OFF','MD','MC','IT','TM','CELL','GT','TX','TB'].forEach(n=>U[n]=gl.getUniformLocation(pr,n));
   gl.uniform1i(U.GT,0);gl.uniform1i(U.TX,1);
   const D=Math.PI/180,LOOP=19,CYCLE=30,INTRO=4.5,START=6.5;
-  // on load (once): dots stream in to spell GO LIVE (0-1.7s), hold, scatter up and right 2.3-3.9s while the ribbon
-  // arrives and the real "GO LIVE" heading rises below.
+  // on load (once): dots pop in onto the heading's own letters (0.1-1.8s); the solid heading fades in over them
+  // (1.6-2.5s) while they drift off, and the ribbon arrives (2.2-4s).
   // then a 30s loop: ribbon, dots light up left to right 6-9 (a count), dots to 13, numbers come in 13-16, numbers to 20,
   // back to the ribbon 20-23, ribbon. Each new minute on the countdown sends one pulse through the ribbon.
   const ease=(a,b,t)=>{const u=Math.min(1,Math.max(0,(t-a)/(b-a)));return u*u*(3-2*u);};
@@ -754,8 +760,7 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
     gl.uniform1f(U.SA,1.7+.5*Math.sin(t+.7));
     gl.uniform1f(U.TWK,.8+.25*Math.sin(t+1.3)); // at most one or two twists across the screen
     gl.uniform1f(U.MD,m[0]);gl.uniform1f(U.MC,m[1]);gl.uniform1f(U.IT,m[2]);
-    // the word sits in the open field above the heading, centred, about three quarters of the width
-    {const W=cv.width,H=cv.height;let bw=Math.min(W*.78,H*.3*tAsp),bh=bw/tAsp;gl.uniform4f(U.TB,(W-bw)/2,H-H*.12-bh,bw,bh);}gl.uniform1f(U.TM,sec);gl.uniform1f(U.CELL,11*dpr);
+    gl.uniform4f(U.TB,box[0],box[1],box[2],box[3]);gl.uniform1f(U.TM,sec);gl.uniform1f(U.CELL,11*dpr);
     if(asp>1)gl.uniform2f(U.OFF,.22*Math.min(asp,1.8)/1.6,.24);else gl.uniform2f(U.OFF,.02,.3);
     gl.drawArrays(gl.TRIANGLES,0,3);
   }
@@ -763,9 +768,10 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
   function size(){
     dpr=Math.min(devicePixelRatio||1,1.5);
     cv.width=Math.round(cv.clientWidth*dpr);cv.height=Math.round(cv.clientHeight*dpr);
-    gl.viewport(0,0,cv.width,cv.height);frame(last,reduce);
+    gl.viewport(0,0,cv.width,cv.height);placeWord();frame(last,reduce);
   }
   size();addEventListener('resize',size);
+  if(document.fonts)document.fonts.ready.then(()=>{placeWord();frame(last,reduce);});
   if(reduce){btn.hidden=true;return;}
   // the loop runs past 5s, so it pauses on request and stops off-screen
   document.documentElement.classList.add('gl-live');
