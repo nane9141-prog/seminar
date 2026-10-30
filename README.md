@@ -12,7 +12,7 @@
 index.html      단일 페이지 (히어로는 WebGL Flow Line → 도트 → 코드 → 파티클 분해·재조립)
 tokens.css      색·서체·간격 토큰 (브랜드 블루 #0071F3)
 base.css        공통 기본 스타일
-assets/         KSMP 로고(ksmp-logo.svg), OG 이미지, 연사 사진, 협력사 로고
+assets/         KSMP 로고(ksmp-logo.svg), 연사 사진(speaker1~3.webp), OG 이미지, 협력사 로고
 .nojekyll       GitHub Pages Jekyll 처리 비활성화
 CNAME           (도메인 확정 후 추가)
 ```
@@ -38,7 +38,6 @@ CNAME           (도메인 확정 후 추가)
 - [ ] 등록 버튼 `#formLink` href에 외부 등록 폼 URL 연결 (`target="_blank"`)
 - [ ] 히어로·모바일바·GNB의 `#register` 버튼도 폼으로 바로 보낼지 결정
 - [ ] 주주PASS 링크(`#appLink`)를 iOS·Android 자동 분기 링크로 교체 (현재 Google Play)
-- [ ] 연사 사진 → `assets/` 추가 후 `hallmarkSlots({ 'speaker-1': 'assets/…' })` 또는 각 카드에 `<img>` 삽입
 - [ ] 협력사 로고 → `assets/` 추가
 - [ ] `assets/og-image.png` (1200×630) 추가
 - [ ] GA 스크립트, 개인정보처리방침 링크
