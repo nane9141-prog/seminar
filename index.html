@@ -19,7 +19,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,800&family=IBM+Plex+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
 <style>
 /* Hallmark · shape: Manifesto (draw a385b3) · genre: modern-minimal · theme: brand · redesign: full · job: attend
- * paper: #f6f8fb · accent: #0071f3 (brand) · display: Archivo 800 wide · body: IBM Plex Sans KR · hero: Ledge · nav: slab · footer: mast · signature: dots pop in on the heading's own letters and the solid "GO LIVE" settles over them as the ribbon arrives (once), then a 30s loop: dots light up left to right like a vote count, a number ticker, back to the ribbon; each new minute pulses it (pausable)
+ * paper: #f6f8fb · accent: #0071f3 (brand) · display: Archivo 800 wide · body: IBM Plex Sans KR · hero: Ledge · nav: slab · footer: mast · signature: dots fly in from far out in swirling waves onto the heading's own letters and the solid "GO LIVE" settles over them as the ribbon arrives (once), then a 30s loop: dots light up left to right like a vote count, a number ticker, back to the ribbon; each new minute pulses it (pausable)
  * axes: light/display-heavy/chromatic-blue · posture: committed (the hero ribbon carries the brand blue; elsewhere the blue is a signal) · imagery: none, the ribbon and the venue sketch are canvas · contrast: pass · fold: pass · v2.0.0 */
 /* Hallmark · pre-emit critique: P4 H5 E4 S4 R4 V4 · weakest: P, a seminar page argues little; led with the owner's own claim ("준비의 시간은 끝났습니다") as a statement right under the hero */
 /* Hallmark · dropped "프로필 사진 수령 예정", the JYI/JYK/SYP initials · placeholder notes, not content; speakers are set in type until photos arrive */
@@ -609,14 +609,14 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
   // the heading "GO LIVE" redrawn into a texture at its exact place on the canvas: the intro's dots land on its letters
   const head=document.querySelector('.hero h1 .l2'),tt=document.createElement('canvas'),tx=tt.getContext('2d'),ttex=gl.createTexture();
-  let box=[0,0,0,0];
+  let box=[0,0,0,0],inkW=0;
   function placeWord(){
     const d=Math.min(devicePixelRatio||1,1.5),cr=cv.getBoundingClientRect(),r=head.getBoundingClientRect(),st=getComputedStyle(head);
     const fs=parseFloat(st.fontSize)*d,lh=(parseFloat(st.lineHeight)||parseFloat(st.fontSize))*d;
     tt.width=Math.max(1,Math.ceil(r.width*d));tt.height=Math.max(1,Math.ceil(r.height*d));
     const font='800 '+fs+'px '+st.fontFamily;tx.font=font;if('fontStretch' in tx)tx.fontStretch='expanded';
     const m=tx.measureText('GO LIVE'),base=(lh-(m.fontBoundingBoxAscent+m.fontBoundingBoxDescent))/2+m.fontBoundingBoxAscent;
-    tx.fillStyle='#fff';tx.fillText('GO LIVE',0,base);
+    tx.fillStyle='#fff';tx.fillText('GO LIVE',0,base);inkW=m.width;
     gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,ttex);
     gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,tt);
     gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
@@ -628,7 +628,7 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
   const vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
   // C = --color-accent #0071f3, C2 = a lighter step of the same hue, BG = --color-paper #f6f8fb
   const fs=`precision highp float;
-  uniform vec2 R;uniform float PH,RA,OA,KA,BA,SA,TWK,MD,MC,IT,TM,CELL;uniform vec2 OFF;uniform vec4 TB;uniform sampler2D GT,TX;
+  uniform vec2 R;uniform float PH,RA,OA,KA,BA,SA,TWK,MD,MC,IT,TM,CELL;uniform vec2 OFF;uniform vec4 TB;uniform vec2 TC;uniform sampler2D GT,TX;
   #define TAU 6.2831853
   const vec3 C=vec3(0.,.4431,.9529),C2=vec3(.4157,.6588,1.),BG=vec3(.9647,.9725,.9843);
   float side(vec2 u){return smoothstep(.1,.45,u.x)*(1.-smoothstep(-.2,.15,u.y));}
@@ -701,29 +701,30 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
       float l=wipe(MC,cell,ux);
       // a quote board: figures on every other row, in short chunks with gaps between them
       float cx=cell.x+floor(h(vec2(cell.y,3.))*7.),seg=floor(cx/7.);
-      l*=step(.5,mod(cell.y,2.))*step(h(vec2(seg,cell.y)),.5)*step(mod(cx,7.),4.5);
+      l*=step(.5,mod(cell.y,2.))*step(h(vec2(seg,cell.y)),.8)*step(mod(cx,7.),5.5);
       float k=floor(mod(h(cell)*16.+floor(TM*(.4+h(vec2(seg,cell.y))*.8)),16.));
       vec2 lp=(fc-cell*cs)/cs;
       float ga=texture2D(GT,vec2((k+mix(.1,.9,lp.x))/16.,mix(.92,.08,lp.y)*.75+.06)).a;
       float sf=.12+bz*.5,gm=smoothstep(.5-sf,.5+sf,ga)*mix(1.,.6,bz);
-      float cm=gm*smoothstep(.04,.45,g.x)*l*tc;
+      float cm=gm*smoothstep(.02,.3,g.x)*l*tc;
       ink+=mix(C,C2,g.y)*cm;ws+=cm;cov=max(cov,cm);
       vis=min(vis,1.-.82*sweep(MC,ux));
     }
     if(IT>=0.){
-      // intro: each dot of the heading's letters pops in on its own (left leaning, random timing) and settles into place,
-      // then they drift off a little and fade as the solid heading fades in over them
+      // intro: the heading's dots fly in from far out in four swirling waves and gather onto its letters (0.1-1.65s),
+      // then drift off a little and fade as the solid heading fades in over them
       vec2 wd=normalize(vec2(.85,.55));
       float sc=smoothstep(1.8,3.2,IT),cs=max(TB.w/24.,3.);
-      vec2 base=floor(fc/cs);
-      for(int j=0;j<9;j++){
-        vec2 cell=base+vec2(mod(float(j),3.)-1.,floor(float(j)/3.)-1.),ctr=(cell+.5)*cs;
-        float hv=h(cell+.37),ta=.1+hv*.9+.35*clamp((ctr.x-TB.x)/max(TB.z,1.),0.,1.);
-        float p=smoothstep(ta,ta+.45,IT);
-        vec2 pos=ctr+vec2(cos(hv*19.),sin(hv*19.))*(1.-p)*1.3*cs+wd*sc*(.3+hv)*cs;
-        float r=cs*.42*p*(1.-.45*sc);
-        float pm=smoothstep(r+.9,r-.9,length(fc-pos))*step(.5,word(ctr))*p*(1.-sc);
-        ink+=mix(C,C2,hv*.6)*pm;ws+=pm;cov=max(cov,pm);
+      for(int i=0;i<4;i++){
+        float fi=float(i),p=smoothstep(.1+.15*fi,1.2+.15*fi,IT),u=(1.-p)*(1.-p);
+        float k=1.+(2.4+.7*fi)*u,an=(mod(fi,2.)*2.-1.)*(.7+.25*fi)*u;
+        vec2 v=fc-TC,hm=TC+rot(an)*v/k;
+        vec2 cell=floor(hm/cs),ctr=(cell+.5)*cs;
+        float own=1.-step(.5,abs(floor(h(cell+.37)*4.)-fi));
+        vec2 pos=TC+rot(-an)*(ctr-TC)*k+wd*sc*(.3+h(cell))*cs;
+        float r=cs*.42*sqrt(k)*(1.-.45*sc);
+        float pm=smoothstep(r+.9,r-.9,length(fc-pos))*own*step(.5,word(ctr))*smoothstep(0.,.35,p)*(1.-sc);
+        ink+=mix(C,C2,h(cell)*.6+u*.4)*pm;ws+=pm;cov=max(cov,pm);
       }
       vis=min(vis,smoothstep(2.2,4.,IT));
     }
@@ -737,10 +738,10 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
   gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());
   gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
   gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
-  const U={};['R','PH','RA','OA','KA','BA','SA','TWK','OFF','MD','MC','IT','TM','CELL','GT','TX','TB'].forEach(n=>U[n]=gl.getUniformLocation(pr,n));
+  const U={};['R','PH','RA','OA','KA','BA','SA','TWK','OFF','MD','MC','IT','TM','CELL','GT','TX','TB','TC'].forEach(n=>U[n]=gl.getUniformLocation(pr,n));
   gl.uniform1i(U.GT,0);gl.uniform1i(U.TX,1);
   const D=Math.PI/180,LOOP=19,CYCLE=30,INTRO=4.5,START=6.5;
-  // on load (once): dots pop in onto the heading's own letters (0.1-1.8s); the solid heading fades in over them
+  // on load (once): dots fly in from far out in swirling waves onto the heading's own letters (0.1-1.65s); the solid heading fades in over them
   // (1.6-2.5s) while they drift off, and the ribbon arrives (2.2-4s).
   // then a 30s loop: ribbon, dots light up left to right 6-9 (a count), dots to 13, numbers come in 13-16, numbers to 20,
   // back to the ribbon 20-23, ribbon. Each new minute on the countdown sends one pulse through the ribbon.
@@ -760,7 +761,7 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
     gl.uniform1f(U.SA,1.7+.5*Math.sin(t+.7));
     gl.uniform1f(U.TWK,.8+.25*Math.sin(t+1.3)); // at most one or two twists across the screen
     gl.uniform1f(U.MD,m[0]);gl.uniform1f(U.MC,m[1]);gl.uniform1f(U.IT,m[2]);
-    gl.uniform4f(U.TB,box[0],box[1],box[2],box[3]);gl.uniform1f(U.TM,sec);gl.uniform1f(U.CELL,11*dpr);
+    gl.uniform4f(U.TB,box[0],box[1],box[2],box[3]);gl.uniform2f(U.TC,box[0]+inkW/2,box[1]+box[3]/2);gl.uniform1f(U.TM,sec);gl.uniform1f(U.CELL,11*dpr);
     if(asp>1)gl.uniform2f(U.OFF,.22*Math.min(asp,1.8)/1.6,.24);else gl.uniform2f(U.OFF,.02,.3);
     gl.drawArrays(gl.TRIANGLES,0,3);
   }
