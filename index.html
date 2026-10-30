@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>The New Mandate : GO LIVE | IR큐더스 전자주총 세미나</title>
+<meta name="description" content="2026.11.30 여의도 페어몬트 앰배서더 서울 · 2027년 전자주주총회 의무화 대비 세미나 「The New Mandate : GO LIVE」">
+<meta property="og:type" content="website">
+<meta property="og:title" content="The New Mandate : GO LIVE">
+<meta property="og:description" content="2026.11.30 여의도 페어몬트 앰배서더 서울 · 2027년 전자주주총회 의무화 대비 세미나 「The New Mandate : GO LIVE」">
+<!-- TODO: 도메인 확정 후 절대 URL로 교체 (예: https://seminar.irkudos.co.kr/assets/og-image.png, 1200x630) -->
+<meta property="og:image" content="assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23020611'/%3E%3Cpath d='M12 9l11 7-11 7z' fill='%231f5bff'/%3E%3C/svg%3E">
+<!-- TODO: GA 스크립트 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* Layout: dark full-bleed hero with a live flow ribbon top-right, title anchored bottom-left;
+   then a single 1120px column of quiet sections on the same ink ground. */
+:root{
+  color-scheme:dark;
+  --ink:#020611;        /* page ground (Flow Line dark) */
+  --ink-2:#07102a;      /* raised surface */
+  --rule:rgba(160,180,255,.14);
+  --fg:#e9edf8;
+  --muted:#8c96b3;
+  --blue:#1f5bff;       /* flow line main */
+  --cyan:#00c2ff;       /* flow line sub */
+  --tbd:#ffc95c;        /* placeholder marker (draft only) */
+  --f-display:"Archivo","IBM Plex Sans KR",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --wrap:1120px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--ink);color:var(--fg);font:16px/1.7 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--ink)}
+a{color:inherit}
+h1,h2,h3{margin:0;text-wrap:balance}
+p{margin:0}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.tbd{color:var(--tbd);border-bottom:1px dashed currentColor}
+.eyebrow{font:500 12px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--cyan)}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:4px}
+
+/* ---------- GNB ---------- */
+.gnb{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:rgba(2,6,17,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--rule)}
+.gnb .wrap{display:flex;align-items:center;gap:28px;height:64px}
+.brand{font:800 17px/1 var(--f-display);font-stretch:112%;letter-spacing:.02em;text-decoration:none;white-space:nowrap}
+.brand b{color:var(--blue)}
+.gnb nav{display:flex;gap:22px;margin-left:auto}
+.gnb nav a{font-size:14px;color:var(--muted);text-decoration:none;transition:color .2s}
+.gnb nav a:hover{color:var(--fg)}
+.dday{font:500 12px/1 var(--f-mono);color:var(--cyan);border:1px solid rgba(0,194,255,.4);border-radius:99px;padding:6px 10px;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;gap:10px;font:600 15px/1 var(--f-body);text-decoration:none;border-radius:99px;padding:15px 24px;border:1px solid transparent;cursor:pointer;transition:transform .2s,background .2s,border-color .2s}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:#3a70ff;transform:translateY(-1px)}
+.btn-ghost{border-color:var(--rule);color:var(--fg)}
+.btn-ghost:hover{border-color:rgba(160,180,255,.4)}
+.btn-sm{padding:10px 16px;font-size:13px}
+.btn .arr{font-family:var(--f-mono)}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;min-height:min(88vh,860px);display:flex;align-items:flex-end;overflow:hidden;isolation:isolate}
+#flow{position:absolute;inset:0;width:100%;height:100%;z-index:-1;display:block}
+.hero::after{content:"";position:absolute;inset:auto 0 0;height:40%;background:linear-gradient(to top,var(--ink),transparent);z-index:-1;pointer-events:none}
+.hero .wrap{width:100%;padding-block:120px 72px}
+.hero .sub{font:600 clamp(15px,1.6vw,19px)/1.5 var(--f-body);color:var(--fg);opacity:.86}
+.hero h1{font-family:var(--f-display);font-weight:800;line-height:.92;letter-spacing:-.02em;margin:18px 0 34px}
+.hero h1 .l1{display:block;font-size:clamp(22px,3.2vw,40px);font-weight:500;font-stretch:100%;letter-spacing:0;color:var(--muted);margin-bottom:14px}
+.hero h1 .l2{display:block;font-size:clamp(64px,13vw,184px);font-stretch:125%}
+.hero h1 .l2 i{font-style:normal;color:var(--blue)}
+.meta{display:grid;grid-template-columns:repeat(3,auto);gap:10px 40px;justify-content:start;padding-top:24px;border-top:1px solid var(--rule);margin-bottom:34px}
+.meta div{display:flex;flex-direction:column;gap:6px}
+.meta dt{font:500 11px/1 var(--f-mono);letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+.meta dd{margin:0;font-weight:600;font-size:17px;line-height:1.4}
+.meta dd .num{font-family:var(--f-mono);font-weight:500}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.count{display:flex;gap:18px;margin-left:auto;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.count div{display:flex;flex-direction:column;align-items:center;min-width:44px}
+.count b{font-size:28px;font-weight:500;line-height:1}
+.count span{font-size:10px;letter-spacing:.14em;color:var(--muted);margin-top:6px}
+
+/* ---------- Sections ---------- */
+section.sec{padding-block:120px}
+section.sec + section.sec{border-top:1px solid var(--rule)}
+.sec-head{display:grid;grid-template-columns:220px 1fr;gap:24px 48px;margin-bottom:56px}
+.sec-head h2{font:700 clamp(28px,3.6vw,44px)/1.25 var(--f-body);letter-spacing:-.02em}
+.sec-head p.lead{color:var(--muted);max-width:60ch;margin-top:14px}
+
+/* Why now timeline */
+.tl{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.tl::before{content:"";position:absolute;left:0;right:0;top:9px;height:2px;background:linear-gradient(90deg,rgba(31,91,255,.2),var(--blue) 50%,var(--cyan))}
+.tl li{list-style:none;position:relative;padding-top:40px}
+.tl li::before{content:"";position:absolute;top:0;left:0;width:20px;height:20px;border-radius:50%;background:var(--ink);border:2px solid var(--blue)}
+.tl li.now::before{background:var(--blue);box-shadow:0 0 0 6px rgba(31,91,255,.2),0 0 24px var(--blue)}
+.tl li.end::before{border-color:var(--cyan)}
+.tl ol{margin:0;padding:0;display:contents}
+.tl .d{font:500 14px/1 var(--f-mono);color:var(--cyan)}
+.tl h3{font-size:20px;font-weight:700;margin:12px 0 8px}
+.tl p{color:var(--muted);font-size:15px}
+
+/* Series */
+.series{display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:stretch}
+.ed{border:1px solid var(--rule);border-radius:20px;padding:32px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.ed .y{font:500 13px/1 var(--f-mono);color:var(--muted)}
+.ed .t{font:800 clamp(30px,3.6vw,44px)/1 var(--f-display);font-stretch:118%}
+.ed p{color:var(--muted);font-size:15px}
+.ed.prev .t{color:var(--muted)}
+.ed.cur{background:radial-gradient(120% 140% at 100% 0%,rgba(31,91,255,.35),transparent 60%),var(--ink-2);border-color:rgba(31,91,255,.5)}
+.ed.cur .t{color:var(--fg)}
+.series .arrow{align-self:center;font:500 22px/1 var(--f-mono);color:var(--blue)}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:20px}
+.stat{padding:28px 32px;border-radius:20px;background:var(--ink-2);display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.stat b{font:700 clamp(48px,6vw,72px)/1 var(--f-display);font-stretch:110%;font-variant-numeric:tabular-nums;color:var(--fg)}
+.stat b small{font-size:.4em;font-weight:600;margin-left:4px;color:var(--muted)}
+.stat span{color:var(--muted);font-size:15px}
+.note{margin-top:24px;font-size:14px;color:var(--muted)}
+
+/* Program */
+.prog{border-top:1px solid var(--rule)}
+.row{display:grid;grid-template-columns:150px 64px 1fr 260px;gap:20px;align-items:center;padding:18px 0;border-bottom:1px solid var(--rule)}
+.row .time{font:500 15px/1 var(--f-mono);font-variant-numeric:tabular-nums}
+.pill{justify-self:start;font:500 12px/1 var(--f-mono);padding:6px 9px;border-radius:99px;border:1px solid var(--rule);color:var(--muted)}
+.row .ti{font-weight:600;min-width:0}
+.row .sp{color:var(--muted);font-size:14px;text-align:right}
+.row.minor .ti{color:var(--muted);font-weight:500}
+.row.minor .time{color:var(--muted)}
+.row.session{padding:26px 0}
+.row.session .ti small{display:block;font:500 11px/1 var(--f-mono);letter-spacing:.14em;color:var(--cyan);margin-bottom:10px}
+.row.session .ti strong{font-size:19px;font-weight:700;line-height:1.45}
+.row.session .sp{color:var(--fg)}
+.row.session .pill{border-color:rgba(31,91,255,.6);color:var(--fg)}
+.row.hl{background:linear-gradient(90deg,rgba(31,91,255,.14),transparent 70%)}
+.row.hl .pill{background:var(--blue);border-color:var(--blue);color:#fff}
+
+/* Speakers */
+.spk{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{border:1px solid var(--rule);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.ph{aspect-ratio:4/3;max-width:100%;position:relative;display:grid;place-items:center;background:
+  radial-gradient(80% 90% at 80% 10%,rgba(0,194,255,.35),transparent 60%),
+  radial-gradient(90% 90% at 10% 100%,rgba(31,91,255,.5),transparent 60%),var(--ink-2)}
+.ph span{font:800 64px/1 var(--f-display);font-stretch:120%;color:rgba(233,237,248,.9)}
+.ph em{position:absolute;left:16px;bottom:14px;font:500 11px/1 var(--f-mono);font-style:normal;color:var(--tbd)}
+.card .bd{padding:24px;display:flex;flex-direction:column;gap:6px}
+.card .ss{font:500 11px/1 var(--f-mono);letter-spacing:.14em;color:var(--cyan)}
+.card h3{font-size:22px;font-weight:700;margin-top:8px}
+.card .org{color:var(--muted);font-size:15px}
+.card .topic{margin-top:14px;padding-top:14px;border-top:1px solid var(--rule);font-size:15px;font-weight:500}
+
+/* Guide */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;counter-reset:s;padding:0;margin:0}
+.steps li{list-style:none;counter-increment:s;padding:24px;border-radius:20px;background:var(--ink-2);display:flex;flex-direction:column;gap:10px;min-width:0}
+.steps li::before{content:"STEP " counter(s,decimal-leading-zero);font:500 11px/1 var(--f-mono);letter-spacing:.14em;color:var(--cyan)}
+.steps h3{font-size:18px;font-weight:700}
+.steps p{color:var(--muted);font-size:14px}
+.perks{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:20px}
+.perk{border:1px solid var(--rule);border-radius:20px;padding:24px;display:flex;gap:16px;align-items:flex-start}
+.perk i{flex:none;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:rgba(31,91,255,.18);color:var(--cyan);font:500 15px/1 var(--f-mono);font-style:normal}
+.perk h3{font-size:16px;font-weight:700}
+.perk p{color:var(--muted);font-size:14px;margin-top:4px}
+
+/* Register */
+.reg{position:relative;overflow:hidden;border-radius:28px;padding:64px;background:
+  radial-gradient(70% 120% at 100% 0%,rgba(0,194,255,.28),transparent 55%),
+  radial-gradient(80% 120% at 0% 100%,rgba(31,91,255,.55),transparent 60%),var(--ink-2);
+  display:grid;grid-template-columns:1.1fr .9fr;gap:48px;border:1px solid rgba(31,91,255,.45)}
+.reg h2{font:700 clamp(28px,3.6vw,44px)/1.25 var(--f-body);letter-spacing:-.02em;margin:14px 0 16px}
+.reg p{color:rgba(233,237,248,.78);max-width:46ch}
+.reg .cta-row{margin-top:32px}
+.facts{margin:0;display:grid;gap:0;align-content:start;border-top:1px solid var(--rule)}
+.facts div{display:grid;grid-template-columns:96px 1fr;gap:16px;padding:16px 0;border-bottom:1px solid var(--rule)}
+.facts dt{font:500 11px/1.9 var(--f-mono);letter-spacing:.12em;color:var(--muted)}
+.facts dd{margin:0;font-weight:500;font-size:15px}
+
+/* Location */
+.loc{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.map{border-radius:20px;background:var(--ink-2);position:relative;min-height:340px;overflow:hidden;border:1px solid var(--rule)}
+.map canvas{position:absolute;inset:0;width:100%;height:100%}
+.loc-info{display:flex;flex-direction:column;gap:24px}
+.loc-info h3{font-size:24px;font-weight:700}
+.loc-info .addr{display:flex;gap:10px;align-items:center;flex-wrap:wrap;color:var(--muted)}
+.copy{font:500 12px/1 var(--f-mono);background:none;border:1px solid var(--rule);color:var(--fg);border-radius:99px;padding:7px 11px;cursor:pointer}
+.ways{display:grid;gap:0;border-top:1px solid var(--rule);margin:0}
+.ways div{display:grid;grid-template-columns:72px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--rule);font-size:15px}
+.ways dt{font:500 11px/1.9 var(--f-mono);letter-spacing:.12em;color:var(--muted)}
+.ways dd{margin:0}
+
+/* FAQ */
+.faq{border-top:1px solid var(--rule)}
+.faq details{border-bottom:1px solid var(--rule)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;gap:20px;padding:22px 0;font-weight:600;font-size:17px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font:400 22px/1 var(--f-mono);color:var(--cyan);transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{padding:0 0 24px;color:var(--muted);max-width:68ch}
+
+/* Footer */
+footer{border-top:1px solid var(--rule);padding-block:56px 120px}
+footer .wrap{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.lg{display:flex;flex-direction:column;gap:14px}
+.lg dt{font:500 11px/1 var(--f-mono);letter-spacing:.14em;color:var(--muted)}
+.lg dd{margin:0;display:flex;flex-wrap:wrap;gap:10px 28px;font-weight:600;font-size:17px}
+footer small{display:block;color:var(--muted);font-size:13px;line-height:1.9}
+footer .right{text-align:right}
+
+/* Mobile register bar */
+.mbar{display:none}
+
+@media (max-width:960px){
+  .gnb nav{display:none}
+  .gnb .dday{margin-left:auto}
+  .sec-head{grid-template-columns:1fr}
+  .row{grid-template-columns:110px 1fr;gap:6px 14px}
+  .row .pill{grid-column:1;grid-row:2}
+  .row .ti{grid-column:2;grid-row:1/3}
+  .row .sp{grid-column:2;text-align:left}
+  .spk,.steps,.perks{grid-template-columns:1fr 1fr}
+  .reg{grid-template-columns:1fr;padding:40px 28px}
+  .loc{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  section.sec{padding-block:80px}
+  .meta{grid-template-columns:1fr;gap:16px}
+  .count{margin-left:0;width:100%;justify-content:space-between;margin-top:8px}
+  .tl{grid-template-columns:1fr;gap:28px;padding-left:36px}
+  .tl::before{left:9px;right:auto;top:0;bottom:0;width:2px;height:auto;background:linear-gradient(180deg,rgba(31,91,255,.2),var(--blue) 50%,var(--cyan))}
+  .tl li{padding-top:0}
+  .tl li::before{left:-36px}
+  .series{grid-template-columns:1fr}
+  .series .arrow{justify-self:center;transform:rotate(90deg)}
+  .stats,.spk,.steps,.perks{grid-template-columns:1fr}
+  footer .wrap{grid-template-columns:1fr}
+  footer .right{text-align:left}
+  .gnb .btn-sm{display:none}
+  .mbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:55;gap:12px;align-items:center;
+    padding:12px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+    background:rgba(2,6,17,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--rule)}
+  .mbar span{font-size:13px;color:var(--muted);line-height:1.4}
+  .mbar span b{display:block;color:var(--fg);font-family:var(--f-mono);font-weight:500}
+  .mbar .btn{margin-left:auto;padding:13px 20px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header class="gnb">
+  <div class="wrap">
+    <a class="brand" href="#top">IR<b>KUDOS</b></a>
+    <nav aria-label="섹션">
+      <a href="#about">About</a><a href="#program">Program</a><a href="#speakers">Speakers</a><a href="#location">Location</a><a href="#faq">FAQ</a>
+    </nav>
+    <span class="dday" id="dday">D-31</span>
+    <a class="btn btn-primary btn-sm" href="#register">사전등록</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" aria-label="세미나 소개">
+    <canvas id="flow" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <p class="sub">2027년 전자주주총회 의무화 대비 세미나</p>
+      <h1><span class="l1">The New Mandate :</span><span class="l2">GO LIVE<i>.</i></span></h1>
+      <dl class="meta">
+        <div><dt>Date</dt><dd><span class="num">2026.11.30</span> 월요일</dd></div>
+        <div><dt>Time</dt><dd><span class="num">13:30 – 18:00</span> <span style="color:var(--muted);font-weight:500">(등록 13:00)</span></dd></div>
+        <div><dt>Venue</dt><dd>페어몬트 앰배서더 서울 B1 그랜드볼룸</dd></div>
+      </dl>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#register">사전등록하기 <span class="arr">→</span></a>
+        <a class="btn btn-ghost" href="#program">프로그램 보기</a>
+        <div class="count" aria-label="행사까지 남은 시간">
+          <div><b id="cd-d">31</b><span>DAYS</span></div>
+          <div><b id="cd-h">00</b><span>HRS</span></div>
+          <div><b id="cd-m">00</b><span>MIN</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="about">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Why now</span>
+        <div>
+          <h2>준비의 시간은 끝났습니다.<br>이제 실행입니다.</h2>
+          <p class="lead">전자주주총회 플랫폼이 문을 열었고, 2027년 정기주총부터는 의무입니다. 남은 한 번의 준비 기간에 실무 기준과 운영 방법을 정리합니다.</p>
+        </div>
+      </div>
+      <ol class="tl">
+        <li><span class="d">2026.11.04</span><h3>전자주총 플랫폼 오픈</h3><p>한국예탁결제원 전자주주총회 도입 및 플랫폼 오픈 기념식</p></li>
+        <li class="now"><span class="d">2026.11.30</span><h3>GO LIVE 세미나</h3><p>법률·학계·실무 관점에서 의무화 대응 방안 점검</p></li>
+        <li class="end"><span class="d">2027</span><h3>정기주총 의무화</h3><p>상장회사 전자주주총회 시행</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec" id="series">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Series</span>
+        <div>
+          <h2>작년에는 준비를, 올해는 실전을</h2>
+          <p class="lead">2025년 「GET READY」 세미나에서 함께 짚었던 과제를, 올해는 실제 운영 화면으로 이어갑니다.</p>
+        </div>
+      </div>
+      <div class="series">
+        <div class="ed prev"><span class="y">2025.11</span><span class="t">GET READY</span><p>전자주총·집중투표 의무화 대비 실무 세미나</p></div>
+        <span class="arrow" aria-hidden="true">→</span>
+        <div class="ed cur"><span class="y">2026.11</span><span class="t">GO LIVE</span><p>2027년 전자주주총회 의무화 대비 세미나</p></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><b data-count="160">160<small>개사</small></b><span>2025 세미나 참석 기업</span></div>
+        <div class="stat"><b data-count="90">90<small>개사</small></b><span>세미나 이후 PoC 진행 기업</span></div>
+      </div>
+      <p class="note">2025 발표자료 <span class="tbd">링크 준비 중</span></p>
+    </div>
+  </section>
+
+  <section class="sec" id="program">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Program</span>
+        <div>
+          <h2>세 개의 세션, 하나의 준비</h2>
+          <p class="lead">법률, 학계, 실무 순서로 진행하고 마지막에는 참석자와 함께 가상의 주주총회를 운영해 봅니다.</p>
+        </div>
+      </div>
+      <div class="prog">
+        <div class="row minor"><span class="time">13:00 – 13:30</span><span class="pill">30′</span><span class="ti">등록 및 입장</span><span class="sp"></span></div>
+        <div class="row minor"><span class="time">13:30 – 13:40</span><span class="pill">10′</span><span class="ti">개회 및 행사·경품 안내</span><span class="sp">IR큐더스</span></div>
+        <div class="row session"><span class="time">13:40 – 14:20</span><span class="pill">40′</span><span class="ti"><small>SESSION 1</small><strong>상법 개정 관련 영향 및 대응방안</strong></span><span class="sp">김앤장 법률사무소<br>전영익 변호사</span></div>
+        <div class="row minor"><span class="time">14:20 – 14:35</span><span class="pill">15′</span><span class="ti">Break time</span><span class="sp"></span></div>
+        <div class="row session"><span class="time">14:35 – 15:15</span><span class="pill">40′</span><span class="ti"><small>SESSION 2</small><strong><span class="tbd">발표 주제 확정 예정</span></strong></span><span class="sp">한국주주총회연구소<br>권재열 연구소장</span></div>
+        <div class="row minor"><span class="time">15:15 – 15:30</span><span class="pill">15′</span><span class="ti">Break time</span><span class="sp"></span></div>
+        <div class="row session"><span class="time">15:30 – 16:10</span><span class="pill">40′</span><span class="ti"><small>SESSION 3-1</small><strong>전자주총 디지털 대응방안 및 솔루션 소개</strong></span><span class="sp">IR큐더스<br>박성용 본부장</span></div>
+        <div class="row session hl"><span class="time">16:10 – 17:25</span><span class="pill">75′</span><span class="ti"><small>SESSION 3-2 · LIVE DEMO</small><strong>참석자와 함께하는 가상의 주주총회 시연</strong></span><span class="sp">IR큐더스<br>박성용 본부장</span></div>
+        <div class="row"><span class="time">17:25 – 17:50</span><span class="pill">25′</span><span class="ti">Q&amp;A · 사전질문 답변 및 현장 질의</span><span class="sp">전체 연사</span></div>
+        <div class="row minor"><span class="time">17:50 – 18:00</span><span class="pill">10′</span><span class="ti">경품 추첨 및 폐회</span><span class="sp"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="speakers">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Speakers</span>
+        <div><h2>연사</h2></div>
+      </div>
+      <div class="spk">
+        <article class="card"><div class="ph"><span>JYI</span><em>프로필 사진 수령 예정</em></div><div class="bd"><span class="ss">SESSION 1</span><h3>전영익 변호사</h3><span class="org">김앤장 법률사무소</span><p class="topic">상법 개정 관련 영향 및 대응방안</p></div></article>
+        <article class="card"><div class="ph"><span>JYK</span><em>프로필 사진 수령 예정</em></div><div class="bd"><span class="ss">SESSION 2</span><h3>권재열 연구소장</h3><span class="org">한국주주총회연구소 · 교수</span><p class="topic"><span class="tbd">발표 주제 확정 예정</span></p></div></article>
+        <article class="card"><div class="ph"><span>SYP</span><em>프로필 사진 수령 예정</em></div><div class="bd"><span class="ss">SESSION 3</span><h3>박성용 본부장</h3><span class="org">IR큐더스</span><p class="topic">전자주총 솔루션 소개 및 가상 주주총회 시연</p></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="guide">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">How to attend</span>
+        <div><h2>이렇게 참석하세요</h2><p class="lead">별도 입장권은 없습니다. 현장에서 사전등록 정보로 본인 확인 후 네임태그를 받으시면 됩니다.</p></div>
+      </div>
+      <ol class="steps">
+        <li><h3>사전등록</h3><p>등록 페이지에서 소속과 연락처를 입력합니다. 선착순 300명.</p></li>
+        <li><h3>확인 메일</h3><p>등록 완료 메일을 받고, 행사 전날 안내 문자를 받습니다.</p></li>
+        <li><h3>현장 본인 확인</h3><p>B1 등록 데스크에서 이름과 소속을 확인하고 네임태그를 받습니다.</p></li>
+        <li><h3>세미나 참석</h3><p>종료 후 발표자료와 설문 안내를 메일로 드립니다.</p></li>
+      </ol>
+      <div class="perks">
+        <div class="perk"><i>01</i><div><h3>발표자료 제공</h3><p>참석자에게 세션별 발표자료를 메일로 드립니다.</p></div></div>
+        <div class="perk"><i>02</i><div><h3>경품 추첨</h3><p>폐회 전 현장 추첨을 진행합니다. <span class="tbd">경품 확정 예정</span></p></div></div>
+        <div class="perk"><i>03</i><div><h3>개별 상담</h3><p>등록 시 신청하면 전자주총 도입 상담을 따로 잡아드립니다.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="register">
+    <div class="wrap">
+      <div class="reg">
+        <div>
+          <span class="eyebrow">Registration</span>
+          <h2>자리를 미리 확보하세요</h2>
+          <p>정원 300명 선착순으로 마감합니다. 등록 시 남겨주신 사전질문은 Q&amp;A 세션에서 우선 답변드립니다.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#register" id="formLink">사전등록 페이지로 이동 <span class="arr">↗</span></a>
+          </div>
+          <p class="note"><span class="tbd">외부 등록 폼(리캐치 등) URL 연결 예정</span></p>
+        </div>
+        <dl class="facts">
+          <div><dt>정원</dt><dd>300명 (선착순)</dd></div>
+          <div><dt>입력 항목</dt><dd>이름, 회사명, 부서·직급, 연락처, 이메일, 사전질문(선택)</dd></div>
+          <div><dt>참가비</dt><dd><span class="tbd">확정 후 기재</span></dd></div>
+          <div><dt>등록 마감</dt><dd><span class="tbd">확정 후 기재</span></dd></div>
+          <div><dt>운영 방식</dt><dd>오프라인 단독 (생중계·다시보기 없음)</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="location">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">Location</span>
+        <div><h2>오시는 길</h2></div>
+      </div>
+      <div class="loc">
+        <div class="map"><canvas id="mapc" aria-label="여의도 위치 약도"></canvas></div>
+        <div class="loc-info">
+          <h3>페어몬트 앰배서더 서울<br>B1 그랜드볼룸</h3>
+          <div class="addr"><span id="addr">서울특별시 영등포구 여의대로 108</span><button class="copy" id="copyAddr" type="button">주소 복사</button></div>
+          <dl class="ways">
+            <div><dt>지하철</dt><dd>5·9호선 여의도역 인근 <span class="tbd">출구 확인</span></dd></div>
+            <div><dt>주차</dt><dd><span class="tbd">주차 지원 여부 확정 후 기재</span></dd></div>
+          </dl>
+          <div class="cta-row">
+            <a class="btn btn-ghost btn-sm" href="https://map.naver.com/p/search/%ED%8E%98%EC%96%B4%EB%AA%AC%ED%8A%B8%20%EC%95%B0%EB%B0%B0%EC%84%9C%EB%8D%94%20%EC%84%9C%EC%9A%B8" target="_blank" rel="noopener">네이버 지도 ↗</a>
+            <a class="btn btn-ghost btn-sm" href="https://map.kakao.com/?q=%ED%8E%98%EC%96%B4%EB%AA%AC%ED%8A%B8%20%EC%95%B0%EB%B0%B0%EC%84%9C%EB%8D%94%20%EC%84%9C%EC%9A%B8" target="_blank" rel="noopener">카카오맵 ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="faq">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="eyebrow">FAQ</span>
+        <div><h2>자주 묻는 질문</h2></div>
+      </div>
+      <div class="faq">
+        <details open><summary>온라인 생중계나 다시보기가 있나요?</summary><p>이번 세미나는 오프라인으로만 진행하며 생중계와 다시보기는 제공하지 않습니다. 발표자료는 참석자에게 메일로 드립니다.</p></details>
+        <details><summary>입장권이나 QR코드가 필요한가요?</summary><p>필요 없습니다. 현장 등록 데스크에서 사전등록하신 이름과 소속을 확인한 뒤 네임태그를 드립니다.</p></details>
+        <details><summary>정원이 있나요?</summary><p>300명 선착순입니다. 정원이 차면 등록이 마감됩니다.</p></details>
+        <details><summary>질문은 어떻게 하나요?</summary><p>등록할 때 사전질문을 남겨주시면 Q&amp;A 세션에서 우선 답변드립니다. 현장 질의도 받습니다.</p></details>
+        <details><summary>참가비와 주차 지원은 어떻게 되나요?</summary><p><span class="tbd">확정 후 기재</span></p></details>
+        <details><summary>전자주총 도입 상담을 따로 받을 수 있나요?</summary><p>등록 시 개별 상담을 신청하시면 IR큐더스 담당자가 일정을 잡아 연락드립니다.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div style="display:grid;gap:28px">
+      <dl class="lg"><dt>HOST</dt><dd>IR큐더스</dd></dl>
+      <dl class="lg"><dt>PARTNERS</dt><dd><span>김앤장 법률사무소</span><span>법무법인 율촌</span><span>스트리밍코리아</span></dd></dl>
+    </div>
+    <div class="right">
+      <small>문의 <span class="tbd">담당자 연락처·메일</span></small>
+      <small><a href="#top">개인정보처리방침</a></small>
+      <small>© 2026 IR KUDOS. All rights reserved.</small>
+    </div>
+  </div>
+</footer>
+
+<div class="mbar" aria-label="사전등록">
+  <span>11.30 MON · 여의도<b>정원 300명 선착순</b></span>
+  <a class="btn btn-primary" href="#register">사전등록</a>
+</div>
+
+<script>
+/* ---------- Countdown ---------- */
+(function(){
+  const target=new Date('2026-11-30T13:30:00+09:00').getTime();
+  const p=n=>String(n).padStart(2,'0');
+  function tick(){
+    let ms=Math.max(0,target-Date.now());
+    const d=Math.floor(ms/864e5),h=Math.floor(ms/36e5)%24,m=Math.floor(ms/6e4)%60;
+    document.getElementById('cd-d').textContent=d;
+    document.getElementById('cd-h').textContent=p(h);
+    document.getElementById('cd-m').textContent=p(m);
+    document.getElementById('dday').textContent=d>0?'D-'+d:'D-DAY';
+  }
+  tick();setInterval(tick,30000);
+})();
+
+/* ---------- Count-up (numbers rest at final value) ---------- */
+(function(){
+  const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(reduce||!('IntersectionObserver' in window))return;
+  const io=new IntersectionObserver(es=>es.forEach(e=>{
+    if(!e.isIntersecting)return;io.unobserve(e.target);
+    const el=e.target,to=+el.dataset.count,small=el.querySelector('small').outerHTML,t0=performance.now();
+    (function f(t){const u=Math.min(1,(t-t0)/1400),v=Math.round(to*(1-Math.pow(1-u,3)));
+      el.innerHTML=v+small;if(u<1)requestAnimationFrame(f);})(t0);
+  }),{threshold:.6});
+  document.querySelectorAll('[data-count]').forEach(el=>io.observe(el));
+})();
+
+/* ---------- Copy address ---------- */
+document.getElementById('copyAddr').addEventListener('click',async e=>{
+  const b=e.currentTarget,t=document.getElementById('addr').textContent;
+  try{await navigator.clipboard.writeText(t);b.textContent='복사됨';}
+  catch(_){const r=document.createRange();r.selectNodeContents(document.getElementById('addr'));const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='선택됨';}
+  setTimeout(()=>b.textContent='주소 복사',1400);
+});
+
+/* ---------- Location sketch (abstract: river + island + pin) ---------- */
+(function(){
+  const c=document.getElementById('mapc'),x=c.getContext('2d');
+  function draw(){
+    const d=Math.min(devicePixelRatio||1,2),w=c.clientWidth,h=c.clientHeight;
+    c.width=w*d;c.height=h*d;x.setTransform(d,0,0,d,0,0);x.clearRect(0,0,w,h);
+    // grid
+    x.strokeStyle='rgba(160,180,255,.07)';x.lineWidth=1;
+    for(let i=0;i<w;i+=28){x.beginPath();x.moveTo(i,0);x.lineTo(i,h);x.stroke();}
+    for(let j=0;j<h;j+=28){x.beginPath();x.moveTo(0,j);x.lineTo(w,j);x.stroke();}
+    // Han river band
+    x.fillStyle='rgba(31,91,255,.22)';x.beginPath();
+    x.moveTo(0,h*.18);x.bezierCurveTo(w*.35,h*.05,w*.6,h*.32,w,h*.2);x.lineTo(w,h*.34);x.bezierCurveTo(w*.6,h*.46,w*.35,h*.2,0,h*.32);x.closePath();x.fill();
+    // Yeouido island
+    x.fillStyle='rgba(233,237,248,.05)';x.strokeStyle='rgba(160,180,255,.25)';x.beginPath();
+    x.ellipse(w*.5,h*.6,w*.36,h*.2,-.18,0,Math.PI*2);x.fill();x.stroke();
+    // Yeouido-daero
+    x.strokeStyle='rgba(0,194,255,.35)';x.lineWidth=3;x.beginPath();x.moveTo(w*.18,h*.78);x.lineTo(w*.84,h*.42);x.stroke();
+    x.font='500 11px "JetBrains Mono",monospace';x.fillStyle='rgba(140,150,179,.9)';
+    x.fillText('HAN RIVER',16,h*.15);x.fillText('SCHEMATIC · 개략 약도',16,h-16);x.fillText('YEOUIDO-DAERO',w*.2,h*.83);
+    // station
+    const sx=w*.42,sy=h*.66;x.fillStyle='#020611';x.strokeStyle='#8c96b3';x.lineWidth=2;x.beginPath();x.arc(sx,sy,6,0,Math.PI*2);x.fill();x.stroke();
+    x.fillStyle='rgba(140,150,179,.9)';x.fillText('여의도역 5·9',sx-34,sy+22);
+    // pin
+    const px=w*.6,py=h*.56;
+    x.fillStyle='rgba(31,91,255,.25)';x.beginPath();x.arc(px,py,22,0,Math.PI*2);x.fill();
+    x.fillStyle='#1f5bff';x.beginPath();x.arc(px,py,9,0,Math.PI*2);x.fill();
+    x.fillStyle='#e9edf8';x.font='600 13px "IBM Plex Sans KR",sans-serif';x.fillText('페어몬트 앰배서더 서울',px+18,py-14);
+  }
+  draw();addEventListener('resize',draw);
+  if(document.fonts)document.fonts.ready.then(draw);
+})();
+
+/* ---------- Hero: Blue Flow Line (dark → blue loop, no white phase) ---------- */
+(function(){
+  const cv=document.getElementById('flow');
+  const gl=cv.getContext('webgl',{antialias:false,alpha:false,premultipliedAlpha:false});
+  if(!gl){cv.style.background='radial-gradient(60% 70% at 75% 30%,rgba(31,91,255,.45),transparent 70%)';return;}
+  const vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+  const fs=`precision highp float;
+  uniform vec2 R;uniform float PH,RA,OA,KA,BA,SA,TWK,FL,ASP;uniform vec2 OFF;
+  #define TAU 6.2831853
+  const vec3 C=vec3(.1216,.3569,1.),C2=vec3(0.,.7608,1.),BG=vec3(.0078,.0235,.0667);
+  mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,s,-s,c);}
+  float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}
+  float curve(float x,float a){float t=PH*TAU;return .07*sin(2.3*x+t+a)+.16*sin(1.1*x-t+1.7+a)+.035*sin(4.1*x+2.*t+a*2.);}
+  void main(){
+    vec2 uv0=(gl_FragCoord.xy-.5*R)/R.y;
+    float t=PH*TAU;
+    vec2 uv=uv0-OFF;
+    uv=rot(.035*sin(t))*uv;uv*=1.+.04*sin(t+1.);
+    vec2 qa=rot(RA)*uv;
+    float x=qa.x;
+    float cy=OA+KA*x*x+.35*curve(x,0.);
+    float tw=TWK*(1.6*x+.7*sin(.9*x-t))+t*2.;
+    float c=cos(tw),sn=sin(tw);
+    float Wd=SA*.17,bl=BA;
+    float wb=mix(.0018,.006,smoothstep(-.8,1.,x))*(1.+bl*14.);
+    float fr=0.,bk=0.;
+    for(int i=0;i<16;i++){
+      float s=float(i)/15.-.5;float zf=.5+s*sn;
+      float d=qa.y-(cy+s*Wd*c);float w=wb*mix(1.8,.8,zf);
+      float e=1.+1.3*smoothstep(.4,.5,abs(s));
+      float L=exp(-d*d/(w*w))*inversesqrt(1.+bl*6.)*e*mix(.3,1.,zf);
+      fr+=L*zf;bk+=L*(1.-zf);
+    }
+    fr*=.3;bk*=.3;
+    float d0=qa.y-cy,hw=abs(Wd*c)*.5+.002,e=.004+bl*.06;
+    float ins=smoothstep(hw+e,hw-e,abs(d0));
+    float sh=clamp(.5+.5*(d0/hw)*sign(c),0.,1.);
+    float fill=ins*(.08+.42*abs(c))*mix(.3,1.5,sh*sh);
+    float vm=fr+fill,vsub=bk*.78,vg=.8*bl*exp(-d0*d0/.06)*.55;
+    float g=smoothstep(-.9,.9,(uv.x-.27)+.25*sin(t)+.15*uv.y);
+    float tot=vm+vsub+vg+1e-5;
+    float k=clamp(((vm+vg)*.5*g+vsub*.8)/tot,0.,1.);
+    vec3 LC=mix(C,C2,k);
+    float a=1.-exp(-tot*1.6);
+    // keep the title corner calm
+    float calm=mix(.28,1.,smoothstep(-.55,.15,uv0.x*.8+uv0.y));
+    a*=calm;
+    // blue flood breathing behind the ribbon
+    float fl=FL*.55*exp(-dot(uv0-OFF,uv0-OFF)/.35);
+    vec3 bg=mix(BG,C*.42,fl);
+    vec3 col=mix(bg,LC,a);
+    col=mix(col,LC*.92+.06,smoothstep(.72,1.,a)*.5);
+    col+=(h(gl_FragCoord.xy+fract(PH*97.)*100.)-.5)*.035;
+    gl_FragColor=vec4(col,1.);
+  }`;
+  function sh(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw gl.getShaderInfoLog(o);return o;}
+  const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));
+  gl.bindAttribLocation(pr,0,'p');gl.linkProgram(pr);gl.useProgram(pr);
+  gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
+  const U={};['R','PH','RA','OA','KA','BA','SA','TWK','FL','OFF'].forEach(n=>U[n]=gl.getUniformLocation(pr,n));
+  const D=Math.PI/180,LOOP=19;
+  function size(){
+    const d=Math.min(devicePixelRatio||1,1.5);
+    cv.width=Math.round(cv.clientWidth*d);cv.height=Math.round(cv.clientHeight*d);
+    gl.viewport(0,0,cv.width,cv.height);
+  }
+  function frame(sec){
+    const ph=(sec/LOOP)%1,t=ph*Math.PI*2,asp=cv.width/cv.height;
+    gl.uniform2f(U.R,cv.width,cv.height);gl.uniform1f(U.PH,ph);
+    gl.uniform1f(U.RA,(14+12*Math.sin(t)+6*Math.sin(2*t+.4))*D);
+    gl.uniform1f(U.OA,.05*Math.sin(t+1));
+    gl.uniform1f(U.KA,-.55+.28*Math.sin(t+2));
+    gl.uniform1f(U.BA,.12+.38*Math.pow(.5+.5*Math.sin(t-1.2),2));
+    gl.uniform1f(U.SA,1.7+.5*Math.sin(t+.7));
+    gl.uniform1f(U.TWK,1.4+.8*Math.sin(t+1.3));
+    gl.uniform1f(U.FL,.5+.5*Math.sin(t-1));
+    if(asp>1)gl.uniform2f(U.OFF,.22*Math.min(asp,1.8)/1.6,.16);else gl.uniform2f(U.OFF,.02,.26);
+    gl.drawArrays(gl.TRIANGLES,0,3);
+  }
+  size();addEventListener('resize',size);
+  const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(reduce){frame(6.5);return;}
+  let visible=true,start=performance.now();
+  new IntersectionObserver(e=>{visible=e[0].isIntersecting;}).observe(cv);
+  frame(0);
+  (function loop(now){if(visible&&!document.hidden)frame((now-start)/1000+4);requestAnimationFrame(loop);})(start);
+})();
+</script>
+
+</body>
+</html>
