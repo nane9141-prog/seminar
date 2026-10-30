@@ -9,7 +9,7 @@
 ## 구조
 
 ```
-index.html      단일 페이지 (히어로: 입자가 모여 리본이 되는 인트로 → 30초 루프 리본·도트 개표·숫자 티커)
+index.html      단일 페이지 (히어로: 도트가 모여 GO LIVE를 쓰고 흩어지는 인트로 → 30초 루프 리본·도트 개표·숫자 티커)
 tokens.css      색·서체·간격 토큰 (브랜드 블루 #0071F3)
 base.css        공통 기본 스타일
 assets/         KSMP 로고(ksmp-logo.svg), 연사 사진(speaker1~3.webp), OG 이미지, 협력사 로고
