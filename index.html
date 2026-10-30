@@ -55,17 +55,17 @@ b, strong{ font-weight: inherit; }
 
 /* Nav: a slab */
 .gnb{ position: sticky; top: 0; z-index: var(--z-sticky-nav); background: var(--color-ink); color: var(--color-on-ink); }
-.gnb .container{ display: flex; align-items: center; gap: var(--space-xl); height: var(--nav-h); }
+.gnb .container{ display: flex; align-items: center; gap: var(--space-lg); height: var(--nav-h); }
 .brand{ display: block; flex-shrink: 0; color: var(--color-on-ink); }
 .brand svg{ height: 44px; width: auto; }
 .brand .lg-b{ fill: var(--color-accent); }
 .brand .lg-t{ fill: currentColor; }
-.gnb nav{ display: flex; gap: var(--space-lg); margin-left: auto; }
+.gnb nav{ display: flex; gap: var(--space-lg); margin-left: auto; margin-right: var(--space-md); }
 .gnb nav a{ font-size: var(--text-md); color: var(--color-on-ink-muted); text-decoration: none; transition: color var(--dur-short) var(--ease-out); }
 .gnb nav a:hover{ color: var(--color-on-ink); }
 .gnb a:focus-visible, .gnb .btn:focus-visible{ outline-color: var(--color-focus-on-ink); }
-.gnb .btn--ghost{ background: transparent; color: var(--color-on-ink); border-color: var(--color-on-ink-muted); }
-.gnb .btn--ghost:hover{ background: var(--color-rule-on-ink); border-color: var(--color-on-ink); }
+.gnb .btn--ghost{ min-height: 44px; padding: 0; background: transparent; border-color: transparent; color: var(--color-on-ink); font-size: var(--text-md); }
+.gnb .btn--ghost:hover{ background: transparent; border-color: transparent; color: var(--color-focus-on-ink); }
 .dday{ display: inline-flex; align-items: center; min-height: 32px; padding: 0 var(--space-sm); border: 1px solid var(--color-focus-on-ink); border-radius: var(--radius-pill); font: 800 var(--text-md)/1 var(--font-display); font-stretch: 108%; font-variant-numeric: tabular-nums; color: var(--color-focus-on-ink); white-space: nowrap; }
 
 /* Hero: a ledge */
