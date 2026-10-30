@@ -284,6 +284,134 @@ footer{ padding-block: var(--space-3xl) var(--space-2xl); border-top: 1px solid 
   .mbar .btn{ margin-left: auto; }
   .mbar .btn:focus-visible{ outline-color: var(--color-focus-on-ink); }
 }
+
+/* ===== Mobile pass (2026-10-30) · DAN25식 모바일: 상단 탭 스트립, 압축 타임테이블, 연사 가로 스와이프, 스크롤 후 노출되는 하단 CTA ===== */
+@media (max-width: 60rem){
+  :root{ --nav-strip: 44px; }
+  .gnb .container{ flex-wrap: wrap; height: auto; column-gap: var(--space-sm); row-gap: 0; }
+  .gnb .brand, .gnb .dday, .gnb .btn{ margin-block: calc((var(--nav-h) - 44px) / 2); }
+  .gnb nav{ order: 3; flex: 0 0 auto; width: calc(100% + 2 * var(--gutter)); display: flex; gap: var(--space-lg); height: var(--nav-strip); align-items: stretch;
+    margin: 0 calc(-1 * var(--gutter)); padding-inline: var(--gutter); overflow-x: auto; scrollbar-width: none; border-top: 1px solid var(--color-rule-on-ink); }
+  .gnb nav::-webkit-scrollbar{ display: none; }
+  .gnb nav a{ display: flex; align-items: center; flex: none; font-size: var(--text-sm); border-bottom: 2px solid transparent; }
+  .gnb nav a.is-on{ color: var(--color-on-ink); border-bottom-color: var(--color-focus-on-ink); }
+  html{ scroll-padding-top: calc(var(--nav-h) + var(--nav-strip) + var(--space-sm)); }
+  .hero{ min-height: auto; }
+}
+@media (max-width: 40rem){
+  :root{ --nav-h: 56px; --section-gap-s: 48px; --section-gap: 64px; --section-gap-l: 72px; }
+  .brand svg{ height: 26px; }
+  .dday{ min-height: 28px; font-size: var(--text-sm); }
+  .head{ margin-bottom: var(--space-lg); }
+  .head .lead, .head--split .lead{ margin-top: var(--space-sm); }
+
+  /* Hero: 상단은 리본 영역, 텍스트는 아래로 · 보조 CTA 숨김 · 일정 정보를 카운트다운보다 먼저 */
+  .hero__in{ padding-block: 46vw var(--space-xl); gap: var(--space-lg); }
+  .hero h1 .l1{ font-size: 1.375rem; margin-bottom: var(--space-2xs); }
+  .hero h1 .l2{ font-size: clamp(3.25rem, 16vw, 4.5rem); }
+  .hero .lead{ margin-top: var(--space-sm); font-size: var(--text-md); }
+  .hero .actions{ margin-top: var(--space-lg); }
+  .hero .actions .btn{ flex: 1; justify-content: center; }
+  .hero .actions .btn--quiet{ display: none; }
+  .side{ gap: var(--space-md); }
+  .meta{ order: -1; }
+  .meta div{ grid-template-columns: 3rem minmax(0, 1fr); gap: var(--space-sm); padding-block: var(--space-xs); }
+  .meta dd{ font-size: var(--text-sm); }
+  .count{ grid-template-columns: repeat(3, auto); justify-content: start; gap: var(--space-lg); }
+  .count div{ grid-auto-flow: column; align-items: baseline; gap: var(--space-2xs); }
+  .count b{ font-size: 2rem; }
+  .flow-toggle{ top: var(--space-xs); right: var(--space-xs); font-size: var(--text-xs); }
+
+  /* About timeline */
+  .statement{ font-size: 1.875rem; }
+  #about .lead{ margin-top: var(--space-md); }
+  .tl{ margin-top: var(--space-xl); }
+  .tl li{ gap: var(--space-2xs) 0; padding-block: var(--space-md); }
+  .tl time{ font-size: var(--text-lg); }
+  .tl h3{ font-size: var(--text-md); }
+  .tl p{ font-size: var(--text-sm); }
+  .tl li.now{ margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); }
+
+  /* Series: 수치 2단 */
+  .stats{ grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: var(--space-lg); }
+  .stat, .stat:first-child{ padding: 0 0 0 var(--space-md); border-top: 0; border-left: 1px solid var(--color-rule); }
+  .stat:first-child{ padding-left: 0; border-left: 0; }
+  .stat b{ font-size: 2.75rem; }
+  .stat b small{ font-size: var(--text-md); }
+
+  /* Program: 시간·분량 한 줄 → 제목 → 연사 / 휴식은 한 줄로 */
+  .row, .row.session{ grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "time dur" "ti ti" "sp sp"; gap: var(--space-2xs) var(--space-xs); padding: var(--space-md) 0; }
+  .row .time{ grid-area: time; font-size: var(--text-sm); color: var(--color-muted); }
+  .row .dur{ grid-area: dur; }
+  .row .dur::before{ content: "· "; }
+  .row .ti{ grid-area: ti; margin-top: var(--space-2xs); }
+  .row .sp{ grid-area: sp; text-align: left; font-size: var(--text-sm); }
+  .row .sp:empty{ display: none; }
+  .row.session .ti small{ font-size: var(--text-xs); }
+  .row.session .ti strong{ font-size: 1.1875rem; }
+  .row.minor{ grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: "time ti dur" ". sp ."; padding-block: var(--space-sm); font-size: var(--text-sm); }
+  .row.minor .ti{ margin-top: 0; padding-left: var(--space-sm); }
+  .row.minor .sp{ padding-left: var(--space-sm); }
+  .row.minor .dur::before{ content: none; }
+  .row.minor .dur{ justify-self: end; }
+  .row.hl{ margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); }
+  .row.hl .time{ color: var(--color-on-ink-muted); }
+  .demo{ padding: var(--space-lg) var(--space-md); margin-top: var(--space-lg); }
+  .demo .actions .btn{ flex: 1; justify-content: center; }
+
+  /* Speakers: 가로 스와이프 */
+  .lineup{ grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 80%; gap: var(--space-sm);
+    margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); scroll-padding-inline: var(--gutter);
+    overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; }
+  .lineup::-webkit-scrollbar{ display: none; }
+  .spk{ aspect-ratio: 3 / 4; scroll-snap-align: start; }
+  .spk__in{ padding: var(--space-lg); gap: var(--space-sm); }
+  .spk:has(> img) .spk__in{ background: linear-gradient(to top, var(--color-ink) 0%, color-mix(in oklab, var(--color-ink) 82%, transparent) 30%, transparent 55%); }
+  .spk .topic{ font-size: var(--text-lg); }
+  .spk .ss{ top: var(--space-lg); left: var(--space-lg); }
+  .lineup-dots{ display: flex; justify-content: center; gap: var(--space-xs); margin-top: var(--space-md); }
+  .lineup-dots i{ width: 6px; height: 6px; border-radius: 50%; background: var(--color-rule); transition: width var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out); }
+  .lineup-dots i.on{ width: 18px; border-radius: 3px; background: var(--color-ink); }
+
+  /* Location */
+  .map{ min-height: 240px; }
+  .loc-card{ padding: var(--space-lg) var(--space-md); gap: var(--space-lg); }
+  .loc-card h3{ font-size: 1.625rem; }
+  .loc-card .hall{ font-size: var(--text-md); }
+  .ways div{ grid-template-columns: 3.5rem minmax(0, 1fr); }
+  .loc-card .actions{ display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .loc-card .actions .btn{ justify-content: center; padding-inline: var(--space-sm); }
+
+  /* FAQ */
+  .faq-wrap .head{ margin-bottom: var(--space-lg); }
+  .faq summary{ font-size: var(--text-md); padding-block: var(--space-md); }
+  .faq details p{ font-size: var(--text-sm); padding-bottom: var(--space-md); }
+
+  /* Register + guide */
+  .reg__main .actions .btn{ flex: 1; justify-content: center; }
+  .facts{ margin-top: var(--space-lg); }
+  .facts div{ grid-template-columns: 4.5rem minmax(0, 1fr); padding-block: var(--space-sm); }
+  .guide{ margin-top: var(--space-2xl); padding-top: var(--space-xl); }
+  .guide h3{ font-size: 1.75rem; }
+  .steps{ margin-top: var(--space-lg); gap: var(--space-lg); }
+  .steps li{ grid-template-columns: 2.25rem minmax(0, 1fr); column-gap: var(--space-sm); row-gap: var(--space-2xs); }
+  .steps li::before{ grid-row: 1 / 3; font-size: 1.75rem; }
+  .steps h4{ margin: 0; font-size: var(--text-lg); }
+  .steps p{ font-size: var(--text-sm); }
+  .perks{ margin-top: var(--space-xl); gap: 0; }
+  .perks div{ padding-block: var(--space-md); border-bottom: 1px solid var(--color-rule-on-ink); }
+  .perks dd{ font-size: var(--text-sm); }
+
+  /* Footer */
+  .mast{ width: 220px; }
+  .foot{ margin-top: var(--space-xl); row-gap: var(--space-lg); }
+  .legal a{ display: inline-block; padding-block: var(--space-sm); }
+
+  /* 하단 CTA: 히어로·등록 섹션이 보일 땐 숨김 */
+  .mbar{ transition: transform var(--dur-long) var(--ease-out); }
+  .mbar.is-hidden{ transform: translateY(110%); }
+}
+@media (max-width: 40rem) and (prefers-reduced-motion: reduce){ .mbar{ transition: none; } }
 </style>
 </head>
 <body>
@@ -414,6 +542,7 @@ footer{ padding-block: var(--space-3xl) var(--space-2xl); border-top: 1px solid 
           </div>
         </li>
       </ol>
+      <div class="lineup-dots" aria-hidden="true" hidden><i class="on"></i><i></i><i></i></div>
     </div>
   </section>
 
@@ -785,5 +914,33 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
 <script>window.hallmarkSlots = (m) => { for (const [k, v] of Object.entries(m)) { const s = document.querySelector(`[data-slot="${k}"]`); if (!s) continue; const im = new Image(); im.src = typeof v === 'string' ? v : v.src; im.alt = (typeof v === 'object' && v.alt) || s.dataset.alt || ''; s.querySelectorAll(':scope > img').forEach((o) => o.remove()); s.prepend(im); } };
 document.querySelectorAll('[data-slot] img').forEach((i) => { if (i.complete && !i.naturalWidth) i.remove(); else i.addEventListener('error', () => i.remove(), { once: true }); });</script>
 
+
+<script>
+/* ---------- Mobile: scroll-spy tabs, CTA bar visibility, speaker dots ---------- */
+(function(){
+  const links=[...document.querySelectorAll('.gnb nav a')];
+  const map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
+  const nav=document.querySelector('.gnb nav');
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{
+      if(!e.isIntersecting)return;
+      const a=map.get(e.target.id);if(!a)return;
+      links.forEach(l=>l.classList.toggle('is-on',l===a));
+      if(nav.scrollWidth>nav.clientWidth)nav.scrollTo({left:a.offsetLeft-24,behavior:'smooth'});
+    }),{rootMargin:'-45% 0px -50% 0px'});
+    map.forEach((a,id)=>{const s=document.getElementById(id);if(s)io.observe(s);});
+
+    const bar=document.querySelector('.mbar');const seen=new Set();
+    const io2=new IntersectionObserver(es=>{es.forEach(e=>e.isIntersecting?seen.add(e.target):seen.delete(e.target));bar.classList.toggle('is-hidden',seen.size>0);});
+    ['.hero','#register'].forEach(q=>{const el=document.querySelector(q);if(el)io2.observe(el);});
+  }
+  const lu=document.querySelector('.lineup'),dots=document.querySelector('.lineup-dots');
+  if(lu&&dots){
+    const ds=[...dots.children];
+    const sync=()=>{dots.hidden=lu.scrollWidth<=lu.clientWidth+4;const w=lu.firstElementChild.getBoundingClientRect().width;const i=Math.round(lu.scrollLeft/(w||1));ds.forEach((d,k)=>d.classList.toggle('on',k===Math.min(i,ds.length-1)));};
+    lu.addEventListener('scroll',()=>requestAnimationFrame(sync),{passive:true});addEventListener('resize',sync);sync();
+  }
+})();
+</script>
 </body>
 </html>
