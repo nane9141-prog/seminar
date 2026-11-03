@@ -728,10 +728,17 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
   const cv=document.getElementById('flow'),btn=document.getElementById('flowToggle');
   const gl=cv.getContext('webgl',{antialias:false,alpha:false,premultipliedAlpha:false,preserveDrawingBuffer:true});
   if(!gl){btn.hidden=true;return;}
-  // glyph atlas for the code phase: 16 characters in one row
-  const GL='0123456789%₩+▲▼.',at=document.createElement('canvas');at.width=512;at.height=64;
-  const ax=at.getContext('2d');ax.fillStyle='#fff';ax.font='700 44px ui-monospace,Consolas,"Courier New",monospace';ax.textAlign='center';ax.textBaseline='middle';
-  [...GL].forEach((ch,i)=>ax.fillText(ch,i*32+16,34));
+  // glyph atlas for the code phase: 16 slots in one row
+  // voting marks drawn as vector shapes (O · X · △ · −), 4 kinds × 4 = 16 slots, so each appears equally often
+  const at=document.createElement('canvas');at.width=512;at.height=64;
+  const ax=at.getContext('2d');ax.strokeStyle='#fff';ax.lineWidth=4.5;ax.lineCap='round';ax.lineJoin='round';
+  const MARK=[
+    (cx,cy)=>{ax.beginPath();ax.arc(cx,cy,10,0,Math.PI*2);ax.stroke();},                                   // O
+    (cx,cy)=>{ax.beginPath();ax.moveTo(cx-9,cy-9);ax.lineTo(cx+9,cy+9);ax.moveTo(cx+9,cy-9);ax.lineTo(cx-9,cy+9);ax.stroke();}, // X
+    (cx,cy)=>{ax.beginPath();ax.moveTo(cx,cy-11);ax.lineTo(cx+11,cy+9);ax.lineTo(cx-11,cy+9);ax.closePath();ax.stroke();},   // △
+    (cx,cy)=>{ax.beginPath();ax.moveTo(cx-10,cy);ax.lineTo(cx+10,cy);ax.stroke();}                           // −
+  ];
+  for(let i=0;i<16;i++)MARK[i%4](i*32+16,30);
   const tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);
   gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,at);
   gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
