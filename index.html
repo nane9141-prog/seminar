@@ -64,20 +64,11 @@ a{color:inherit}
 .dday{font-size:13px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums}
 
 /* Hero: flowing blue gradient */
-.hero{position:relative;overflow:hidden;isolation:isolate;min-height:min(78vh,760px);display:grid;place-items:center;text-align:center;background:#1f4ff2;padding:120px 24px 96px}
-.hero .bl{position:absolute;border-radius:50%;filter:blur(70px);z-index:-1;will-change:transform}
-.bl.b1{width:70vw;height:70vw;left:-20vw;top:-25vw;background:#0e2bd8;animation:d1 22s ease-in-out infinite alternate}
-.bl.b2{width:55vw;height:55vw;right:-15vw;top:-10vw;background:#3aa0ff;animation:d2 26s ease-in-out infinite alternate}
-.bl.b3{width:45vw;height:30vw;right:5vw;bottom:-12vw;background:#cfc6ff;opacity:.75;animation:d3 20s ease-in-out infinite alternate}
-.bl.b4{width:16vw;height:90vw;left:46vw;top:-30vw;background:#eaf3ff;opacity:.55;border-radius:40%;transform:rotate(28deg);animation:d4 18s ease-in-out infinite alternate}
-.bl.b5{width:40vw;height:40vw;left:5vw;bottom:-20vw;background:#3f37e8;animation:d2 30s ease-in-out infinite alternate-reverse}
-@keyframes d1{to{transform:translate(12vw,8vw) scale(1.1)}}
-@keyframes d2{to{transform:translate(-10vw,10vw) scale(.92)}}
-@keyframes d3{to{transform:translate(-14vw,-6vw) scale(1.15)}}
-@keyframes d4{from{transform:translateX(-8vw) rotate(28deg)}to{transform:translateX(10vw) rotate(34deg)}}
-.hero::after{content:"";position:absolute;inset:auto 0 0;height:120px;background:linear-gradient(to bottom,transparent,rgba(18,18,18,.35));z-index:-1}
+.hero{position:relative;overflow:hidden;isolation:isolate;min-height:min(82vh,780px);display:grid;place-items:center;text-align:center;background:#000;padding:120px 24px 160px}
+#glow{position:absolute;inset:0;width:100%;height:100%;z-index:-1;display:block;background:radial-gradient(120% 70% at 50% 100%,#0b2fd0 0%,#06135a 38%,#000 70%)}
+.hero::after{content:"";position:absolute;inset:auto 0 0;height:90px;background:linear-gradient(to bottom,transparent,var(--bg));z-index:-1}
 .hero__k{font-size:15px;font-weight:600;color:rgba(255,255,255,.82);letter-spacing:.02em}
-.hero h1{margin-top:18px;font-weight:800;font-size:clamp(40px,7.2vw,92px);line-height:1.12;letter-spacing:-.035em;color:#eef4ff;text-wrap:balance}
+.hero h1{margin-top:18px;font-weight:800;font-size:clamp(40px,7.2vw,92px);line-height:1.12;letter-spacing:-.035em;color:#dbe8ff;text-shadow:0 0 40px rgba(60,130,255,.45);text-wrap:balance}
 .hero h1 span{display:block}
 .hero__meta{margin-top:28px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;font-size:17px;font-weight:600;color:rgba(255,255,255,.9)}
 .hero__meta i{font-style:normal;opacity:.5}
@@ -229,7 +220,7 @@ footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;c
   .top__in{padding-inline:20px;height:56px}
   .brand svg{height:22px}
   .top .btn--sm{display:none}
-  .hero{min-height:auto;padding:128px 20px 88px}
+  .hero{min-height:min(88svh,720px);padding:120px 20px 150px}
   .hero h1{font-size:clamp(34px,10.4vw,48px)}
   .hero__meta{font-size:15px;flex-direction:column;gap:2px}
   .hero__meta i{display:none}
@@ -265,7 +256,7 @@ footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;c
   .mbar span b{display:block;color:#fff}
   .mbar .btn{margin-left:auto;min-height:44px;padding:0 20px;font-size:15px}
 }
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero .bl{animation:none}.mbar{transition:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.mbar{transition:none}}
 </style>
 </head>
 <body>
@@ -295,7 +286,7 @@ footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;c
 
 <main>
   <section class="hero" aria-label="설명회 소개">
-    <i class="bl b1"></i><i class="bl b2"></i><i class="bl b5"></i><i class="bl b3"></i><i class="bl b4"></i>
+    <canvas id="glow" aria-hidden="true"></canvas>
     <div>
       <p class="hero__k">IR큐더스 · 2026</p>
       <h1><span>전자주주총회플랫폼</span><span>시연 설명회</span></h1>
@@ -574,6 +565,62 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
   if(!('IntersectionObserver' in window)){bar.classList.remove('is-hidden');return;}
   const io=new IntersectionObserver(es=>{es.forEach(e=>e.isIntersecting?seen.add(e.target):seen.delete(e.target));bar.classList.toggle('is-hidden',seen.size>0);});
   ['.hero','#register','footer'].forEach(q=>{const el=document.querySelector(q);if(el)io.observe(el);});
+})();
+</script>
+
+<script>
+/* ---------- Hero: glowing horizon (Apple Event 첫 장면 참고) · 그라디언트가 블루 ↔ 옐로·오렌지로 바뀌는 루프 ---------- */
+(function(){
+  const cv=document.getElementById('glow'),gl=cv.getContext('webgl',{alpha:false,antialias:false});
+  if(!gl)return;
+  const vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+  const fs=`precision highp float;uniform vec2 R;uniform float T,H;
+  vec3 ramp(float h){
+    vec3 c=vec3(0.);
+    c=mix(c,vec3(.02,.06,.45),smoothstep(.05,.30,h));
+    c=mix(c,vec3(.05,.27,1.),smoothstep(.28,.52,h));
+    c=mix(c,vec3(.30,.62,1.),smoothstep(.50,.66,h));
+    c=mix(c,vec3(.98,.90,.55),smoothstep(.70,.84,h));
+    c=mix(c,vec3(1.,.50,.10),smoothstep(.86,1.,h));
+    return c;}
+  float hash(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}
+  void main(){
+    vec2 uv=(gl_FragCoord.xy-.5*R)/R.y;
+    float asp=R.x/R.y,x=uv.x/max(asp,1.)*1.6;
+    // horizon: higher at the sides, dipping in the middle, slowly breathing
+    float y0=mix(-.20,-.31,step(1.,asp))+.30*x*x+.035*sin(2.4*x+T*.45)+.02*sin(5.1*x-T*.3);
+    float d=uv.y-y0;
+    float edge=exp(-abs(d)*(d>0.?7.:4.5));                 // glow on both sides of the line
+    float below=d<0.?exp(d*2.2)*.55:0.;                     // body under the line fades to black
+    float halo=d>0.?exp(-d*2.4)*.55:0.;                     // blue air above the line
+    // dark lens at the top with a lit rim
+    vec2 q=(uv-vec2(.10+.03*sin(T*.2),.52))/vec2(.42,.30);
+    float r=length(q),lens=smoothstep(1.,.75,r),rim=exp(-pow((r-1.)*3.2,2.))*.6*smoothstep(-.2,.3,uv.y);
+    float h=max(max(edge*.98,below),halo)+rim*.55;
+    h*=1.-lens*.92;
+    // heat: the band shifts from blue toward yellow/orange and back
+    float heat=mix(.80,1.06,H);
+    float k=h*heat*(.92+.08*sin(x*3.+T*.7));
+    vec3 col=ramp(clamp(k,0.,1.));
+    col*=smoothstep(-.62,-.15,uv.y)*.85+.15;                 // fade the bottom into the page
+    col+=(hash(gl_FragCoord.xy+T)-.5)*.02;
+    gl_FragColor=vec4(col,1.);
+  }`;
+  function sh(t,src){const o=gl.createShader(t);gl.shaderSource(o,src);gl.compileShader(o);return o;}
+  const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));
+  gl.bindAttribLocation(pr,0,'p');gl.linkProgram(pr);if(!gl.getProgramParameter(pr,gl.LINK_STATUS))return;gl.useProgram(pr);
+  gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
+  const uR=gl.getUniformLocation(pr,'R'),uT=gl.getUniformLocation(pr,'T'),uH=gl.getUniformLocation(pr,'H');
+  const LOOP=12; // 초: 블루 → 옐로·오렌지 → 블루
+  function size(){const d=Math.min(devicePixelRatio||1,1.5);cv.width=Math.round(cv.clientWidth*d);cv.height=Math.round(cv.clientHeight*d);gl.viewport(0,0,cv.width,cv.height);}
+  function draw(sec){const ph=(sec%LOOP)/LOOP,H=.5-.5*Math.cos(ph*Math.PI*2);gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,sec);gl.uniform1f(uH,H);gl.drawArrays(gl.TRIANGLES,0,3);}
+  size();addEventListener('resize',()=>{size();draw(clock);});
+  let clock=0,prev=performance.now(),visible=true;
+  draw(0);
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+  if('IntersectionObserver' in window)new IntersectionObserver(e=>{visible=e[0].isIntersecting;}).observe(cv);
+  (function loop(now){const dt=Math.min(.1,(now-prev)/1000);prev=now;if(visible&&!document.hidden){clock+=dt;draw(clock);}requestAnimationFrame(loop);})(prev);
 })();
 </script>
 </body>
