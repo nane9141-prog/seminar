@@ -67,8 +67,8 @@ a{color:inherit}
 .hero{position:relative;overflow:hidden;isolation:isolate;min-height:min(82vh,780px);display:grid;place-items:center;text-align:center;background:#000;padding:120px 24px 160px}
 #glow{position:absolute;inset:0;width:100%;height:100%;z-index:-1;display:block;background:radial-gradient(120% 70% at 50% 100%,#0b2fd0 0%,#06135a 38%,#000 70%)}
 .hero::after{content:"";position:absolute;inset:auto 0 0;height:90px;background:linear-gradient(to bottom,transparent,var(--bg));z-index:-1}
-.hero__k{font-size:15px;font-weight:600;color:rgba(255,255,255,.82);letter-spacing:.02em}
-.hero h1{margin-top:18px;font-weight:800;font-size:clamp(40px,7.2vw,92px);line-height:1.12;letter-spacing:-.035em;color:#dbe8ff;text-shadow:0 0 40px rgba(60,130,255,.45);text-wrap:balance}
+.hero__k{font-size:15px;font-weight:600;color:#9aa6bb;mix-blend-mode:screen;letter-spacing:.02em}
+.hero h1{margin-top:18px;font-weight:800;font-size:clamp(40px,7.2vw,92px);line-height:1.12;letter-spacing:-.035em;color:#a9b6cc;mix-blend-mode:screen;text-wrap:balance}
 .hero h1 span{display:block}
 .hero__meta{margin-top:28px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;font-size:17px;font-weight:600;color:rgba(255,255,255,.9)}
 .hero__meta i{font-style:normal;opacity:.5}
@@ -574,36 +574,49 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
   const cv=document.getElementById('glow'),gl=cv.getContext('webgl',{alpha:false,antialias:false});
   if(!gl)return;
   const vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
-  const fs=`precision highp float;uniform vec2 R;uniform float T,H;
+  const fs=`precision highp float;uniform vec2 R;uniform float T,P;
+  #define TAU 6.2831853
   vec3 ramp(float h){
     vec3 c=vec3(0.);
-    c=mix(c,vec3(.02,.06,.45),smoothstep(.05,.30,h));
-    c=mix(c,vec3(.05,.27,1.),smoothstep(.28,.52,h));
-    c=mix(c,vec3(.30,.62,1.),smoothstep(.50,.66,h));
-    c=mix(c,vec3(.98,.90,.55),smoothstep(.70,.84,h));
-    c=mix(c,vec3(1.,.50,.10),smoothstep(.86,1.,h));
+    c=mix(c,vec3(.02,.05,.40),smoothstep(.04,.28,h));
+    c=mix(c,vec3(.04,.24,.98),smoothstep(.26,.50,h));
+    c=mix(c,vec3(.24,.58,1.),smoothstep(.48,.64,h));
+    c=mix(c,vec3(.72,.86,1.),smoothstep(.64,.72,h));
+    c=mix(c,vec3(1.,.88,.52),smoothstep(.72,.84,h));
+    c=mix(c,vec3(1.,.47,.10),smoothstep(.86,1.,h));
     return c;}
   float hash(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}
+  float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+    return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}
+  float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<4;i++){v+=a*vn(p);p=p*2.03+vec2(1.7,9.2);a*=.5;}return v;}
   void main(){
     vec2 uv=(gl_FragCoord.xy-.5*R)/R.y;
-    float asp=R.x/R.y,x=uv.x/max(asp,1.)*1.6;
-    // horizon: higher at the sides, dipping in the middle, slowly breathing
-    float y0=mix(-.20,-.31,step(1.,asp))+.30*x*x+.035*sin(2.4*x+T*.45)+.02*sin(5.1*x-T*.3);
+    float asp=R.x/R.y,x=uv.x/max(asp,1.)*1.6,t=T;
+    // domain-warped horizon: the surface folds and drifts like cloth
+    float w=fbm(vec2(x*1.1+t*.04,t*.06))-.5;
+    float w2=fbm(vec2(x*2.6-t*.07,uv.y*1.5+t*.05))-.5;
+    float y0=mix(-.27,-.31,step(1.,asp))+.30*x*x+.045*sin(2.4*x+t*.42)+.022*sin(5.3*x-t*.31)+.09*w;
     float d=uv.y-y0;
-    float edge=exp(-abs(d)*(d>0.?7.:4.5));                 // glow on both sides of the line
-    float below=d<0.?exp(d*2.2)*.55:0.;                     // body under the line fades to black
-    float halo=d>0.?exp(-d*2.4)*.55:0.;                     // blue air above the line
-    // dark lens at the top with a lit rim
-    vec2 q=(uv-vec2(.10+.03*sin(T*.2),.52))/vec2(.42,.30);
-    float r=length(q),lens=smoothstep(1.,.75,r),rim=exp(-pow((r-1.)*3.2,2.))*.6*smoothstep(-.2,.3,uv.y);
-    float h=max(max(edge*.98,below),halo)+rim*.55;
-    h*=1.-lens*.92;
-    // heat: the band shifts from blue toward yellow/orange and back
-    float heat=mix(.80,1.06,H);
-    float k=h*heat*(.92+.08*sin(x*3.+T*.7));
-    vec3 col=ramp(clamp(k,0.,1.));
-    col*=smoothstep(-.62,-.15,uv.y)*.85+.15;                 // fade the bottom into the page
-    col+=(hash(gl_FragCoord.xy+T)-.5)*.02;
+    // a second, fainter fold above the main line
+    float y1=y0+.12+.05*sin(1.6*x-t*.33)+.05*w2;
+    float d1=uv.y-y1;
+    float edge=exp(-abs(d)*(d>0.?8.5:5.2));
+    float fold=exp(-abs(d1)*11.)*.32*smoothstep(-.05,.25,d);
+    // body under the line: fades to black with soft internal striations
+    float body=d<0.?exp(d*2.1)*.58*(.86+.14*sin(d*22.+x*2.4+t*.55+w2*6.)):0.;
+    // air above the line, with slow drifting haze
+    float haze=d>0.?exp(-d*2.2)*.48*(.8+.4*fbm(uv*1.8+vec2(t*.03,-t*.02))):0.;
+    float h=max(max(edge*.97,body),haze)+fold;
+    // a sheen that travels along the line
+    float sx=fract(t/9.)*4.-2.;
+    h+=exp(-pow((x-sx)*1.4,2.))*edge*.12;
+    // heat sweeps across: one side warms first, then the other, then back to blue
+    float hx=pow(.5-.5*cos(TAU*(P-x*.10-d*.25)),1.7);
+    float heat=mix(.76,1.05,hx);
+    vec3 col=ramp(clamp(h*heat,0.,1.));
+    col*=smoothstep(-.64,-.12,uv.y)*.86+.14;
+    col*=1.-.35*smoothstep(.55,1.15,length(uv*vec2(.8,1.)));     // vignette
+    col+=(hash(gl_FragCoord.xy+fract(t)*91.)-.5)*.025;             // grain
     gl_FragColor=vec4(col,1.);
   }`;
   function sh(t,src){const o=gl.createShader(t);gl.shaderSource(o,src);gl.compileShader(o);return o;}
@@ -611,10 +624,10 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
   gl.bindAttribLocation(pr,0,'p');gl.linkProgram(pr);if(!gl.getProgramParameter(pr,gl.LINK_STATUS))return;gl.useProgram(pr);
   gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
   gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
-  const uR=gl.getUniformLocation(pr,'R'),uT=gl.getUniformLocation(pr,'T'),uH=gl.getUniformLocation(pr,'H');
+  const uR=gl.getUniformLocation(pr,'R'),uT=gl.getUniformLocation(pr,'T'),uP=gl.getUniformLocation(pr,'P');
   const LOOP=12; // 초: 블루 → 옐로·오렌지 → 블루
   function size(){const d=Math.min(devicePixelRatio||1,1.5);cv.width=Math.round(cv.clientWidth*d);cv.height=Math.round(cv.clientHeight*d);gl.viewport(0,0,cv.width,cv.height);}
-  function draw(sec){const ph=(sec%LOOP)/LOOP,H=.5-.5*Math.cos(ph*Math.PI*2);gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,sec);gl.uniform1f(uH,H);gl.drawArrays(gl.TRIANGLES,0,3);}
+  function draw(sec){gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,sec);gl.uniform1f(uP,(sec%LOOP)/LOOP);gl.drawArrays(gl.TRIANGLES,0,3);}
   size();addEventListener('resize',()=>{size();draw(clock);});
   let clock=0,prev=performance.now(),visible=true;
   draw(0);
