@@ -76,7 +76,6 @@ b, strong{ font-weight: inherit; }
 .hero h1{ max-width: none; font-weight: 800; letter-spacing: 0; line-height: 1; }
 .hero h1 .l1{ display: block; font-size: var(--text-section); font-stretch: 100%; margin-bottom: var(--space-sm); }
 .hero h1 .l2{ display: block; font-size: clamp(3.5rem, 9vw, 8rem); font-stretch: 125%; text-transform: uppercase; }
-.gl-live .hero h1 span{ animation: settle .9s var(--ease-out) 1.6s both; }
 @keyframes settle{ from{ opacity: 0; } to{ opacity: 1; } }
 #cd-m.tick{ animation: tick .6s var(--ease-out); }
 @keyframes tick{ 30%{ transform: translateY(-4px); } }
@@ -1012,7 +1011,7 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
   gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
   const U={};['R','PH','RA','OA','KA','BA','SA','TWK','OFF','MD','MC','IT','TM','CELL','GT','TX','TB','TC'].forEach(n=>U[n]=gl.getUniformLocation(pr,n));
   gl.uniform1i(U.GT,0);gl.uniform1i(U.TX,1);
-  const D=Math.PI/180,LOOP=19,CYCLE=30,INTRO=4.5,START=6.5;
+  const D=Math.PI/180,LOOP=19,CYCLE=30,INTRO=0,START=6.5; // INTRO=0: 도트가 제목 글자로 모이는 인트로 제거 (2026-11-05)
   // on load (once): dots fly in from far out in swirling waves onto the heading's own letters (0.1-1.65s); the solid heading fades in over them
   // (1.6-2.5s) while they drift off, and the ribbon arrives (2.2-4s).
   // then a 30s loop: ribbon, dots light up left to right 6-9 (a count), dots to 13, numbers come in 13-16, numbers to 20,
