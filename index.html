@@ -3,509 +3,276 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>전자주주총회 플랫폼 시연 설명회 | IR큐더스</title>
-<meta name="description" content="2026.11.30 여의도 페어몬트 앰배서더 서울 · 2027년 전자주주총회 의무화 대비 IR큐더스 전자주주총회 플랫폼 시연 설명회">
+<title>전자주주총회플랫폼 시연 설명회 | IR큐더스</title>
+<meta name="description" content="2026.11.30 여의도 페어몬트 앰배서더 서울 · 2027년 전자주주총회 의무화 대비 IR큐더스 전자주주총회플랫폼 시연 설명회">
 <meta property="og:type" content="website">
-<meta property="og:title" content="전자주주총회 플랫폼 시연 설명회">
-<meta property="og:description" content="2026.11.30 여의도 페어몬트 앰배서더 서울 · 2027년 전자주주총회 의무화 대비 IR큐더스 전자주주총회 플랫폼 시연 설명회">
-<!-- TODO: 도메인 확정 후 절대 URL로 교체 (예: https://seminar.irkudos.co.kr/assets/og-image.png, 1200x630) -->
+<meta property="og:title" content="전자주주총회플랫폼 시연 설명회">
+<meta property="og:description" content="2026.11.30 여의도 페어몬트 앰배서더 서울 · 2027년 전자주주총회 의무화 대비 IR큐더스 전자주주총회플랫폼 시연 설명회">
+<!-- TODO: 도메인 확정 후 절대 URL로 교체 (1200x630) -->
 <meta property="og:image" content="assets/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230071f3'/%3E%3Cpath d='M12 9l11 7-11 7z' fill='%23f6f8fb'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#121212">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232f6bff'/%3E%3Cpath d='M12 9l11 7-11 7z' fill='%23fff'/%3E%3C/svg%3E">
 <!-- TODO: GA 스크립트 -->
-<script>document.documentElement.classList.add('js');</script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,800&family=IBM+Plex+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
-/* Hallmark · shape: Manifesto (draw a385b3) · genre: modern-minimal · theme: brand · redesign: full · job: attend
- * paper: #f6f8fb · accent: #0071f3 (brand) · display: Archivo 800 wide · body: IBM Plex Sans KR · hero: Ledge · nav: slab · footer: mast · signature: dots fly in from far out in swirling waves onto the heading's own letters and the solid "GO LIVE" settles over them as the ribbon arrives (once), then a 30s loop: dots light up left to right like a vote count, a number ticker, back to the ribbon; each new minute pulses it (pausable)
- * axes: light/display-heavy/chromatic-blue · posture: committed (the hero ribbon carries the brand blue; elsewhere the blue is a signal) · imagery: none, the ribbon and the venue sketch are canvas · contrast: pass · fold: pass · v2.0.0 */
-/* Hallmark · pre-emit critique: P4 H5 E4 S4 R4 V4 · weakest: P, a seminar page argues little; led with the owner's own claim ("준비의 시간은 끝났습니다") as a statement right under the hero */
-/* Hallmark · dropped "프로필 사진 수령 예정", the JYI/JYK/SYP initials · placeholder notes, not content; speakers are set in type until photos arrive */
-/* Hallmark · reworded "SESSION 1" to "세션 1", "STEP 01" to a counter numeral, "13:00 – 13:30" to "13:00~13:30", "30′" to "30분", "HOST/PARTNERS" to "주최/협력" · 67 and 19 name them */
-/* Hallmark · reworded "GO LIVE." to "GO LIVE" · 38iii names the blue full stop as an accented mark */
-/* Hallmark · reworded the perk headings to <dt> terms, the countdown to "31일 00시간 00분" · same words, a definition list and Korean units instead of tiles and DAYS/HRS/MIN */
-/* Hallmark · dismissed 41 · accent-ink sits on --color-accent-2 (the darker brand step), never on the brand blue itself */
-/* Hallmark · dropped the 2026.11.04 platform-opening row, the 2025 deck link, the fee and deadline rows · the owner replaced, withheld and removed them (2026-10-30) */
-/* Hallmark · reworded "자리를 미리 확보하세요" to "사전등록으로 참석을 신청하세요" · the owner asked for a new line */
-/* Hallmark · speakers and location follow DAN25 by the owner's request: tall cards with photo slots, a dark map beside a light card */
-/* Hallmark · waive 77 · the GET READY band holds the owner's two figures (160, 90) at display size · a short band between the timeline and the schedule, with the 2025 deck withheld there is nothing else true to add */
-/* Hallmark · dismissed 19 · "All rights reserved" is the owner's legal line and stays as written */
-@import url("./tokens.css");
-@import url("./base.css");
+/* v3 (2026-11-05) · 원티드 HIGHFIVE 2026 스타일 참고: 다크 그라운드, 블루 그라디언트 히어로, 가운데 정렬 단일 컬럼, 블루 타이틀 카드 */
+:root{
+  color-scheme: dark;
+  --bg:#121212; --card:#1e1e1e; --card-2:#262626; --line:#2e2e2e;
+  --fg:#ffffff; --fg-2:#c7c7c7; --fg-3:#8a8a8a;
+  --blue:#5ea2ff;      /* 타이틀·강조 텍스트 (HIGHFIVE 트랙 타이틀 톤) */
+  --blue-2:#2f6bff;    /* 버튼 */
+  --blue-3:#4a80ff;
+  --chip-ink:#0a1a33;
+  --wrap:832px; --wide:1120px;
+  --font:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  /* 약도 스크립트용 토큰 */
+  --color-ink:#121212; --color-map-block:#242424; --color-rule-on-ink:#333; --color-on-ink:#fff; --color-on-ink-muted:#9a9a9a;
+  --color-accent:#2f6bff; --color-line5:#996cac; --color-line9:#bdb092; --font-body:var(--font);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 16px/1.7 var(--font);word-break:keep-all;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+h1,h2,h3,h4,p{margin:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}
+.wrap{width:100%;max-width:calc(var(--wrap) + 48px);margin-inline:auto;padding-inline:max(24px,env(safe-area-inset-left,0px))}
+.wide{max-width:calc(var(--wide) + 48px)}
+.tbd{padding:0 4px;border:1px dashed var(--fg-3);border-radius:3px;color:var(--fg-3)}
 
-:root{ --nav-h: 76px; }
-html{ scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + var(--space-md)); }
-body{ line-height: 1.65; word-break: keep-all; }
-b, strong{ font-weight: inherit; }
-.grid12{ display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--gap-columns); }
-.tbd{ padding: 0 var(--space-2xs); border: 1px dashed var(--color-muted); border-radius: 3px; color: var(--color-muted); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 28px;border-radius:999px;border:0;background:var(--blue-2);color:#fff;font:700 16px/1 var(--font);text-decoration:none;cursor:pointer;transition:background-color .2s}
+.btn:hover{background:var(--blue-3)}
+.btn--ghost{background:#2b2b2b;color:#fff}
+.btn--ghost:hover{background:#363636}
+.btn--sm{min-height:36px;padding:0 14px;font-size:13px;border-radius:8px}
+.btn svg{width:18px;height:18px}
 
-/* Controls */
-.btn{ display: inline-flex; align-items: center; min-height: 48px; padding: 0 var(--space-lg); border: 1px solid var(--color-accent-2); border-radius: var(--radius-pill); background: var(--color-accent-2); color: var(--color-accent-ink); font: 700 var(--text-md)/1 var(--font-body); white-space: nowrap; text-decoration: none; cursor: pointer; transition: background-color var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out), transform var(--dur-micro) var(--ease-out); }
-.btn:hover{ background: var(--color-accent-3); border-color: var(--color-accent-3); }
-.btn:active{ transform: translateY(1px); }
-.btn:focus-visible{ outline: 2px solid var(--color-focus); outline-offset: 2px; }
-.btn:disabled, .btn[aria-disabled="true"]{ opacity: .55; cursor: not-allowed; transform: none; }
-.btn--quiet{ background: transparent; color: var(--color-ink); border-color: var(--color-rule); }
-.btn--quiet:hover{ background: var(--color-paper-2); border-color: var(--color-muted); }
-.btn--sm{ min-height: 44px; padding: 0 var(--space-md); font-size: var(--text-sm); }
-.actions{ display: flex; flex-wrap: wrap; gap: var(--space-sm); }
+/* Header */
+.top{position:fixed;inset:0 0 auto;z-index:50;padding-top:env(safe-area-inset-top,0px);transition:background-color .3s,border-color .3s;border-bottom:1px solid transparent}
+.top.is-solid .dday{color:var(--blue)}
+.top.is-solid{background:rgba(18,18,18,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom-color:var(--line)}
+.top__in{display:flex;align-items:center;gap:20px;height:60px;padding-inline:max(24px,env(safe-area-inset-left,0px))}
+.brand{display:block;color:#fff;flex:none}
+.brand svg{height:26px;width:auto;display:block}
+.brand svg *{fill:currentColor}
+.top nav{display:flex;gap:24px;margin-left:auto}
+.top nav a{font-size:14px;font-weight:500;color:var(--fg-2);text-decoration:none}
+.top nav a:hover,.top nav a.is-on{color:#fff}
+.dday{font-size:13px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums}
 
-/* Nav: a slab */
-.gnb{ position: sticky; top: 0; z-index: var(--z-sticky-nav); background: var(--color-ink); color: var(--color-on-ink); }
-.gnb .container{ display: flex; align-items: center; gap: var(--space-lg); height: var(--nav-h); }
-.brand{ display: block; flex-shrink: 0; color: var(--color-on-ink); }
-.brand svg{ height: 44px; width: auto; }
-.brand .lg-b{ fill: var(--color-accent); }
-.brand .lg-t{ fill: currentColor; }
-.gnb nav{ display: flex; gap: var(--space-lg); margin-left: auto; margin-right: var(--space-md); }
-.gnb nav a{ font-size: var(--text-md); color: var(--color-on-ink-muted); text-decoration: none; transition: color var(--dur-short) var(--ease-out); }
-.gnb nav a:hover{ color: var(--color-on-ink); }
-.gnb a:focus-visible, .gnb .btn:focus-visible{ outline-color: var(--color-focus-on-ink); }
-.gnb .btn--ghost{ min-height: 44px; padding: 0; background: transparent; border-color: transparent; color: var(--color-on-ink); font-size: var(--text-md); }
-.gnb .btn--ghost:hover{ background: transparent; border-color: transparent; color: var(--color-focus-on-ink); }
-.dday{ display: inline-flex; align-items: center; min-height: 32px; padding: 0 var(--space-sm); border: 1px solid var(--color-focus-on-ink); border-radius: var(--radius-pill); font: 800 var(--text-md)/1 var(--font-display); font-stretch: 108%; font-variant-numeric: tabular-nums; color: var(--color-focus-on-ink); white-space: nowrap; }
-
-/* Hero: a ledge */
-.hero{ position: relative; isolation: isolate; min-height: calc(100svh - var(--nav-h)); display: flex; align-items: flex-end; }
-#flow{ position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; display: block; }
-.hero .container{ width: 100%; }
-.hero__in{ display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); gap: var(--space-2xl); align-items: end; padding-block: var(--space-3xl) var(--space-2xl); }
-.hero h1{ max-width: none; font-weight: 800; letter-spacing: 0; line-height: 1; }
-.hero h1 .l1{ display: block; font-size: var(--text-section); font-stretch: 100%; margin-bottom: var(--space-sm); }
-.hero h1 .l2{ display: block; font-size: clamp(3.5rem, 9vw, 8rem); font-stretch: 125%; text-transform: uppercase; }
-@keyframes settle{ from{ opacity: 0; } to{ opacity: 1; } }
-#cd-m.tick{ animation: tick .6s var(--ease-out); }
-@keyframes tick{ 30%{ transform: translateY(-4px); } }
-.count b{ display: block; }
-@media (prefers-reduced-motion: reduce){ .gl-live .hero h1 span, #cd-m.tick{ animation: none; } }
-.hero .lead{ margin-top: var(--space-lg); color: var(--color-ink-2); font-weight: 700; }
-.hero .actions{ margin-top: var(--space-xl); }
-.meta{ margin: 0; display: grid; border-top: 2px solid var(--color-ink); }
-.meta div{ display: grid; gap: var(--space-2xs); padding-block: var(--space-sm); border-bottom: 1px solid var(--color-rule); }
-.meta dt{ font-size: var(--text-sm); color: var(--color-muted); }
-.meta dd{ margin: 0; font-weight: 700; line-height: 1.45; }
-.meta .num{ font-variant-numeric: tabular-nums; }
-.side{ display: grid; gap: var(--space-lg); }
-.count{ display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-md); }
-.count div{ display: grid; gap: var(--space-2xs); }
-.count b{ font: 800 var(--text-display-s)/1 var(--font-display); font-stretch: 110%; font-variant-numeric: tabular-nums; }
-.count span{ font-size: var(--text-sm); color: var(--color-muted); }
-.flow-toggle{ position: absolute; top: var(--space-md); right: var(--gutter); min-height: 44px; padding: 0 var(--space-sm); background: transparent; border: 1px solid transparent; border-radius: var(--radius-pill); color: var(--color-ink-2); font-size: var(--text-sm); cursor: pointer; transition: border-color var(--dur-short) var(--ease-out); }
-.flow-toggle:hover{ border-color: var(--color-rule); }
-.flow-toggle:active{ transform: translateY(1px); }
-.flow-toggle:focus-visible{ outline: 2px solid var(--color-focus); outline-offset: 2px; }
-html:not(.js) .flow-toggle{ display: none; }
+/* Hero: flowing blue gradient */
+.hero{position:relative;overflow:hidden;isolation:isolate;min-height:min(78vh,760px);display:grid;place-items:center;text-align:center;background:#1f4ff2;padding:120px 24px 96px}
+.hero .bl{position:absolute;border-radius:50%;filter:blur(70px);z-index:-1;will-change:transform}
+.bl.b1{width:70vw;height:70vw;left:-20vw;top:-25vw;background:#0e2bd8;animation:d1 22s ease-in-out infinite alternate}
+.bl.b2{width:55vw;height:55vw;right:-15vw;top:-10vw;background:#3aa0ff;animation:d2 26s ease-in-out infinite alternate}
+.bl.b3{width:45vw;height:30vw;right:5vw;bottom:-12vw;background:#cfc6ff;opacity:.75;animation:d3 20s ease-in-out infinite alternate}
+.bl.b4{width:16vw;height:90vw;left:46vw;top:-30vw;background:#eaf3ff;opacity:.55;border-radius:40%;transform:rotate(28deg);animation:d4 18s ease-in-out infinite alternate}
+.bl.b5{width:40vw;height:40vw;left:5vw;bottom:-20vw;background:#3f37e8;animation:d2 30s ease-in-out infinite alternate-reverse}
+@keyframes d1{to{transform:translate(12vw,8vw) scale(1.1)}}
+@keyframes d2{to{transform:translate(-10vw,10vw) scale(.92)}}
+@keyframes d3{to{transform:translate(-14vw,-6vw) scale(1.15)}}
+@keyframes d4{from{transform:translateX(-8vw) rotate(28deg)}to{transform:translateX(10vw) rotate(34deg)}}
+.hero::after{content:"";position:absolute;inset:auto 0 0;height:120px;background:linear-gradient(to bottom,transparent,rgba(18,18,18,.35));z-index:-1}
+.hero__k{font-size:15px;font-weight:600;color:rgba(255,255,255,.82);letter-spacing:.02em}
+.hero h1{margin-top:18px;font-weight:800;font-size:clamp(40px,7.2vw,92px);line-height:1.12;letter-spacing:-.035em;color:#eef4ff;text-wrap:balance}
+.hero h1 span{display:block}
+.hero__meta{margin-top:28px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;font-size:17px;font-weight:600;color:rgba(255,255,255,.9)}
+.hero__meta i{font-style:normal;opacity:.5}
 
 /* Sections */
-.sec{ padding-block: var(--section-gap); }
-.sec--s{ padding-block: var(--section-gap-s); }
-.sec--l{ padding-block: var(--section-gap-l); }
-.sec--well{ background: var(--color-paper-2); }
-.head{ margin-bottom: var(--space-2xl); }
-.head .lead{ margin-top: var(--space-md); color: var(--color-ink-2); }
-.head--split{ align-items: end; }
-.head--split h2{ grid-column: 1 / 6; }
-.head--split .lead{ grid-column: 7 / 13; margin-top: 0; }
+section{padding-block:140px}
+.sec-h{text-align:center}
+.sec-h h2{font-size:clamp(28px,3.4vw,40px);font-weight:700;line-height:1.4;letter-spacing:-.025em}
+.sec-h p{margin-top:16px;color:var(--fg-2);font-size:17px}
 
-/* Statement + timeline */
-.statement{ max-width: none; font-size: var(--text-display-s); line-height: 1.15; }
-#about .lead{ margin-top: var(--space-lg); color: var(--color-ink-2); }
-.tl{ list-style: none; margin: var(--space-2xl) 0 0; padding: 0; border-top: 2px solid var(--color-ink); }
-.tl li{ display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--gap-columns); align-items: baseline; padding-block: var(--space-lg); border-bottom: 1px solid var(--color-rule); }
-.tl time{ grid-column: 1 / 4; font: 800 var(--text-title)/1.2 var(--font-display); font-variant-numeric: tabular-nums; }
-.tl h3{ grid-column: 4 / 8; }
-.tl p{ grid-column: 8 / 13; color: var(--color-ink-2); }
-.tl li.now{ background: var(--color-paper-2); }
-.tl li.now time{ color: var(--color-accent); }
+/* Intro */
+.intro{text-align:center}
+.intro h2{font-size:clamp(30px,3.8vw,44px);font-weight:700;line-height:1.38;letter-spacing:-.03em}
+.intro h2 em{font-style:normal;color:var(--blue)}
+.intro__p{margin-top:44px;display:grid;gap:14px;font-size:18px;color:var(--fg-2)}
+.intro__p p:last-child{margin-top:18px;color:#fff;font-weight:600}
+.info{margin-top:56px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 28px;font-size:16px;color:var(--fg-2)}
+.info b{color:#fff;font-weight:700;margin-right:8px}
+.count{margin-top:40px;display:flex;justify-content:center;gap:28px;font-variant-numeric:tabular-nums}
+.count div{display:flex;align-items:baseline;gap:6px}
+.count b{font-size:40px;font-weight:800;letter-spacing:-.02em}
+.count span{font-size:14px;color:var(--fg-3)}
+.intro .btn{margin-top:44px}
 
-/* Series */
-.series{ align-items: end; }
-.series__head{ grid-column: 1 / 7; }
-.series__head .lead{ margin-top: var(--space-md); color: var(--color-ink-2); }
-.series__note{ margin-top: var(--space-lg); color: var(--color-ink-2); }
-.stats{ grid-column: 7 / 13; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.stat{ display: grid; gap: var(--space-xs); padding-inline: var(--space-lg); border-left: 1px solid var(--color-rule); }
-.stat:first-child{ padding-left: 0; border-left: 0; }
-.stat b{ font: 800 var(--text-display)/1 var(--font-display); font-stretch: 110%; font-variant-numeric: tabular-nums; }
-.stat b small{ font: 700 var(--text-lead)/1 var(--font-body); margin-left: var(--space-2xs); color: var(--color-ink-2); }
-.stat span{ font-size: var(--text-sm); color: var(--color-ink-2); }
+/* Program cards */
+.prog{margin-top:64px;display:grid;gap:12px}
+.pc{background:var(--card);border-radius:16px;padding:32px}
+.pc__h{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.pc__h h3{font-size:28px;font-weight:700;letter-spacing:-.02em;color:var(--blue);line-height:1.3}
+.chip{display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:4px;background:var(--blue);color:var(--chip-ink);font-size:12px;font-weight:700;white-space:nowrap}
+.pc__d{margin-top:8px;font-size:15px;color:var(--fg-2)}
+.rows{margin-top:24px;border-top:1px solid var(--line)}
+.r{display:grid;grid-template-columns:132px minmax(0,1fr);gap:16px;padding:18px 0;border-bottom:1px solid var(--line)}
+.r:last-child{border-bottom:0;padding-bottom:0}
+.r__t{font-size:14px;font-weight:600;color:var(--fg-3);font-variant-numeric:tabular-nums;padding-top:2px}
+.r__ti{font-size:18px;font-weight:700;line-height:1.45}
+.r__ti.is-blue{color:var(--blue)}
+.r__sp{margin-top:4px;font-size:14px;color:var(--fg-3)}
+.r__sp b{color:var(--fg-2);font-weight:600;margin-right:6px}
+.r.minor .r__ti{font-size:16px;font-weight:500;color:var(--fg-2)}
 
-/* Program: a schedule */
-.prog{ border-top: 2px solid var(--color-ink); }
-.row{ display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 6fr) minmax(0, 3fr); gap: var(--gap-columns); align-items: center; padding: var(--space-md) var(--space-sm); border-bottom: 1px solid var(--color-rule); }
-.row .time{ font-variant-numeric: tabular-nums; }
-.row .dur{ justify-self: start; font-size: var(--text-sm); color: var(--color-muted); font-variant-numeric: tabular-nums; }
-.row .ti{ min-width: 0; font-weight: 700; }
-.row .sp{ font-size: var(--text-sm); color: var(--color-ink-2); text-align: right; }
-.row.minor{ color: var(--color-muted); }
-.row.minor .ti{ font-weight: 400; }
-.row.session{ padding-block: var(--space-lg); }
-.row.session .ti small{ display: block; margin-bottom: var(--space-2xs); font-size: var(--text-sm); font-weight: 400; color: var(--color-muted); }
-.row.session .ti strong{ font-size: var(--text-title); line-height: 1.35; }
-.row.session .ti strong + small{ margin: var(--space-2xs) 0 0; }
-.row.session .sp{ color: var(--color-ink); }
-.row.hl{ background: var(--color-ink); color: var(--color-on-ink); }
-.row.hl .ti small, .row.hl .dur{ color: var(--color-on-ink-muted); }
-.row.hl .sp{ color: var(--color-on-ink); }
+/* Demo */
+.stages{margin:64px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.stages>li{background:var(--card);border-radius:16px;padding:28px;display:grid;gap:12px;align-content:start}
+.st-n{font-size:14px;font-weight:700;color:var(--fg-3)}
+.stages h3{font-size:22px;font-weight:700;color:var(--blue);letter-spacing:-.02em;line-height:1.35}
+.stages ul{margin:0;padding:0;list-style:none;display:grid;gap:6px;font-size:15px;color:var(--fg-2)}
+.stages ul li{padding-left:14px;position:relative}
+.stages ul li::before{content:"";position:absolute;left:0;top:.72em;width:4px;height:4px;border-radius:50%;background:var(--fg-3)}
+.tagbox{margin-top:12px;background:var(--card);border-radius:16px;padding:28px 32px;display:grid;gap:20px}
+.tagrow{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;align-items:baseline}
+.tagrow h4{font-size:15px;font-weight:700}
+.tagrow ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.tagrow li{padding:6px 12px;border-radius:999px;background:var(--card-2);font-size:14px;color:var(--fg-2)}
+.app{margin-top:12px;background:var(--card);border-radius:16px;padding:28px 32px;display:flex;flex-wrap:wrap;gap:16px 24px;align-items:center;justify-content:space-between}
+.app p{font-size:15px;color:var(--fg-2);max-width:36em}
+.app p b{display:block;color:#fff;font-size:18px;margin-bottom:4px}
+.app small{display:block;margin-top:4px;color:var(--fg-3);font-size:13px}
 
-/* Demo participation note under the schedule */
-.demo{ margin-top: var(--space-xl); align-items: center; padding: var(--space-xl); border-radius: var(--radius-card); background: var(--color-paper-2); }
-.demo__t{ grid-column: 1 / 9; }
-.demo__t h3{ max-width: none; }
-.demo__t p{ margin-top: var(--space-xs); color: var(--color-ink-2); }
-.demo__t p.note{ font-size: var(--text-sm); color: var(--color-muted); }
-.demo .actions{ grid-column: 9 / 13; justify-content: flex-end; }
+/* Speakers */
+.spk{margin:64px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.spk li{position:relative;border-radius:16px;overflow:hidden;background:var(--card);aspect-ratio:4/5}
+.spk img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 18%}
+.spk .cap{position:absolute;inset:auto 0 0;padding:72px 24px 24px;background:linear-gradient(to top,rgba(18,18,18,.96) 30%,transparent)}
+.spk .ss{font-size:13px;font-weight:700;color:var(--blue)}
+.spk h3{margin-top:6px;font-size:20px;font-weight:700}
+.spk .org{font-size:14px;color:var(--fg-2)}
+.spk .topic{margin-top:10px;font-size:14px;color:var(--fg-3);line-height:1.5}
 
-/* Speakers: tall cards, the talk set large, name at the foot (after DAN25) */
-.lineup{ list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-md); }
-.spk{ aspect-ratio: 4 / 5; border-radius: var(--radius-card); background: var(--color-ink); color: var(--color-on-ink); }
-.spk__in{ position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: flex-end; gap: var(--space-md); padding: var(--space-xl); }
-.spk:has(> img) .spk__in{ background: linear-gradient(to top, var(--color-ink) 0%, color-mix(in oklab, var(--color-ink) 70%, transparent) 35%, transparent 65%); }
-.spk .topic{ font: 700 var(--text-title)/1.35 var(--font-body); max-width: 18ch; text-wrap: balance; }
-.spk .who{ display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2xs) var(--space-xs); }
-.spk h3{ font: 700 var(--text-md)/1.4 var(--font-body); letter-spacing: 0; }
-.spk .org{ font-size: var(--text-md); color: var(--color-on-ink-muted); }
-.spk .ss{ position: absolute; top: var(--space-xl); left: var(--space-xl); font-size: var(--text-sm); color: var(--color-on-ink-muted); }
-.spk > img{ object-position: 50% 18%; }
-.spk .tbd{ color: var(--color-on-ink-muted); border-color: var(--color-on-ink-muted); }
+/* Benefits */
+.ben{margin-top:64px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.ben div{background:var(--card);border-radius:16px;padding:28px;min-height:200px;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;background-image:radial-gradient(120% 90% at 100% 0%,rgba(47,107,255,.28),transparent 60%)}
+.ben span{font-size:14px;font-weight:700;color:var(--fg-3)}
+.ben h3{font-size:21px;font-weight:700;letter-spacing:-.02em}
+.ben p{font-size:15px;color:var(--fg-2)}
 
-/* Location: a dark map beside a light card (after DAN25) */
-.loc{ display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-md); }
-.map{ position: relative; min-height: 520px; border-radius: var(--radius-card); background: var(--color-ink); overflow: hidden; }
-.map canvas{ position: absolute; inset: 0; width: 100%; height: 100%; }
-.loc-card{ display: grid; align-content: center; gap: var(--space-xl); padding: var(--space-2xl); border-radius: var(--radius-card); background: var(--color-paper); }
-.loc-card h3{ font-size: var(--text-display-s); line-height: 1.1; max-width: none; }
-.loc-card .hall{ margin-top: var(--space-xs); font: 700 var(--text-lead)/1.4 var(--font-body); }
-.loc-card .addr{ display: flex; flex-wrap: wrap; gap: var(--space-sm); align-items: center; }
-.loc-card .ways{ margin: 0; }
-.btn svg{ width: 20px; height: 20px; margin-left: var(--space-xs); flex-shrink: 0; }
-.ways div{ display: grid; grid-template-columns: 4rem minmax(0, 1fr); gap: var(--space-md); padding-block: var(--space-sm); border-bottom: 1px solid var(--color-rule); }
-.ways dt{ font-size: var(--text-sm); color: var(--color-muted); }
-.ways dd{ margin: 0; }
-.copy{ min-height: 44px; white-space: nowrap; padding: 0 var(--space-md); border: 1px solid var(--color-rule); border-radius: var(--radius-pill); background: transparent; color: var(--color-ink); font-size: var(--text-sm); cursor: pointer; transition: background-color var(--dur-short) var(--ease-out); }
-.copy:hover{ background: var(--color-paper-2); }
-.copy:active{ transform: translateY(1px); }
-.copy:focus-visible{ outline: 2px solid var(--color-focus); outline-offset: 2px; }
-.copy:disabled{ opacity: .55; cursor: not-allowed; }
+/* Register */
+.reg{text-align:center}
+.reg__k{font-size:18px;font-weight:700}
+.reg__big{margin-top:6px;font-size:clamp(56px,9vw,104px);font-weight:800;letter-spacing:-.04em;line-height:1.1;color:var(--blue)}
+.reg__p{margin-top:28px;color:var(--fg-2);font-size:17px}
+.reg .btn{margin-top:36px}
+.reg__note{margin-top:14px;font-size:13px}
+.facts{margin:56px auto 0;max-width:640px;text-align:left;background:var(--card);border-radius:16px;padding:8px 28px}
+.facts div{display:grid;grid-template-columns:96px minmax(0,1fr);gap:16px;padding:16px 0;border-bottom:1px solid var(--line)}
+.facts div:last-child{border-bottom:0}
+.facts dt{font-size:14px;color:var(--fg-3)}
+.facts dd{margin:0;font-weight:600}
+.steps{margin:20px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;text-align:left;counter-reset:s}
+.steps li{counter-increment:s;background:var(--card);border-radius:16px;padding:24px;display:grid;gap:6px;align-content:start}
+.steps li::before{content:"STEP " counter(s,decimal-leading-zero);font-size:12px;font-weight:700;color:var(--blue);letter-spacing:.04em}
+.steps h4{font-size:17px;font-weight:700}
+.steps p{font-size:14px;color:var(--fg-2)}
+.guide-h{margin-top:96px;font-size:24px;font-weight:700;text-align:center}
+.guide-p{margin-top:10px;text-align:center;color:var(--fg-2);font-size:15px}
 
-/* FAQ: head beside rows */
-.faq-wrap .head{ grid-column: 1 / 5; margin-bottom: 0; }
-.faq{ grid-column: 5 / 13; border-top: 2px solid var(--color-ink); }
-.faq details{ border-bottom: 1px solid var(--color-rule); }
-.faq summary{ list-style: none; cursor: pointer; display: flex; justify-content: space-between; gap: var(--space-lg); padding-block: var(--space-lg); font-weight: 700; font-size: var(--text-lead); }
-.faq summary::-webkit-details-marker{ display: none; }
-.faq summary::after{ content: "+"; flex: none; font: 800 var(--text-title)/1 var(--font-display); color: var(--color-accent); transition: transform var(--dur-short) var(--ease-out); }
-.faq details[open] summary::after{ transform: rotate(45deg); }
-.faq summary:focus-visible{ outline: 2px solid var(--color-focus); outline-offset: 2px; }
-.faq details p{ padding-bottom: var(--space-lg); color: var(--color-ink-2); }
+/* Location */
+.loc{margin-top:64px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.map{position:relative;min-height:420px;border-radius:16px;overflow:hidden;background:var(--card)}
+.map canvas{position:absolute;inset:0;width:100%;height:100%}
+.lc{background:var(--card);border-radius:16px;padding:32px;display:grid;gap:24px;align-content:center}
+.lc h3{font-size:26px;font-weight:700;letter-spacing:-.02em;line-height:1.3}
+.lc .hall{margin-top:4px;color:var(--blue);font-weight:700}
+.ways{margin:0}
+.ways div{display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:15px}
+.ways dt{color:var(--fg-3);font-size:14px}
+.ways dd{margin:0;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.copy{min-height:32px;padding:0 10px;border:0;border-radius:6px;background:var(--card-2);color:var(--fg-2);font:500 13px var(--font);cursor:pointer}
+.maplinks{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.maplinks .btn{min-height:46px;font-size:15px}
 
-/* Register + how to attend: the close, on ink */
-.close{ background: var(--color-ink); color: var(--color-on-ink); }
-.close .btn:focus-visible, .close a:focus-visible{ outline-color: var(--color-focus-on-ink); }
-.close .tbd{ color: var(--color-on-ink-muted); border-color: var(--color-on-ink-muted); }
-.reg{ align-items: start; }
-.reg__main{ grid-column: 1 / 7; }
-.reg__main p{ margin-top: var(--space-md); color: var(--color-on-ink-muted); max-width: 46ch; }
-.reg__main .actions{ margin-top: var(--space-xl); }
-.reg__main p.note{ margin-top: var(--space-md); font-size: var(--text-sm); }
-.facts{ grid-column: 8 / 13; margin: 0; border-top: 2px solid var(--color-on-ink); }
-.facts div{ display: grid; grid-template-columns: 6rem minmax(0, 1fr); gap: var(--space-md); padding-block: var(--space-md); border-bottom: 1px solid var(--color-rule-on-ink); }
-.facts dt{ font-size: var(--text-sm); color: var(--color-on-ink-muted); }
-.facts dd{ margin: 0; font-weight: 700; }
-.guide{ margin-top: var(--section-gap-s); padding-top: var(--space-2xl); border-top: 1px solid var(--color-rule-on-ink); }
-.guide h3{ font-size: var(--text-section); max-width: none; }
-.guide > p{ margin-top: var(--space-md); color: var(--color-on-ink-muted); }
-.steps{ list-style: none; counter-reset: s; margin: var(--space-2xl) 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gap-columns); }
-.steps li{ counter-increment: s; display: grid; gap: var(--space-xs); align-content: start; min-width: 0; }
-.steps li::before{ content: counter(s); font: 800 var(--text-display-s)/1 var(--font-display); color: var(--color-focus-on-ink); font-variant-numeric: tabular-nums; }
-.steps h4{ margin: var(--space-sm) 0 0; font-size: var(--text-title); line-height: 1.3; }
-.steps p{ color: var(--color-on-ink-muted); }
-.perks{ margin: var(--space-2xl) 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap-columns); border-top: 1px solid var(--color-rule-on-ink); }
-.perks div{ padding-top: var(--space-lg); min-width: 0; }
-.perks dt{ font-weight: 700; }
-.perks dd{ margin: var(--space-2xs) 0 0; color: var(--color-on-ink-muted); }
+/* FAQ */
+.faq{margin-top:64px;display:grid;gap:8px}
+.faq details{background:var(--card);border-radius:12px}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 24px;font-size:17px;font-weight:600}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";flex:none;width:10px;height:10px;border-right:2px solid var(--blue);border-bottom:2px solid var(--blue);transform:rotate(45deg) translateY(-3px);transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(-135deg) translateY(-3px)}
+.faq details p{padding:0 24px 22px;color:var(--fg-2);font-size:15px}
 
-/* Footer: a mast */
-footer{ padding-block: var(--space-3xl) var(--space-2xl); border-top: 1px solid var(--color-rule); }
-.mast{ width: min(100%, 36rem); height: auto; }
-.foot{ margin-top: var(--space-2xl); align-items: start; }
-.lg{ grid-column: span 4; margin: 0; display: grid; gap: var(--space-xs); }
-.lg dt{ font-size: var(--text-sm); color: var(--color-muted); }
-.lg dd{ margin: 0; display: flex; flex-wrap: wrap; gap: var(--space-xs) var(--space-lg); font-weight: 700; }
-.legal{ grid-column: span 4; display: grid; gap: var(--space-2xs); justify-items: end; text-align: right; }
-.legal small{ font-size: var(--text-sm); color: var(--color-ink-2); }
+/* Footer */
+footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;color:var(--fg-3)}
+.ft{display:flex;flex-wrap:wrap;justify-content:space-between;gap:32px}
+.ft .brand svg{height:28px}
+.ft dl{margin:16px 0 0;display:grid;gap:6px}
+.ft dl div{display:flex;gap:12px}
+.ft dt{min-width:32px}
+.ft dd{margin:0;color:var(--fg-2)}
+.legal{display:grid;gap:4px;justify-items:end;text-align:right}
+.legal a{padding-block:6px;display:inline-block}
 
-/* Mobile register bar */
-.mbar{ display: none; }
+/* Mobile CTA bar */
+.mbar{display:none}
 
-@media (max-width: 60rem){
-  .gnb nav{ display: none; }
-  .dday{ margin-left: auto; }
-  .hero__in{ grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); }
-  .head--split h2, .head--split .lead, .series__head, .stats, .reg__main, .facts, .faq-wrap .head, .faq, .demo__t, .demo .actions{ grid-column: 1 / -1; }
-  .head--split .lead{ margin-top: var(--space-md); }
-  .faq-wrap .head{ margin-bottom: var(--space-xl); }
-  .tl time{ grid-column: 1 / -1; }
-  .tl h3, .tl p{ grid-column: 1 / -1; }
-  .stats{ margin-top: var(--space-xl); }
-  .row{ grid-template-columns: minmax(0, 7rem) minmax(0, 1fr); gap: var(--space-2xs) var(--space-md); }
-  .row .dur{ grid-column: 1; grid-row: 2; }
-  .row .ti{ grid-column: 2; grid-row: 1 / 3; }
-  .row .sp{ grid-column: 2; text-align: left; }
-  .lineup{ grid-template-columns: minmax(0, 1fr); }
-  .spk{ aspect-ratio: 4 / 3; }
-  .loc{ grid-template-columns: minmax(0, 1fr); }
-  .map{ min-height: 360px; }
-  .loc-card{ padding: var(--space-xl) var(--space-lg); }
-  .demo .actions{ justify-content: flex-start; }
-  .steps{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .perks{ grid-template-columns: minmax(0, 1fr); }
-  .lg, .legal{ grid-column: 1 / -1; }
-  .legal{ justify-items: start; text-align: left; }
-  .facts{ margin-top: var(--space-xl); }
+@media (max-width:960px){
+  .top nav{display:none}
+  .dday{margin-left:auto}
+  section{padding-block:104px}
+  .stages,.ben{grid-template-columns:minmax(0,1fr)}
+  .steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .spk{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:72%;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:-24px;padding-inline:24px;scroll-padding-inline:24px;scrollbar-width:none}
+  .spk::-webkit-scrollbar{display:none}
+  .spk li{scroll-snap-align:start}
+  .loc{grid-template-columns:minmax(0,1fr)}
+  .map{min-height:280px}
 }
-@media (max-width: 40rem){
-  .gnb .btn{ display: none; }
-  .brand svg{ height: 36px; }
-  .steps{ grid-template-columns: minmax(0, 1fr); }
-  .stats{ grid-template-columns: minmax(0, 1fr); }
-  .stat{ padding: var(--space-md) 0; border-left: 0; border-top: 1px solid var(--color-rule); }
-  .stat:first-child{ border-top: 0; }
-  footer{ padding-bottom: calc(var(--space-3xl) + var(--space-2xl)); }
-  .mbar{ display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-sticky); gap: var(--space-sm); align-items: center;
-    padding: var(--space-sm) var(--space-md) calc(var(--space-sm) + env(safe-area-inset-bottom, 0px));
-    background: var(--color-ink); color: var(--color-on-ink); }
-  .mbar .mbar__t{ font-size: var(--text-sm); color: var(--color-on-ink-muted); line-height: 1.4; }
-  .mbar .mbar__t b{ display: block; font-weight: 700; color: var(--color-on-ink); }
-  .mbar .btn{ margin-left: auto; }
-  .mbar .btn:focus-visible{ outline-color: var(--color-focus-on-ink); }
+@media (max-width:640px){
+  .wrap{padding-inline:max(20px,env(safe-area-inset-left,0px))}
+  .top__in{padding-inline:20px;height:56px}
+  .brand svg{height:22px}
+  .top .btn--sm{display:none}
+  .hero{min-height:auto;padding:128px 20px 88px}
+  .hero h1{font-size:clamp(34px,10.4vw,48px)}
+  .hero__meta{font-size:15px;flex-direction:column;gap:2px}
+  .hero__meta i{display:none}
+  section{padding-block:80px}
+  .intro__p{margin-top:32px;font-size:16px}
+  .intro__p br{display:none}
+  .info{flex-direction:column;gap:4px;margin-top:40px}
+  .count b{font-size:32px}
+  .count{gap:20px}
+  .intro .btn,.reg .btn{width:100%}
+  .prog{margin-top:44px}
+  .pc{padding:24px 20px}
+  .pc__h h3{font-size:22px}
+  .r{grid-template-columns:minmax(0,1fr);gap:2px;padding:14px 0}
+  .r.minor{grid-template-columns:104px minmax(0,1fr);gap:8px}
+  .r__ti{font-size:16px}
+  .r.minor .r__ti{font-size:15px}
+  .tagbox,.app{padding:24px 20px}
+  .tagrow{grid-template-columns:minmax(0,1fr);gap:10px}
+  .app .btn{width:100%}
+  .spk{grid-auto-columns:82%;margin-inline:-20px;padding-inline:20px;scroll-padding-inline:20px}
+  .steps{grid-template-columns:minmax(0,1fr)}
+  .facts{padding:4px 20px}
+  .facts div{grid-template-columns:80px minmax(0,1fr)}
+  .lc{padding:24px 20px}
+  .faq summary{padding:18px 20px;font-size:16px}
+  .faq details p{padding:0 20px 18px}
+  .legal{justify-items:start;text-align:left}
+  footer{padding-bottom:120px}
+  .mbar{display:flex;position:fixed;inset:auto 0 0;z-index:60;align-items:center;gap:12px;padding:12px 20px calc(12px + env(safe-area-inset-bottom,0px));background:rgba(18,18,18,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);transition:transform .35s}
+  .mbar.is-hidden{transform:translateY(110%)}
+  .mbar span{font-size:13px;color:var(--fg-3);line-height:1.4}
+  .mbar span b{display:block;color:#fff}
+  .mbar .btn{margin-left:auto;min-height:44px;padding:0 20px;font-size:15px}
 }
-
-/* ===== Mobile pass (2026-10-30) · DAN25식 모바일: 상단 탭 스트립, 압축 타임테이블, 연사 가로 스와이프, 스크롤 후 노출되는 하단 CTA ===== */
-@media (max-width: 60rem){
-  :root{ --nav-strip: 44px; }
-  .gnb .container{ flex-wrap: wrap; height: auto; column-gap: var(--space-sm); row-gap: 0; }
-  .gnb .brand, .gnb .dday, .gnb .btn{ margin-block: calc((var(--nav-h) - 44px) / 2); }
-  .gnb nav{ order: 3; flex: 0 0 auto; width: calc(100% + 2 * var(--gutter)); display: flex; gap: var(--space-lg); height: var(--nav-strip); align-items: stretch;
-    margin: 0 calc(-1 * var(--gutter)); padding-inline: var(--gutter); overflow-x: auto; scrollbar-width: none; border-top: 1px solid var(--color-rule-on-ink); }
-  .gnb nav::-webkit-scrollbar{ display: none; }
-  .gnb nav a{ display: flex; align-items: center; flex: none; font-size: var(--text-sm); border-bottom: 2px solid transparent; }
-  .gnb nav a.is-on{ color: var(--color-on-ink); border-bottom-color: var(--color-focus-on-ink); }
-  html{ scroll-padding-top: calc(var(--nav-h) + var(--nav-strip) + var(--space-sm)); }
-  .hero{ min-height: auto; }
-}
-@media (max-width: 40rem){
-  :root{ --nav-h: 56px; --section-gap-s: 48px; --section-gap: 64px; --section-gap-l: 72px; }
-  .brand svg{ height: 26px; }
-  .dday{ min-height: 28px; font-size: var(--text-sm); }
-  .head{ margin-bottom: var(--space-lg); }
-  .head .lead, .head--split .lead{ margin-top: var(--space-sm); }
-
-  /* Hero: 상단은 리본 영역, 텍스트는 아래로 · 보조 CTA 숨김 · 일정 정보를 카운트다운보다 먼저 */
-  .hero__in{ padding-block: 46vw var(--space-xl); gap: var(--space-lg); }
-  .hero h1 .l1{ font-size: 1.375rem; margin-bottom: var(--space-2xs); }
-  .hero h1 .l2{ font-size: clamp(3.25rem, 16vw, 4.5rem); }
-  .hero .lead{ margin-top: var(--space-sm); font-size: var(--text-md); }
-  .hero .actions{ margin-top: var(--space-lg); }
-  .hero .actions .btn{ flex: 1; justify-content: center; }
-  .hero .actions .btn--quiet{ display: none; }
-  .side{ gap: var(--space-md); }
-  .meta{ order: -1; }
-  .meta div{ grid-template-columns: 3rem minmax(0, 1fr); gap: var(--space-sm); padding-block: var(--space-xs); }
-  .meta dd{ font-size: var(--text-sm); }
-  .count{ grid-template-columns: repeat(3, auto); justify-content: start; gap: var(--space-lg); }
-  .count div{ grid-auto-flow: column; align-items: baseline; gap: var(--space-2xs); }
-  .count b{ font-size: 2rem; }
-  .flow-toggle{ top: var(--space-xs); right: var(--space-xs); font-size: var(--text-xs); }
-
-  /* About timeline */
-  .statement{ font-size: 1.875rem; }
-  #about .lead{ margin-top: var(--space-md); }
-  .tl{ margin-top: var(--space-xl); }
-  .tl li{ gap: var(--space-2xs) 0; padding-block: var(--space-md); }
-  .tl time{ font-size: var(--text-lg); }
-  .tl h3{ font-size: var(--text-md); }
-  .tl p{ font-size: var(--text-sm); }
-  .tl li.now{ margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); }
-
-  /* Series: 수치 2단 */
-  .stats{ grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: var(--space-lg); }
-  .stat, .stat:first-child{ padding: 0 0 0 var(--space-md); border-top: 0; border-left: 1px solid var(--color-rule); }
-  .stat:first-child{ padding-left: 0; border-left: 0; }
-  .stat b{ font-size: 2.75rem; }
-  .stat b small{ font-size: var(--text-md); }
-
-  /* Program: 시간·분량 한 줄 → 제목 → 연사 / 휴식은 한 줄로 */
-  .row, .row.session{ grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "time dur" "ti ti" "sp sp"; gap: var(--space-2xs) var(--space-xs); padding: var(--space-md) 0; }
-  .row .time{ grid-area: time; font-size: var(--text-sm); color: var(--color-muted); }
-  .row .dur{ grid-area: dur; }
-  .row .dur::before{ content: "· "; }
-  .row .ti{ grid-area: ti; margin-top: var(--space-2xs); }
-  .row .sp{ grid-area: sp; text-align: left; font-size: var(--text-sm); }
-  .row .sp:empty{ display: none; }
-  .row.session .ti small{ font-size: var(--text-xs); }
-  .row.session .ti strong{ font-size: 1.1875rem; }
-  .row.minor{ grid-template-columns: auto minmax(0, 1fr) auto; grid-template-areas: "time ti dur" ". sp ."; padding-block: var(--space-sm); font-size: var(--text-sm); }
-  .row.minor .ti{ margin-top: 0; padding-left: var(--space-sm); }
-  .row.minor .sp{ padding-left: var(--space-sm); }
-  .row.minor .dur::before{ content: none; }
-  .row.minor .dur{ justify-self: end; }
-  .row.hl{ margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); }
-  .row.hl .time{ color: var(--color-on-ink-muted); }
-  .demo{ padding: var(--space-lg) var(--space-md); margin-top: var(--space-lg); }
-  .demo .actions .btn{ flex: 1; justify-content: center; }
-
-  /* Speakers: 가로 스와이프 */
-  .lineup{ grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 80%; gap: var(--space-sm);
-    margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter); scroll-padding-inline: var(--gutter);
-    overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; }
-  .lineup::-webkit-scrollbar{ display: none; }
-  .spk{ aspect-ratio: 3 / 4; scroll-snap-align: start; }
-  .spk__in{ padding: var(--space-lg); gap: var(--space-sm); }
-  .spk:has(> img) .spk__in{ background: linear-gradient(to top, var(--color-ink) 0%, color-mix(in oklab, var(--color-ink) 82%, transparent) 30%, transparent 55%); }
-  .spk .topic{ font-size: var(--text-lg); }
-  .spk .ss{ top: var(--space-lg); left: var(--space-lg); }
-  .lineup-dots{ display: flex; justify-content: center; gap: var(--space-xs); margin-top: var(--space-md); }
-  .lineup-dots i{ width: 6px; height: 6px; border-radius: 50%; background: var(--color-rule); transition: width var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out); }
-  .lineup-dots i.on{ width: 18px; border-radius: 3px; background: var(--color-ink); }
-
-  /* Location */
-  .map{ min-height: 240px; }
-  .loc-card{ padding: var(--space-lg) var(--space-md); gap: var(--space-lg); }
-  .loc-card h3{ font-size: 1.625rem; }
-  .loc-card .hall{ font-size: var(--text-md); }
-  .ways div{ grid-template-columns: 3.5rem minmax(0, 1fr); }
-  .loc-card .actions{ display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .loc-card .actions .btn{ justify-content: center; padding-inline: var(--space-sm); }
-
-  /* FAQ */
-  .faq-wrap .head{ margin-bottom: var(--space-lg); }
-  .faq summary{ font-size: var(--text-md); padding-block: var(--space-md); }
-  .faq details p{ font-size: var(--text-sm); padding-bottom: var(--space-md); }
-
-  /* Register + guide */
-  .reg__main .actions .btn{ flex: 1; justify-content: center; }
-  .facts{ margin-top: var(--space-lg); }
-  .facts div{ grid-template-columns: 4.5rem minmax(0, 1fr); padding-block: var(--space-sm); }
-  .guide{ margin-top: var(--space-2xl); padding-top: var(--space-xl); }
-  .guide h3{ font-size: 1.75rem; }
-  .steps{ margin-top: var(--space-lg); gap: var(--space-lg); }
-  .steps li{ grid-template-columns: 2.25rem minmax(0, 1fr); column-gap: var(--space-sm); row-gap: var(--space-2xs); }
-  .steps li::before{ grid-row: 1 / 3; font-size: 1.75rem; }
-  .steps h4{ margin: 0; font-size: var(--text-lg); }
-  .steps p{ font-size: var(--text-sm); }
-  .perks{ margin-top: var(--space-xl); gap: 0; }
-  .perks div{ padding-block: var(--space-md); border-bottom: 1px solid var(--color-rule-on-ink); }
-  .perks dd{ font-size: var(--text-sm); }
-
-  /* Footer */
-  .mast{ width: 220px; }
-  .foot{ margin-top: var(--space-xl); row-gap: var(--space-lg); }
-  .legal a{ display: inline-block; padding-block: var(--space-sm); }
-
-  /* 하단 CTA: 히어로·등록 섹션이 보일 땐 숨김 */
-  .mbar{ transition: transform var(--dur-long) var(--ease-out); }
-  .mbar.is-hidden{ transform: translateY(110%); }
-}
-@media (max-width: 40rem) and (prefers-reduced-motion: reduce){ .mbar{ transition: none; } }
-
-/* ===== v2 (2026-11-05): IR큐더스 로고, 국문 타이틀, Molocon식 아젠다, 시연 섹션 ===== */
-.gnb{ background: color-mix(in oklab, var(--color-paper) 92%, transparent); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: var(--color-ink); border-bottom: 1px solid var(--color-rule); }
-.brand{ color: var(--color-ink); }
-.brand svg{ height: 34px; }
-.brand .lg-t{ fill: #373837; }
-.brand .lg-b{ fill: #024f2b; }
-.gnb nav a{ color: var(--color-ink-2); }
-.gnb nav a:hover{ color: var(--color-ink); }
-.gnb a:focus-visible, .gnb .btn:focus-visible{ outline-color: var(--color-focus); }
-.gnb .btn--ghost{ color: var(--color-accent-2); }
-.gnb .btn--ghost:hover{ color: var(--color-accent-3); }
-.dday{ border-color: var(--color-accent); color: var(--color-accent); }
-.mast{ width: min(100%, 22rem); }
-
-.hero .kicker{ font-weight: 700; color: var(--color-accent-2); margin-bottom: var(--space-md); }
-.hero h1 .l2{ font-size: clamp(2.5rem, 5.4vw, 5.5rem); font-stretch: 100%; line-height: 1.12; letter-spacing: -0.03em; text-transform: none; white-space: nowrap; }
-.hero .lead{ font-weight: 400; max-width: 34em; }
-
-/* Agenda: a centred list with group headers between dotted rules (after Molocon26) */
-.ag-head{ text-align: center; margin-bottom: var(--space-2xl); }
-.ag-head h2{ margin-inline: auto; }
-.ag-head .lead{ margin: var(--space-md) auto 0; color: var(--color-ink-2); max-width: 40em; }
-.agenda{ max-width: 920px; margin-inline: auto; }
-.ag-g{ max-width: none; margin: 0; padding: var(--space-md) var(--space-lg); font-size: var(--text-lg); font-weight: 700; letter-spacing: -0.01em; color: var(--color-accent-2);
-  border-top: 1px dotted var(--color-ink); border-bottom: 1px dotted var(--color-ink); margin-top: -1px; }
-.ag-row{ display: grid; grid-template-columns: 13rem minmax(0, 1fr); gap: var(--space-lg); padding: var(--space-lg); border-bottom: 1px dotted var(--color-rule); }
-.ag-row:last-child, .ag-row:has(+ .ag-g), .ag-row:has(+ .ag-live){ border-bottom: 0; }
-.ag-t{ font: 700 var(--text-sm)/1.6 var(--font-body); font-variant-numeric: tabular-nums; color: var(--color-ink); }
-.ag-ti{ font-size: var(--text-lg); font-weight: 700; line-height: 1.4; }
-.ag-sp{ margin-top: var(--space-2xs); font-size: var(--text-sm); color: var(--color-ink-2); }
-.ag-sp b{ font-weight: 700; color: var(--color-ink); margin-right: var(--space-2xs); }
-.ag-row.minor{ padding-block: var(--space-md); }
-.ag-row.minor .ag-ti{ font-size: var(--text-md); }
-.ag-row.minor .ag-t{ color: var(--color-muted); }
-.ag-live{ display: grid; grid-template-columns: 13rem minmax(0, 1fr) auto; grid-template-areas: "t title go" "t desc go"; gap: var(--space-xs) var(--space-lg); align-items: start;
-  margin-block: var(--space-sm) var(--space-md); padding: var(--space-xl) var(--space-lg); border-radius: var(--radius-card); background: var(--color-ink); color: var(--color-on-ink); text-decoration: none; position: relative; overflow: hidden; isolation: isolate; }
-.ag-live::after{ content: ""; position: absolute; inset: -40% -10% -40% 55%; z-index: -1; background: radial-gradient(closest-side, color-mix(in oklab, var(--color-accent) 55%, transparent), transparent); }
-.ag-live .ag-t{ grid-area: t; color: var(--color-focus-on-ink); }
-.ag-live__t{ grid-area: title; font: 800 var(--text-section)/1.15 var(--font-display); letter-spacing: -0.02em; }
-.ag-live__d{ grid-area: desc; font-size: var(--text-sm); color: var(--color-on-ink-muted); }
-.ag-live__d b{ color: var(--color-on-ink); }
-.ag-live__go{ grid-area: go; align-self: end; font-size: var(--text-sm); font-weight: 700; color: var(--color-on-ink); border-bottom: 1px solid currentColor; white-space: nowrap; }
-.ag-live:hover .ag-live__go{ color: var(--color-focus-on-ink); }
-.ag-live:focus-visible{ outline: 2px solid var(--color-focus); outline-offset: 3px; }
-
-/* Demo: three stages + screen and agenda tags */
-.stages{ list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-md); counter-reset: st; }
-.stages > li{ counter-increment: st; padding: var(--space-xl); border-radius: var(--radius-card); background: var(--color-paper); display: grid; gap: var(--space-sm); align-content: start; min-width: 0; }
-.st-k{ display: flex; align-items: baseline; gap: var(--space-xs); font-weight: 700; color: var(--color-accent-2); }
-.st-k::before{ content: counter(st, decimal-leading-zero); font: 800 var(--text-display-s)/1 var(--font-display); color: var(--color-ink); }
-.stages h3{ font-size: var(--text-title); max-width: none; }
-.stages ul{ margin: 0; padding: 0; list-style: none; display: grid; gap: var(--space-2xs); color: var(--color-ink-2); font-size: var(--text-sm); }
-.stages ul li{ padding-left: var(--space-md); position: relative; }
-.stages ul li::before{ content: ""; position: absolute; left: 0; top: .7em; width: 6px; height: 6px; border-radius: 50%; background: var(--color-accent); }
-.screens{ margin-top: var(--space-xl); display: grid; grid-template-columns: 13rem minmax(0, 1fr); gap: var(--space-md); align-items: baseline; }
-.screens__h{ font-weight: 700; font-size: var(--text-sm); }
-.screens ul{ list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-xs); }
-.screens ul li{ padding: var(--space-2xs) var(--space-sm); border: 1px solid var(--color-rule); border-radius: var(--radius-pill); background: var(--color-paper); font-size: var(--text-sm); }
-.screens + .screens{ margin-top: var(--space-md); }
-.app{ margin-top: var(--space-xl); padding-top: var(--space-xl); border-top: 1px solid var(--color-rule); display: flex; flex-wrap: wrap; gap: var(--space-md) var(--space-xl); align-items: center; justify-content: space-between; }
-.app p{ max-width: 52em; color: var(--color-ink-2); }
-.app p b{ color: var(--color-ink); }
-.app .note{ display: block; margin-top: var(--space-2xs); font-size: var(--text-sm); color: var(--color-muted); }
-
-@media (max-width: 60rem){
-  .gnb nav{ border-top-color: var(--color-rule); }
-  .gnb nav a.is-on{ color: var(--color-ink); border-bottom-color: var(--color-accent); }
-  .stages{ grid-template-columns: minmax(0, 1fr); }
-  .screens{ grid-template-columns: minmax(0, 1fr); gap: var(--space-xs); }
-}
-@media (max-width: 40rem){
-  .brand svg{ height: 26px; }
-  .hero h1 .l2{ font-size: clamp(2rem, 9.2vw, 2.75rem); }
-  .hero .kicker{ font-size: var(--text-sm); margin-bottom: var(--space-xs); }
-  .ag-head{ text-align: left; margin-bottom: var(--space-lg); }
-  .ag-head .lead{ margin-left: 0; }
-  .ag-g{ padding-inline: 0; font-size: var(--text-md); }
-  .ag-row{ grid-template-columns: minmax(0, 1fr); gap: var(--space-2xs); padding: var(--space-md) 0; }
-  .ag-row.minor{ grid-template-columns: 7.5rem minmax(0, 1fr); padding-block: var(--space-sm); }
-  .ag-ti{ font-size: var(--text-md); }
-  .ag-live{ grid-template-columns: minmax(0, 1fr); grid-template-areas: "t" "title" "desc" "go"; margin-inline: calc(-1 * var(--gutter)); border-radius: 0; padding: var(--space-xl) var(--gutter); }
-  .ag-live__t{ font-size: 2rem; }
-  .ag-live__go{ justify-self: start; margin-top: var(--space-xs); }
-  .stages > li{ padding: var(--space-lg); }
-  .app .btn{ flex: 1; justify-content: center; }
-  .mast{ width: 180px; }
-}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero .bl{animation:none}.mbar{transition:none}}
 </style>
 </head>
 <body>
 
-<header class="gnb">
-  <div class="container">
-    <a class="brand" href="#top" aria-label="IR큐더스, 맨 위로"><svg viewBox="0 0 1014.29 283.46" aria-hidden="true" focusable="false"><g>
+<header class="top" id="top">
+  <div class="top__in">
+    <a class="brand" href="#" aria-label="IR큐더스, 맨 위로"><svg viewBox="0 0 1014.29 283.46" aria-hidden="true" focusable="false"><g>
     <path d="M970.2,177.85c10.82,0,17.47-3.76,17.47-11.28,0-5.26-3.16-8.12-10.65-10.83s-22.47-6.62-32.45-11.88c-9.99-5.26-15.31-13.08-15.31-25.26,0-20.9,16.81-33.38,42.1-33.38,11.82,0,26.13,2.71,36.61,7.67v23.16c-12.65-7.07-26.79-10.07-35.95-10.07-9.82,0-16.14,3.46-16.14,10.38,0,5.26,3.33,7.97,10.98,10.68,7.66,2.71,22.63,6.47,32.62,11.88s14.81,14.14,14.81,25.56c0,21.5-17.47,34.14-43.6,34.14-12.48,0-28.12-3.01-39.61-8.57v-24.06c13.48,8.42,29.79,11.88,39.11,11.88v-.02Z" class="lg-t"/>
     <polygon points="511.09 85.22 481.74 85.22 437.22 140.41 437.22 135.58 437.22 135.58 437.22 85.22 411.88 85.22 411.88 195.7 437.22 195.7 437.22 141.83 437.22 141.83 437.22 140.58 481.74 195.77 511.09 195.77 466.51 140.49 511.09 85.22" class="lg-t"/>
     <path d="M557.13,85.22v62.48c0,7.97,1.13,15.03,5.5,20.39,4.37,5.37,11,8.59,20.22,8.59s15.85-3.22,20.22-8.59,5.66-12.42,5.66-20.39v-62.48h24.74v64.01c0,12.27-2.75,24.69-11.32,34.04-8.57,9.35-22.32,15.33-39.78,15.33s-31.21-5.83-39.62-15.33-11.32-21.31-11.32-34.04v-64.01h25.71-.01Z" class="lg-t"/>
@@ -519,282 +286,224 @@ footer{ padding-block: var(--space-3xl) var(--space-2xl); border-top: 1px solid 
     <polygon points="29.97 216.05 84.43 283.46 193.33 283.46 84.36 149.13 29.97 216.05" class="lg-b"/>
   </g></svg></a>
     <nav aria-label="섹션">
-      <a href="#about">About</a><a href="#program">Program</a><a href="#demo">Demo</a><a href="#speakers">Speakers</a><a href="#location">Location</a><a href="#faq">FAQ</a>
+      <a href="#about">소개</a><a href="#program">프로그램</a><a href="#demo">시연</a><a href="#speakers">연사</a><a href="#location">오시는 길</a><a href="#faq">FAQ</a>
     </nav>
-    <span class="dday" id="dday">D-31</span>
-    <a class="btn btn--sm btn--ghost" href="#register">사전등록</a>
+    <span class="dday" id="dday">D-25</span>
+    <a class="btn btn--sm" href="#register">사전등록</a>
   </div>
 </header>
 
-<main id="top">
-  <section class="hero" aria-label="세미나 소개">
-    <canvas id="flow" aria-hidden="true"></canvas>
-    <button class="flow-toggle" id="flowToggle" type="button" aria-pressed="false">일시정지</button>
-    <div class="container">
-      <div class="hero__in">
-        <div>
-          <p class="kicker">2027 전자주주총회 의무화 대비</p>
-          <h1><span class="l2">전자주주총회</span><span class="l2">플랫폼 시연 설명회</span></h1>
-          <p class="lead">주주명부 설정부터 사전 의결권 관리, 주총 당일 운영과 집계까지 실제 화면으로 보여드립니다.</p>
-          <div class="actions">
-            <a class="btn" href="#register">사전등록하기</a>
-            <a class="btn btn--quiet" href="#program">프로그램 보기</a>
+<main>
+  <section class="hero" aria-label="설명회 소개">
+    <i class="bl b1"></i><i class="bl b2"></i><i class="bl b5"></i><i class="bl b3"></i><i class="bl b4"></i>
+    <div>
+      <p class="hero__k">IR큐더스 · 2026</p>
+      <h1><span>전자주주총회플랫폼</span><span>시연 설명회</span></h1>
+      <p class="hero__meta"><span>2026.11.30 (월) 13:30</span><i>|</i><span>페어몬트 앰배서더 서울 B1 그랜드볼룸</span></p>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap intro">
+      <h2>2027년 전자주주총회 의무화,<br><em>실제 화면</em>으로 미리 준비하세요</h2>
+      <div class="intro__p">
+        <p>전자주주총회 플랫폼이 문을 열었고, <br>2027년 정기주주총회부터 전자주주총회가 의무화됩니다.</p>
+        <p>IR큐더스가 법률·학계 전문가와 함께 의무화 쟁점을 짚고, <br>주주명부 설정부터 주총 당일 운영과 집계까지 실제 플랫폼으로 보여드립니다.</p>
+        <p>지금 시연 설명회에서 2027년 정기주주총회를 준비하세요.</p>
+      </div>
+      <p class="info"><span><b>일정</b>2026.11.30 (월) 13:30~18:00 (등록 13:00)</span><span><b>장소</b>페어몬트 앰배서더 서울 B1 그랜드볼룸</span></p>
+      <div class="count" role="timer" aria-label="행사까지 남은 시간"><div><b id="cd-d">25</b><span>일</span></div><div><b id="cd-h">00</b><span>시간</span></div><div><b id="cd-m">00</b><span>분</span></div></div>
+      <a class="btn" href="#register">사전등록하기</a>
+    </div>
+  </section>
+
+  <section id="program">
+    <div class="wrap">
+      <div class="sec-h">
+        <h2>법률·학계의 시선으로 짚고,<br>실제 플랫폼으로 확인합니다</h2>
+        <p>의무화 쟁점 세션에 이어 가상의 주주총회를 함께 운영합니다.</p>
+      </div>
+      <div class="prog">
+        <article class="pc">
+          <div class="pc__h"><h3>Opening</h3><span class="chip">13:00~13:40</span></div>
+          <div class="rows">
+            <div class="r minor"><span class="r__t">13:00~13:30</span><div><p class="r__ti">등록 및 입장</p></div></div>
+            <div class="r minor"><span class="r__t">13:30~13:40</span><div><p class="r__ti">개회 및 행사·경품 안내</p></div></div>
           </div>
-        </div>
-        <div class="side">
-          <div class="count" role="timer" aria-label="행사까지 남은 시간">
-            <div><b id="cd-d">31</b><span>일</span></div>
-            <div><b id="cd-h">00</b><span>시간</span></div>
-            <div><b id="cd-m">00</b><span>분</span></div>
+        </article>
+        <article class="pc">
+          <div class="pc__h"><h3>의무화가 바꾸는 주주총회</h3><span class="chip">13:40~15:30</span></div>
+          <p class="pc__d">상법 개정과 전자주주총회 의무화를 법률·학계 관점에서 다룹니다.</p>
+          <div class="rows">
+            <div class="r"><span class="r__t">13:40~14:20</span><div><p class="r__ti">상법 개정 관련 영향 및 대응방안</p><p class="r__sp"><b>전영익</b>김앤장 법률사무소, 변호사</p></div></div>
+            <div class="r minor"><span class="r__t">14:20~14:35</span><div><p class="r__ti">브레이크 타임</p></div></div>
+            <div class="r"><span class="r__t">14:35~15:15</span><div><p class="r__ti is-blue">상법 개정과 전자주총이 몰고 올 기업 경영의 지각변동</p><p class="r__sp"><b>권재열</b>한국주주총회연구소, 연구소장</p></div></div>
+            <div class="r minor"><span class="r__t">15:15~15:30</span><div><p class="r__ti">브레이크 타임</p></div></div>
           </div>
-          <dl class="meta">
-            <div><dt>일시</dt><dd><span class="num">2026.11.30</span> 월요일<br><span class="num">13:30~18:00</span> (등록 13:00)</dd></div>
-            <div><dt>장소</dt><dd>페어몬트 앰배서더 서울 B1 그랜드볼룸</dd></div>
-          </dl>
-        </div>
+        </article>
+        <article class="pc">
+          <div class="pc__h"><h3>전자주주총회 플랫폼 시연</h3><span class="chip">15:30~17:25</span></div>
+          <p class="pc__d">IR큐더스의 전자주주총회 솔루션을 소개하고, 참석자와 함께 가상의 주주총회를 진행합니다.</p>
+          <div class="rows">
+            <div class="r"><span class="r__t">15:30~16:10</span><div><p class="r__ti">전자주총 디지털 대응방안 및 솔루션 소개</p><p class="r__sp"><b>박성용</b>IR큐더스, 본부장</p></div></div>
+            <div class="r"><span class="r__t">16:10~17:25</span><div><p class="r__ti">가상의 주주총회 라이브 시연</p><p class="r__sp"><b>박성용</b>IR큐더스, 본부장 · 참석자가 주주PASS로 직접 투표에 참여합니다</p></div></div>
+          </div>
+        </article>
+        <article class="pc">
+          <div class="pc__h"><h3>Q&amp;A · Closing</h3><span class="chip">17:25~18:00</span></div>
+          <div class="rows">
+            <div class="r"><span class="r__t">17:25~17:50</span><div><p class="r__ti">Q&amp;A: 사전질문 답변 및 현장 질의</p><p class="r__sp"><b>전체 연사</b></p></div></div>
+            <div class="r minor"><span class="r__t">17:50~18:00</span><div><p class="r__ti">경품 추첨 및 폐회</p></div></div>
+          </div>
+        </article>
       </div>
     </div>
   </section>
 
-  <section class="sec--l" id="about">
-    <div class="container">
-      <h2 class="statement">준비의 시간은 끝났습니다.<br>이제 실행입니다.</h2>
-      <p class="lead">전자주주총회 플랫폼이 문을 열었고, 2027년 정기주총부터는 의무입니다. 남은 한 번의 준비 기간에 실무 기준과 운영 방법을 정리합니다.</p>
-      <ol class="tl">
-        <li><time datetime="2025-11-25">2025.11.25</time><h3>GET READY 세미나</h3><p>전자주총·집중투표 의무화 대비 실무 세미나</p></li>
-        <li class="now"><time datetime="2026-11-30">2026.11.30</time><h3>플랫폼 시연 설명회</h3><p>법률·학계·실무 관점에서 의무화 대응 방안 점검</p></li>
-        <li class="end"><time datetime="2027">2027</time><h3>정기주총 의무화</h3><p>상장회사 전자주주총회 시행</p></li>
-      </ol>
-    </div>
-  </section>
-
-  <section class="sec--s sec--well" id="series">
-    <div class="container grid12 series">
-      <div class="series__head">
-        <h2>작년에는 준비를, 올해는 실전을</h2>
-        <p class="lead">2025년 「GET READY」 세미나에서 함께 짚었던 과제를, 올해는 실제 운영 화면으로 이어갑니다.</p>
-      </div>
-      <div class="stats">
-        <div class="stat"><b data-count="160">160<small>개사</small></b><span>2025 세미나 참석 기업</span></div>
-        <div class="stat"><b data-count="90">90<small>개사</small></b><span>세미나 이후 PoC 진행 기업</span></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="sec" id="program">
-    <div class="container">
-      <div class="ag-head">
-        <h2>프로그램</h2>
-        <p class="lead">법률·학계 관점에서 의무화 쟁점을 짚고, 실제 플랫폼으로 가상의 주주총회를 운영합니다.</p>
-      </div>
-      <div class="agenda">
-        <h3 class="ag-g">Opening</h3>
-          <div class="ag-row minor"><span class="ag-t">13:00 – 13:30</span><div class="ag-b"><p class="ag-ti">등록 및 입장</p></div></div>
-          <div class="ag-row minor"><span class="ag-t">13:30 – 13:40</span><div class="ag-b"><p class="ag-ti">개회 및 행사·경품 안내</p><p class="ag-sp"><b>IR큐더스</b> </p></div></div>
-        <h3 class="ag-g">의무화가 바꾸는 주주총회</h3>
-          <div class="ag-row"><span class="ag-t">13:40 – 14:20</span><div class="ag-b"><p class="ag-ti">상법 개정 관련 영향 및 대응방안</p><p class="ag-sp"><b>전영익</b> 김앤장 법률사무소, 변호사</p></div></div>
-          <div class="ag-row minor"><span class="ag-t">14:20 – 14:35</span><div class="ag-b"><p class="ag-ti">브레이크 타임</p></div></div>
-          <div class="ag-row"><span class="ag-t">14:35 – 15:15</span><div class="ag-b"><p class="ag-ti">상법 개정과 전자주총이 몰고 올 기업 경영의 지각변동</p><p class="ag-sp"><b>권재열</b> 한국주주총회연구소, 연구소장</p></div></div>
-          <div class="ag-row minor"><span class="ag-t">15:15 – 15:30</span><div class="ag-b"><p class="ag-ti">브레이크 타임</p></div></div>
-        <h3 class="ag-g">전자주주총회 플랫폼 시연</h3>
-          <div class="ag-row"><span class="ag-t">15:30 – 16:10</span><div class="ag-b"><p class="ag-ti">전자주총 디지털 대응방안 및 솔루션 소개</p><p class="ag-sp"><b>박성용</b> IR큐더스, 본부장</p></div></div>
-          <a class="ag-live" href="#demo">
-            <span class="ag-t">16:10 – 17:25</span>
-            <span class="ag-live__t">가상의 주주총회<br>라이브 시연</span>
-            <span class="ag-live__d">참석자가 주주PASS로 직접 투표에 참여합니다 · <b>박성용</b> IR큐더스, 본부장</span>
-            <span class="ag-live__go">시연 내용 보기</span>
-          </a>
-        <h3 class="ag-g">Q&amp;A · Closing</h3>
-          <div class="ag-row"><span class="ag-t">17:25 – 17:50</span><div class="ag-b"><p class="ag-ti">Q&amp;A: 사전질문 답변 및 현장 질의</p><p class="ag-sp"><b>전체 연사</b> </p></div></div>
-          <div class="ag-row minor"><span class="ag-t">17:50 – 18:00</span><div class="ag-b"><p class="ag-ti">경품 추첨 및 폐회</p></div></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="sec sec--well" id="demo">
-    <div class="container">
-      <div class="head head--split grid12">
+  <section id="demo">
+    <div class="wrap">
+      <div class="sec-h">
         <h2>준비부터 집계까지,<br>주주총회 한 번을 그대로</h2>
-        <p class="lead">가상의 회사·주주·의안으로 주주총회 전 과정을 진행합니다. 관리자와 주주, 의장석 화면을 함께 띄워 각 단계가 어떻게 이어지는지 보여드립니다.</p>
+        <p>가상의 회사·주주·의안으로 주주총회 전 과정을 진행합니다.</p>
       </div>
       <ol class="stages">
-        <li><span class="st-k">설정</span><h3>명부와 의안을 준비합니다</h3><ul><li>주주명부 연결, 투표권자 확정</li><li>의안 설정과 양립불가 연계</li><li>의결권 제한(3% 룰) 자동 계산</li></ul></li>
-        <li><span class="st-k">사전</span><h3>주총 전 의결권을 모읍니다</h3><ul><li>의결권 권유, 전자·서면 투표 현황</li><li>중복·불통일·집중투표 관리</li><li>개인·법인·해외 주주의 전자주총 참여</li></ul></li>
-        <li><span class="st-k">당일</span><h3>현장과 온라인을 함께 운영합니다</h3><ul><li>본인·대리인 참석 등록, 출석 현황</li><li>의장·사회자 화면으로 상정과 표결</li><li>총회 종료와 결과 집계</li></ul></li>
+        <li><span class="st-n">01 설정</span><h3>명부와 의안을 준비합니다</h3><ul><li>주주명부 연결, 투표권자 확정</li><li>의안 설정과 양립불가 연계</li><li>의결권 제한(3% 룰) 자동 계산</li></ul></li>
+        <li><span class="st-n">02 사전</span><h3>주총 전 의결권을 모읍니다</h3><ul><li>의결권 권유, 전자·서면 투표 현황</li><li>중복·불통일·집중투표 관리</li><li>개인·법인·해외 주주의 전자주총 참여</li></ul></li>
+        <li><span class="st-n">03 당일</span><h3>현장과 온라인을 함께 운영합니다</h3><ul><li>본인·대리인 참석 등록, 출석 현황</li><li>의장·사회자 화면으로 상정과 표결</li><li>총회 종료와 결과 집계</li></ul></li>
       </ol>
-      <div class="screens">
-        <p class="screens__h">함께 띄우는 6개 화면</p>
-        <ul><li>커넥서스 관리자</li><li>전자주주총회 주주 화면</li><li>현장표결앱</li><li>의장용 화면</li><li>사회자용 화면</li><li>의결권권유앱</li></ul>
-      </div>
-      <div class="screens">
-        <p class="screens__h">시연 의안에서 확인할 것</p>
-        <ul><li>특별결의 가결요건</li><li>배당 수정동의</li><li>감사위원 분리선출 합산 3%</li><li>특별이해관계자 의결권 제한</li><li>양립불가 의안</li><li>집중투표</li></ul>
+      <div class="tagbox">
+        <div class="tagrow"><h4>함께 띄우는 6개 화면</h4><ul><li>커넥서스 관리자</li><li>전자주주총회 주주 화면</li><li>현장표결앱</li><li>의장용 화면</li><li>사회자용 화면</li><li>의결권권유앱</li></ul></div>
+        <div class="tagrow"><h4>시연 의안에서 확인할 것</h4><ul><li>특별결의 가결요건</li><li>배당 수정동의</li><li>감사위원 분리선출 합산 3%</li><li>특별이해관계자 의결권 제한</li><li>양립불가 의안</li><li>집중투표</li></ul></div>
       </div>
       <div class="app">
-        <p><b>시연에 투표로 참여하세요.</b> 현장표결 앱 주주PASS를 미리 설치해 오시면 가상의 주주총회에서 직접 투표할 수 있습니다. <span class="note">지금은 Google Play 링크이며, iOS 링크는 추후 연결됩니다.</span></p>
+        <p><b>시연에 투표로 참여하세요</b>현장표결 앱 주주PASS를 미리 설치해 오시면 가상의 주주총회에서 직접 투표할 수 있습니다.<small>지금은 Google Play 링크이며, iOS 링크는 추후 연결됩니다.</small></p>
         <!-- TODO: iOS·Android 자동 분기 링크로 교체 -->
-        <a class="btn btn--quiet" id="appLink" href="https://play.google.com/store/apps/details?id=com.irkudos.jujupass&amp;hl=ko&amp;gl=KR&amp;utm_source=apac_med" target="_blank" rel="noopener">주주PASS 설치하기<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+        <a class="btn btn--ghost" id="appLink" href="https://play.google.com/store/apps/details?id=com.irkudos.jujupass&amp;hl=ko&amp;gl=KR&amp;utm_source=apac_med" target="_blank" rel="noopener">주주PASS 설치하기<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
       </div>
     </div>
   </section>
 
-  <section class="sec--s" id="speakers">
-    <div class="container">
-      <div class="head"><h2>연사</h2></div>
-      <ol class="lineup">
-        <li class="spk" data-slot="speaker-1" data-alt="전영익 변호사 프로필 사진, 세로 4:5, 상반신">
-          <img src="assets/speaker1.webp" width="900" height="1205" alt="" loading="lazy" decoding="async">
-          <div class="spk__in" data-keep>
-            <p class="topic">상법 개정 관련 영향 및 대응방안</p>
-            <div class="who"><h3>전영익 변호사</h3><span class="org">김앤장 법률사무소</span></div>
-            <span class="ss">세션 1</span>
-          </div>
-        </li>
-        <li class="spk" data-slot="speaker-2" data-alt="권재열 연구소장 프로필 사진, 세로 4:5, 상반신">
-          <img src="assets/speaker2.webp" width="900" height="1205" alt="" loading="lazy" decoding="async">
-          <div class="spk__in" data-keep>
-            <p class="topic">상법 개정과 전자주총이 몰고 올 기업 경영의 지각변동</p>
-            <div class="who"><h3>권재열 연구소장</h3><span class="org">한국주주총회연구소, 교수</span></div>
-            <span class="ss">세션 2</span>
-          </div>
-        </li>
-        <li class="spk" data-slot="speaker-3" data-alt="박성용 본부장 프로필 사진, 세로 4:5, 상반신">
-          <img src="assets/speaker3.webp" width="900" height="1205" alt="" loading="lazy" decoding="async">
-          <div class="spk__in" data-keep>
-            <p class="topic">전자주총 솔루션 소개 및 가상 주주총회 시연</p>
-            <div class="who"><h3>박성용 본부장</h3><span class="org">IR큐더스</span></div>
-            <span class="ss">세션 3</span>
-          </div>
-        </li>
-      </ol>
-      <div class="lineup-dots" aria-hidden="true" hidden><i class="on"></i><i></i><i></i></div>
+  <section id="speakers">
+    <div class="wrap">
+      <div class="sec-h"><h2>연사</h2></div>
+      <ul class="spk">
+        <li><img src="assets/speaker1.webp" width="900" height="1205" alt="전영익 변호사" loading="lazy" decoding="async"><div class="cap"><p class="ss">세션 1</p><h3>전영익 변호사</h3><p class="org">김앤장 법률사무소</p><p class="topic">상법 개정 관련 영향 및 대응방안</p></div></li>
+        <li><img src="assets/speaker2.webp" width="900" height="1205" alt="권재열 연구소장" loading="lazy" decoding="async"><div class="cap"><p class="ss">세션 2</p><h3>권재열 연구소장</h3><p class="org">한국주주총회연구소, 교수</p><p class="topic">상법 개정과 전자주총이 몰고 올 기업 경영의 지각변동</p></div></li>
+        <li><img src="assets/speaker3.webp" width="900" height="1205" alt="박성용 본부장" loading="lazy" decoding="async"><div class="cap"><p class="ss">세션 3</p><h3>박성용 본부장</h3><p class="org">IR큐더스</p><p class="topic">전자주총 솔루션 소개 및 가상 주주총회 시연</p></div></li>
+      </ul>
     </div>
   </section>
 
-  <section class="sec sec--well" id="location">
-    <div class="container">
-      <div class="head"><h2>오시는 길</h2></div>
+  <section id="benefit">
+    <div class="wrap">
+      <div class="sec-h"><h2>설명회에서만 만나는 혜택</h2></div>
+      <div class="ben">
+        <div><span>01</span><h3>발표자료 제공</h3><p>참석자에게 세션별 발표자료를 메일로 드립니다.</p></div>
+        <div><span>02</span><h3>경품 추첨</h3><p>폐회 전 현장 추첨을 진행합니다. <span class="tbd">경품 확정 예정</span></p></div>
+        <div><span>03</span><h3>개별 상담</h3><p>등록 시 신청하면 전자주총 도입 상담을 따로 잡아드립니다.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="register">
+    <div class="wrap reg">
+      <p class="reg__k">정원 300명 · 선착순 마감</p>
+      <p class="reg__big">사전등록</p>
+      <p class="reg__p">등록 시 남겨주신 사전질문은 Q&amp;A 세션에서 우선 답변드립니다.</p>
+      <a class="btn" href="#register" id="formLink">사전등록 페이지로 이동</a>
+      <p class="reg__note"><span class="tbd">외부 등록 폼(리캐치 등) URL 연결 예정</span></p>
+      <dl class="facts">
+        <div><dt>정원</dt><dd>300명 (선착순)</dd></div>
+        <div><dt>입력 항목</dt><dd>이름, 회사명, 부서·직급, 연락처, 이메일, 사전질문(선택)</dd></div>
+        <div><dt>운영 방식</dt><dd>오프라인 단독 (생중계·다시보기 없음)</dd></div>
+      </dl>
+      <h3 class="guide-h" id="guide">이렇게 참석하세요</h3>
+      <p class="guide-p">별도 입장권은 없습니다. 현장에서 사전등록 정보로 본인 확인 후 네임태그를 받으시면 됩니다.</p>
+      <ol class="steps">
+        <li><h4>사전등록</h4><p>등록 페이지에서 소속과 연락처를 입력합니다.</p></li>
+        <li><h4>확인 메일</h4><p>등록 완료 메일을 받고, 행사 전날 안내 문자를 받습니다.</p></li>
+        <li><h4>현장 본인 확인</h4><p>B1 등록 데스크에서 이름과 소속을 확인하고 네임태그를 받습니다.</p></li>
+        <li><h4>설명회 참석</h4><p>종료 후 발표자료와 설문 안내를 메일로 드립니다.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="location">
+    <div class="wrap">
+      <div class="sec-h"><h2>오시는 길</h2></div>
       <div class="loc">
         <div class="map"><canvas id="mapc" role="img" aria-label="여의도 위치 약도: 여의도역 5·9호선 인근 페어몬트 앰배서더 서울"></canvas></div>
-        <div class="loc-card">
-          <div>
-            <h3>페어몬트 앰배서더 서울</h3>
-            <p class="hall">B1 그랜드볼룸</p>
-          </div>
+        <div class="lc">
+          <div><h3>페어몬트 앰배서더 서울</h3><p class="hall">B1 그랜드볼룸</p></div>
           <dl class="ways">
-            <div><dt>주소</dt><dd class="addr"><span id="addr">서울특별시 영등포구 여의대로 108</span><button class="copy" id="copyAddr" type="button">주소 복사</button></dd></div>
+            <div><dt>주소</dt><dd><span id="addr">서울특별시 영등포구 여의대로 108</span><button class="copy" id="copyAddr" type="button">주소 복사</button></dd></div>
             <div><dt>지하철</dt><dd>5·9호선 여의도역 인근 <span class="tbd">출구 확인</span></dd></div>
             <div><dt>주차</dt><dd><span class="tbd">주차 지원 여부 확정 후 기재</span></dd></div>
           </dl>
-          <div class="actions">
-            <a class="btn btn--quiet" href="https://map.naver.com/p/search/%ED%8E%98%EC%96%B4%EB%AA%AC%ED%8A%B8%20%EC%95%B0%EB%B0%B0%EC%84%9C%EB%8D%94%20%EC%84%9C%EC%9A%B8" target="_blank" rel="noopener">네이버 지도<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
-            <a class="btn btn--quiet" href="https://map.kakao.com/?q=%ED%8E%98%EC%96%B4%EB%AA%AC%ED%8A%B8%20%EC%95%B0%EB%B0%B0%EC%84%9C%EB%8D%94%20%EC%84%9C%EC%9A%B8" target="_blank" rel="noopener">카카오맵<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg></a>
+          <div class="maplinks">
+            <a class="btn btn--ghost" href="https://map.naver.com/p/search/%ED%8E%98%EC%96%B4%EB%AA%AC%ED%8A%B8%20%EC%95%B0%EB%B0%B0%EC%84%9C%EB%8D%94%20%EC%84%9C%EC%9A%B8" target="_blank" rel="noopener">네이버 지도</a>
+            <a class="btn btn--ghost" href="https://map.kakao.com/?q=%ED%8E%98%EC%96%B4%EB%AA%AC%ED%8A%B8%20%EC%95%B0%EB%B0%B0%EC%84%9C%EB%8D%94%20%EC%84%9C%EC%9A%B8" target="_blank" rel="noopener">카카오맵</a>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="sec" id="faq">
-    <div class="container grid12 faq-wrap">
-      <div class="head"><h2>자주 묻는 질문</h2></div>
+  <section id="faq">
+    <div class="wrap">
+      <div class="sec-h"><h2>자주 묻는 질문</h2></div>
       <div class="faq">
-        <details open><summary>온라인 생중계나 다시보기가 있나요?</summary><p>이번 세미나는 오프라인으로만 진행하며 생중계와 다시보기는 제공하지 않습니다. 발표자료는 참석자에게 메일로 드립니다.</p></details>
+        <details><summary>온라인 생중계나 다시보기가 있나요?</summary><p>이번 설명회는 오프라인으로만 진행하며 생중계와 다시보기는 제공하지 않습니다. 발표자료는 참석자에게 메일로 드립니다.</p></details>
         <details><summary>입장권이나 QR코드가 필요한가요?</summary><p>필요 없습니다. 현장 등록 데스크에서 사전등록하신 이름과 소속을 확인한 뒤 네임태그를 드립니다.</p></details>
         <details><summary>정원이 있나요?</summary><p>300명 선착순입니다. 정원이 차면 등록이 마감됩니다.</p></details>
         <details><summary>질문은 어떻게 하나요?</summary><p>등록할 때 사전질문을 남겨주시면 Q&amp;A 세션에서 우선 답변드립니다. 현장 질의도 받습니다.</p></details>
-        <details><summary>시연에 참여하려면 무엇이 필요한가요?</summary><p>스마트폰에 현장표결 앱 주주PASS를 설치해 오시면 세션 3-2 가상의 주주총회에서 직접 투표에 참여할 수 있습니다.</p></details>
+        <details><summary>시연에 참여하려면 무엇이 필요한가요?</summary><p>스마트폰에 현장표결 앱 주주PASS를 설치해 오시면 가상의 주주총회에서 직접 투표에 참여할 수 있습니다.</p></details>
         <details><summary>주차 지원이 되나요?</summary><p><span class="tbd">확정 후 기재</span></p></details>
         <details><summary>전자주총 도입 상담을 따로 받을 수 있나요?</summary><p>등록 시 개별 상담을 신청하시면 IR큐더스 담당자가 일정을 잡아 연락드립니다.</p></details>
-      </div>
-    </div>
-  </section>
-
-  <section class="sec close" id="register">
-    <div class="container">
-      <div class="grid12 reg">
-        <div class="reg__main">
-          <h2>사전등록으로 참석을 신청하세요</h2>
-          <p>정원 300명 선착순으로 마감합니다. 등록 시 남겨주신 사전질문은 Q&amp;A 세션에서 우선 답변드립니다.</p>
-          <div class="actions">
-            <a class="btn" href="#register" id="formLink">사전등록 페이지로 이동</a>
-          </div>
-          <p class="note"><span class="tbd">외부 등록 폼(리캐치 등) URL 연결 예정</span></p>
-        </div>
-        <dl class="facts">
-          <div><dt>정원</dt><dd>300명 (선착순)</dd></div>
-          <div><dt>입력 항목</dt><dd>이름, 회사명, 부서·직급, 연락처, 이메일, 사전질문(선택)</dd></div>
-          <div><dt>운영 방식</dt><dd>오프라인 단독 (생중계·다시보기 없음)</dd></div>
-        </dl>
-      </div>
-      <div class="guide" id="guide">
-        <h3>이렇게 참석하세요</h3>
-        <p>별도 입장권은 없습니다. 현장에서 사전등록 정보로 본인 확인 후 네임태그를 받으시면 됩니다.</p>
-        <ol class="steps">
-          <li><h4>사전등록</h4><p>등록 페이지에서 소속과 연락처를 입력합니다. 선착순 300명.</p></li>
-          <li><h4>확인 메일</h4><p>등록 완료 메일을 받고, 행사 전날 안내 문자를 받습니다.</p></li>
-          <li><h4>현장 본인 확인</h4><p>B1 등록 데스크에서 이름과 소속을 확인하고 네임태그를 받습니다.</p></li>
-          <li><h4>세미나 참석</h4><p>종료 후 발표자료와 설문 안내를 메일로 드립니다.</p></li>
-        </ol>
-        <dl class="perks">
-          <div><dt>발표자료 제공</dt><dd>참석자에게 세션별 발표자료를 메일로 드립니다.</dd></div>
-          <div><dt>경품 추첨</dt><dd>폐회 전 현장 추첨을 진행합니다. <span class="tbd">경품 확정 예정</span></dd></div>
-          <div><dt>개별 상담</dt><dd>등록 시 신청하면 전자주총 도입 상담을 따로 잡아드립니다.</dd></div>
-        </dl>
       </div>
     </div>
   </section>
 </main>
 
 <footer>
-  <div class="container">
-    <img class="mast" src="assets/irkudos-logo.svg" alt="IR큐더스" width="1014" height="283">
-    <div class="grid12 foot">
-      <dl class="lg"><dt>주최</dt><dd>IR큐더스</dd></dl>
-      <dl class="lg"><dt>협력</dt><dd><span>김앤장 법률사무소</span><span>법무법인 율촌</span><span>스트리밍코리아</span></dd></dl>
-      <div class="legal">
-        <small>문의 <span class="tbd">담당자 연락처·메일</span></small>
-        <small><a href="#top">개인정보처리방침</a></small>
-        <small>© 2026 IR KUDOS. All rights reserved.</small>
-      </div>
+  <div class="wrap wide ft">
+    <div>
+      <span class="brand"><svg viewBox="0 0 1014.29 283.46" role="img" aria-label="IR큐더스"><g>
+    <path d="M970.2,177.85c10.82,0,17.47-3.76,17.47-11.28,0-5.26-3.16-8.12-10.65-10.83s-22.47-6.62-32.45-11.88c-9.99-5.26-15.31-13.08-15.31-25.26,0-20.9,16.81-33.38,42.1-33.38,11.82,0,26.13,2.71,36.61,7.67v23.16c-12.65-7.07-26.79-10.07-35.95-10.07-9.82,0-16.14,3.46-16.14,10.38,0,5.26,3.33,7.97,10.98,10.68,7.66,2.71,22.63,6.47,32.62,11.88s14.81,14.14,14.81,25.56c0,21.5-17.47,34.14-43.6,34.14-12.48,0-28.12-3.01-39.61-8.57v-24.06c13.48,8.42,29.79,11.88,39.11,11.88v-.02Z" class="lg-t"/>
+    <polygon points="511.09 85.22 481.74 85.22 437.22 140.41 437.22 135.58 437.22 135.58 437.22 85.22 411.88 85.22 411.88 195.7 437.22 195.7 437.22 141.83 437.22 141.83 437.22 140.58 481.74 195.77 511.09 195.77 466.51 140.49 511.09 85.22" class="lg-t"/>
+    <path d="M557.13,85.22v62.48c0,7.97,1.13,15.03,5.5,20.39,4.37,5.37,11,8.59,20.22,8.59s15.85-3.22,20.22-8.59,5.66-12.42,5.66-20.39v-62.48h24.74v64.01c0,12.27-2.75,24.69-11.32,34.04-8.57,9.35-22.32,15.33-39.78,15.33s-31.21-5.83-39.62-15.33-11.32-21.31-11.32-34.04v-64.01h25.71-.01Z" class="lg-t"/>
+    <path d="M661.78,85.22h42.65c17.06,0,32.07,5.34,42.81,15.57,10.74,10.23,16.59,24.13,16.59,39.7s-5.84,29.47-16.59,39.7c-10.74,10.23-25.59,15.57-42.65,15.57h-42.81v-110.55h0ZM727.81,165.99c6.79-5.8,10.9-15.12,10.9-25.5s-4.11-19.7-10.9-25.5-15.64-8.55-25.59-8.55h-15.32v68.1h15.32c9.95,0,18.8-2.75,25.59-8.55h0Z" class="lg-t"/>
+    <path d="M789.35,141.2c0-31.67,25.06-55.99,58.11-55.99s58.11,25.73,58.11,57.4-25.06,55.99-58.11,55.99-58.11-25.73-58.11-57.4ZM881.13,142.61c0-19.36-14.45-36.08-33.67-36.08s-33.67,16.72-33.67,36.08,14.45,34.67,33.67,34.67,33.67-15.31,33.67-34.67Z" class="lg-t"/>
+    <path d="M221.85,85.22h25.51v110.55h-25.51v-110.55Z" class="lg-t"/>
+    <path d="M275.66,85.22h41.75c12.24,0,21.82,1.98,29.66,7.48,7.85,5.5,13.18,14.51,13.18,26.57,0,14.66-8.16,25.8-21.97,31l30.92,45.5h-28.57l-27.94-41.99h-12.08v41.99h-24.96v-110.55h.01ZM315.99,134.54c6.28,0,10.52-.76,13.97-3.05,3.45-2.29,5.34-6.57,5.34-11.15,0-4.89-2.04-9.01-5.34-11.3-3.3-2.29-7.69-3.05-13.97-3.05h-15.38v28.55h15.38Z" class="lg-t"/>
+  </g>
+  <g>
+    <polygon points="100.24 114.76 193.33 0 84.43 0 0 104.5 0 141.73 0 141.73 0 178.96 23.95 208.6 100.24 114.76" class="lg-b"/>
+    <polygon points="29.97 216.05 84.43 283.46 193.33 283.46 84.36 149.13 29.97 216.05" class="lg-b"/>
+  </g></svg></span>
+      <dl><div><dt>주최</dt><dd>IR큐더스</dd></div><div><dt>협력</dt><dd>김앤장 법률사무소 · 법무법인 율촌 · 스트리밍코리아</dd></div></dl>
+    </div>
+    <div class="legal">
+      <span>문의 <span class="tbd">담당자 연락처·메일</span></span>
+      <a href="#">개인정보처리방침</a>
+      <span>© 2026 IR KUDOS. All rights reserved.</span>
     </div>
   </div>
 </footer>
 
-<div class="mbar" aria-label="사전등록">
-  <span class="mbar__t">11월 30일 월요일, 여의도<b>정원 300명 선착순</b></span>
+<div class="mbar is-hidden" aria-label="사전등록">
+  <span>11월 30일 (월), 여의도<b>정원 300명 선착순</b></span>
   <a class="btn" href="#register">사전등록</a>
 </div>
 
 <script>
 /* ---------- Countdown ---------- */
 (function(){
-  const target=new Date('2026-11-30T13:30:00+09:00').getTime();
-  const p=n=>String(n).padStart(2,'0');
-  function tick(){
-    let ms=Math.max(0,target-Date.now());
-    const d=Math.floor(ms/864e5),h=Math.floor(ms/36e5)%24,m=Math.floor(ms/6e4)%60;
-    document.getElementById('cd-d').textContent=d;
-    document.getElementById('cd-h').textContent=p(h);
-    const cm=document.getElementById('cd-m');
-    if(cm.textContent!==p(m)&&tick.ran){cm.classList.remove('tick');void cm.offsetWidth;cm.classList.add('tick');document.dispatchEvent(new Event('minute'));}
-    cm.textContent=p(m);tick.ran=true;
-    document.getElementById('dday').textContent=d>0?'D-'+d:'D-DAY';
-  }
-  tick();setInterval(tick,1000);
-})();
-
-/* ---------- Count-up (numbers rest at final value) ---------- */
-(function(){
-  const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
-  if(reduce||!('IntersectionObserver' in window))return;
-  const io=new IntersectionObserver(es=>es.forEach(e=>{
-    if(!e.isIntersecting)return;io.unobserve(e.target);
-    const el=e.target,to=+el.dataset.count,small=el.querySelector('small').outerHTML,t0=performance.now();
-    (function f(t){const u=Math.min(1,(t-t0)/1400),v=Math.round(to*(1-Math.pow(1-u,3)));
-      el.innerHTML=v+small;if(u<1)requestAnimationFrame(f);})(t0);
-  }),{threshold:.6});
-  document.querySelectorAll('[data-count]').forEach(el=>io.observe(el));
+  const target=new Date('2026-11-30T13:30:00+09:00').getTime(),p=n=>String(n).padStart(2,'0');
+  function tick(){const ms=Math.max(0,target-Date.now()),d=Math.floor(ms/864e5),h=Math.floor(ms/36e5)%24,m=Math.floor(ms/6e4)%60;
+    document.getElementById('cd-d').textContent=d;document.getElementById('cd-h').textContent=p(h);document.getElementById('cd-m').textContent=p(m);
+    document.getElementById('dday').textContent=d>0?'D-'+d:'D-DAY';}
+  tick();setInterval(tick,30000);
 })();
 
 /* ---------- Copy address ---------- */
@@ -848,240 +557,23 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
   if(document.fonts)document.fonts.ready.then(draw);
 })();
 
-/* ---------- Hero: brand-blue Flow Line on paper that passes into dots, then code, then back (pausable) ---------- */
+/* ---------- Header state, scroll-spy, mobile CTA bar ---------- */
 (function(){
-  const cv=document.getElementById('flow'),btn=document.getElementById('flowToggle');
-  const gl=cv.getContext('webgl',{antialias:false,alpha:false,premultipliedAlpha:false,preserveDrawingBuffer:true});
-  if(!gl){btn.hidden=true;return;}
-  // glyph atlas for the code phase: 16 slots in one row
-  // voting marks drawn as vector shapes (O · X · △ · −), 4 kinds × 4 = 16 slots, so each appears equally often
-  const at=document.createElement('canvas');at.width=512;at.height=64;
-  const ax=at.getContext('2d');ax.strokeStyle='#fff';ax.lineWidth=4.5;ax.lineCap='round';ax.lineJoin='round';
-  const MARK=[
-    (cx,cy)=>{ax.beginPath();ax.arc(cx,cy,10,0,Math.PI*2);ax.stroke();},                                   // O
-    (cx,cy)=>{ax.beginPath();ax.moveTo(cx-9,cy-9);ax.lineTo(cx+9,cy+9);ax.moveTo(cx+9,cy-9);ax.lineTo(cx-9,cy+9);ax.stroke();}, // X
-    (cx,cy)=>{ax.beginPath();ax.moveTo(cx,cy-11);ax.lineTo(cx+11,cy+9);ax.lineTo(cx-11,cy+9);ax.closePath();ax.stroke();},   // △
-    (cx,cy)=>{ax.beginPath();ax.moveTo(cx-10,cy);ax.lineTo(cx+10,cy);ax.stroke();}                           // −
-  ];
-  for(let i=0;i<16;i++)MARK[i%4](i*32+16,30);
-  const tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);
-  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,at);
-  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
-  // the heading redrawn into a texture at its exact place on the canvas: the intro's dots land on its letters
-  const head=document.querySelector('.hero h1'),tt=document.createElement('canvas'),tx=tt.getContext('2d'),ttex=gl.createTexture();
-  let box=[0,0,0,0],inkW=0;
-  function placeWord(){
-    const d=Math.min(devicePixelRatio||1,1.5),cr=cv.getBoundingClientRect(),r=head.getBoundingClientRect();
-    tt.width=Math.max(1,Math.ceil(r.width*d));tt.height=Math.max(1,Math.ceil(r.height*d));
-    tx.clearRect(0,0,tt.width,tt.height);tx.fillStyle='#fff';
-    let wrapped=false;inkW=0;
-    head.querySelectorAll('span').forEach(sp=>{
-      const sr=sp.getBoundingClientRect(),st=getComputedStyle(sp);
-      const fs=parseFloat(st.fontSize)*d,lh=(parseFloat(st.lineHeight)||parseFloat(st.fontSize)*1.1)*d;
-      if(sr.height*d>lh*1.4)wrapped=true;
-      tx.font=st.fontWeight+' '+fs+'px '+st.fontFamily;if('fontStretch' in tx)tx.fontStretch='expanded';
-      const t=sp.textContent.trim(),m=tx.measureText(t),base=(sr.top-r.top)*d+(lh-(m.fontBoundingBoxAscent+m.fontBoundingBoxDescent))/2+m.fontBoundingBoxAscent;
-      tx.fillText(t,(sr.left-r.left)*d,base);inkW=Math.max(inkW,m.width);
-    });
-    gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,ttex);
-    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,tt);
-    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
-    gl.activeTexture(gl.TEXTURE0);
-    // a heading line that wraps gets no dot intro
-    box=wrapped?[0,0,0,0]:[(r.left-cr.left)*d,(cr.bottom-r.bottom)*d,tt.width,tt.height];
-  }
-  const vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
-  // C = --color-accent #0071f3, C2 = a lighter step of the same hue, BG = --color-paper #f6f8fb
-  const fs=`precision highp float;
-  uniform vec2 R;uniform float PH,RA,OA,KA,BA,SA,TWK,MD,MC,IT,TM,CELL;uniform vec2 OFF;uniform vec4 TB;uniform vec2 TC;uniform sampler2D GT,TX;
-  #define TAU 6.2831853
-  const vec3 C=vec3(0.,.4431,.9529),C2=vec3(.4157,.6588,1.),BG=vec3(.9647,.9725,.9843);
-  float side(vec2 u){return smoothstep(.1,.45,u.x)*(1.-smoothstep(-.2,.15,u.y));}
-  mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,s,-s,c);}
-  float h(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}
-  float curve(float x,float a){float t=PH*TAU;return .07*sin(2.3*x+t+a)+.16*sin(1.1*x-t+1.7+a)+.035*sin(4.1*x+2.*t+a*2.);}
-  // the ribbon at one point: x = coverage, y = how much of the far side shows
-  vec2 field(vec2 fc){
-    vec2 uv0=(fc-.5*R)/R.y;
-    float t=PH*TAU;
-    vec2 uv=uv0-OFF;
-    uv=rot(.035*sin(t))*uv;uv*=1.+.04*sin(t+1.);
-    vec2 qa=rot(RA)*uv;
-    float x=qa.x;
-    float cy=OA+KA*x*x+.35*curve(x,0.);
-    float tw=TWK*(1.6*x+.7*sin(.9*x-t))+t*2.;
-    float c=cos(tw),sn=sin(tw);
-    float Wd=SA*.17,bl=BA;
-    float wb=mix(.0018,.006,smoothstep(-.8,1.,x))*(1.+bl*14.);
-    float fr=0.,bk=0.;
-    for(int i=0;i<16;i++){
-      float s=float(i)/15.-.5;float zf=.5+s*sn;
-      float d=qa.y-(cy+s*Wd*c);float w=wb*mix(1.8,.8,zf);
-      float e=1.+1.3*smoothstep(.4,.5,abs(s));
-      float L=exp(-d*d/(w*w))*inversesqrt(1.+bl*6.)*e*mix(.3,1.,zf);
-      fr+=L*zf;bk+=L*(1.-zf);
-    }
-    fr*=.3;bk*=.3;
-    float d0=qa.y-cy,hw=abs(Wd*c)*.5+.002,e=.004+bl*.06;
-    float ins=smoothstep(hw+e,hw-e,abs(d0));
-    float sh=clamp(.5+.5*(d0/hw)*sign(c),0.,1.);
-    float fill=ins*(.08+.42*abs(c))*mix(.3,1.5,sh*sh);
-    float vm=fr+fill,vsub=bk*.78,tot=vm+vsub+1e-5;
-    // keep the text calm: the title corner and the whole band the hero copy sits in
-    float calm=mix(.12,1.,smoothstep(-.55,.15,uv0.x*.8+uv0.y));
-    // a soft, partial clearing behind the countdown column, and a fade before the hero's bottom edge
-    calm*=1.-.45*side(uv0);
-    calm*=smoothstep(-.5,-.3,uv0.y);
-    return vec2((1.-exp(-tot*1.6))*calm,clamp(vsub/tot,0.,1.));
-  }
-  // a soft wipe that sweeps left to right, each cell a little early or late
-  float tally(float w,vec2 cell,float ux){float q=clamp(.5+.35*ux+.06*(h(cell)-.5),0.,1.);return smoothstep(0.,1.,clamp((w*1.4-q)/.22,0.,1.));}
-  float wipe(float w,vec2 cell,float ux){float q=clamp(.5+.35*ux+.35*(h(cell)-.5),0.,1.);return smoothstep(0.,1.,clamp((w*1.9-q)/.9,0.,1.));}
-  // the same sweep without per-cell jitter, for fading the ribbon itself (no blocks)
-  float sweep(float w,float ux){float q=clamp(.5+.35*ux,0.,1.);return smoothstep(0.,1.,clamp((w*1.9-q)/.9,0.,1.));}
-  // is this point inside the letters of the intro word?
-  float word(vec2 p){vec2 u=(p-TB.xy)/TB.zw;if(u.x<0.||u.y<0.||u.x>1.||u.y>1.)return 0.;return texture2D(TX,vec2(u.x,1.-u.y)).a;}
-  // focus that drifts across the field, riding on the ribbon's own blur
-  float focus(float ux){return clamp(BA+.22*sin(ux*2.4-TM*.8)+.1*sin(TM*.37),0.,.75);}
-  void main(){
-    vec2 fc=gl_FragCoord.xy;
-    float ux=(fc.x-.5*R.x)/R.y,bz=focus(ux),tc=1.-.95*smoothstep(.12,.32,ux)*(1.-smoothstep(-.06,.16,(fc.y-.5*R.y)/R.y));
-    vec2 f=field(fc);
-    vec3 rib=mix(C,C2,f.y);
-    float vis=1.;
-    vec3 ink=vec3(0.);float ws=0.,cov=0.;
-    if(MD>0.){
-      // dots grow out of the ribbon, then shrink away as the code arrives
-      vec2 cell=floor(fc/CELL),ctr=(cell+.5)*CELL;
-      vec2 g=field(ctr);
-      float l=tally(MD,cell,ux)*(1.-wipe(MC,cell,ux));
-      float r=CELL*.5*sqrt(g.x)*.92*l,sf=.8+bz*CELL*.45;
-      float dm=smoothstep(r+sf,r-sf,length(fc-ctr))*step(.03,g.x)*mix(1.,.7,bz);
-      ink+=mix(C,C2,g.y)*dm;ws+=dm;cov=max(cov,dm);
-      vis=min(vis,1.-.82*sweep(MD,ux));
-    }
-    if(MC>0.){
-      vec2 cs=vec2(CELL*2.6),cell=floor(fc/cs),ctr=(cell+.5)*cs;
-      vec2 g=field(ctr);
-      float l=wipe(MC,cell,ux);
-      // scattered voting marks: most cells stay empty; each mark sits off-centre at its own size and fades in and out on its own clock
-      l*=step(h(cell+7.13),.07+.2*smoothstep(0.,.6,g.x));
-      float cyc=TM*(.12+h(cell+1.7)*.22)+h(cell+4.1),ph=fract(cyc);
-      l*=smoothstep(0.,.15,ph)*smoothstep(.9,.65,ph);
-      float sz=mix(.42,.8,h(cell+9.4));
-      vec2 jit=(vec2(h(cell+2.3),h(cell+5.9))-.5)*(1.-sz);
-      vec2 lp=((fc-cell*cs)/cs-.5-jit)/sz+.5;
-      l*=step(0.,lp.x)*step(lp.x,1.)*step(0.,lp.y)*step(lp.y,1.);
-      float k=mod(floor(h(cell)*4.)+floor(cyc),4.);
-      float ga=texture2D(GT,vec2((k+.1+.8*clamp(lp.x,0.,1.))/16.,.47+(.5-clamp(lp.y,0.,1.))*.4)).a;
-      float sf=.12+bz*.5,gm=smoothstep(.5-sf,.5+sf,ga)*mix(1.,.6,bz);
-      float cm=gm*smoothstep(.02,.3,g.x)*l*tc;
-      ink+=mix(C,C2,g.y)*cm;ws+=cm;cov=max(cov,cm);
-      vis=min(vis,1.-.82*sweep(MC,ux));
-    }
-    if(IT>=0.){
-      // intro: the heading's dots fly in from far out in four swirling waves and gather onto its letters (0.1-1.65s),
-      // then drift off a little and fade as the solid heading fades in over them
-      vec2 wd=normalize(vec2(.85,.55));
-      float sc=smoothstep(1.8,3.2,IT),cs=max(TB.w/24.,3.);
-      for(int i=0;i<4;i++){
-        float fi=float(i),p=smoothstep(.1+.15*fi,1.2+.15*fi,IT),u=(1.-p)*(1.-p);
-        float k=1.+(2.4+.7*fi)*u,an=(mod(fi,2.)*2.-1.)*(.7+.25*fi)*u;
-        vec2 v=fc-TC,hm=TC+rot(an)*v/k;
-        vec2 cell=floor(hm/cs),ctr=(cell+.5)*cs;
-        float own=1.-step(.5,abs(floor(h(cell+.37)*4.)-fi));
-        vec2 pos=TC+rot(-an)*(ctr-TC)*k+wd*sc*(.3+h(cell))*cs;
-        float r=cs*.42*sqrt(k)*(1.-.45*sc);
-        float pm=smoothstep(r+.9,r-.9,length(fc-pos))*own*step(.5,word(ctr))*smoothstep(0.,.35,p)*(1.-sc);
-        ink+=mix(C,C2,h(cell)*.6+u*.4)*pm;ws+=pm;cov=max(cov,pm);
-      }
-      vis=min(vis,smoothstep(2.2,4.,IT));
-    }
-    vec3 col=mix(mix(BG,rib,f.x*vis),ink/max(ws,1e-4),cov);
-    col+=(h(fc+fract(PH*97.)*100.)-.5)*.02;
-    gl_FragColor=vec4(col,1.);
-  }`;
-  function sh(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw gl.getShaderInfoLog(o);return o;}
-  const pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));
-  gl.bindAttribLocation(pr,0,'p');gl.linkProgram(pr);gl.useProgram(pr);
-  gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());
-  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
-  gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
-  const U={};['R','PH','RA','OA','KA','BA','SA','TWK','OFF','MD','MC','IT','TM','CELL','GT','TX','TB','TC'].forEach(n=>U[n]=gl.getUniformLocation(pr,n));
-  gl.uniform1i(U.GT,0);gl.uniform1i(U.TX,1);
-  const D=Math.PI/180,LOOP=19,CYCLE=30,INTRO=0,START=6.5; // INTRO=0: 도트가 제목 글자로 모이는 인트로 제거 (2026-11-05)
-  // on load (once): dots fly in from far out in swirling waves onto the heading's own letters (0.1-1.65s); the solid heading fades in over them
-  // (1.6-2.5s) while they drift off, and the ribbon arrives (2.2-4s).
-  // then a 30s loop: ribbon, dots light up left to right 6-9 (a count), dots to 13, numbers come in 13-16, numbers to 20,
-  // back to the ribbon 20-23, ribbon. Each new minute on the countdown sends one pulse through the ribbon.
-  const ease=(a,b,t)=>{const u=Math.min(1,Math.max(0,(t-a)/(b-a)));return u*u*(3-2*u);};
-  function modes(sec){const el=sec-START;if(el<INTRO)return [0,0,el];const t=(el-INTRO)%CYCLE;return [t<16?ease(6,9,t):0,ease(13,16,t)-ease(20,23,t),-1];}
-  let pulseAt=-9;document.addEventListener('minute',()=>{pulseAt=last;});
-  const pulse=sec=>{const u=(sec-pulseAt)/.9;return u<0||u>1?0:Math.sin(u*Math.PI);};
-  let last=START,dpr=1;
-  function frame(sec,still){
-    last=sec;
-    const ph=(sec/LOOP)%1,t=ph*Math.PI*2,asp=cv.width/cv.height,m=still?[0,0,-1]:modes(sec);
-    gl.uniform2f(U.R,cv.width,cv.height);gl.uniform1f(U.PH,ph);
-    gl.uniform1f(U.RA,(14+12*Math.sin(t)+6*Math.sin(2*t+.4))*D);
-    gl.uniform1f(U.OA,.05*Math.sin(t+1));
-    gl.uniform1f(U.KA,-.55+.28*Math.sin(t+2));
-    gl.uniform1f(U.BA,.12+.38*Math.pow(.5+.5*Math.sin(t-1.2),2)+.3*pulse(sec));
-    gl.uniform1f(U.SA,1.7+.5*Math.sin(t+.7));
-    gl.uniform1f(U.TWK,.8+.25*Math.sin(t+1.3)); // at most one or two twists across the screen
-    gl.uniform1f(U.MD,m[0]);gl.uniform1f(U.MC,m[1]);gl.uniform1f(U.IT,m[2]);
-    gl.uniform4f(U.TB,box[0],box[1],box[2],box[3]);gl.uniform2f(U.TC,box[0]+inkW/2,box[1]+box[3]/2);gl.uniform1f(U.TM,sec);gl.uniform1f(U.CELL,11*dpr);
-    if(asp>1)gl.uniform2f(U.OFF,.22*Math.min(asp,1.8)/1.6,.24);else gl.uniform2f(U.OFF,.02,.3);
-    gl.drawArrays(gl.TRIANGLES,0,3);
-  }
-  const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
-  function size(){
-    dpr=Math.min(devicePixelRatio||1,1.5);
-    cv.width=Math.round(cv.clientWidth*dpr);cv.height=Math.round(cv.clientHeight*dpr);
-    gl.viewport(0,0,cv.width,cv.height);placeWord();frame(last,reduce);
-  }
-  size();addEventListener('resize',size);
-  if(document.fonts)document.fonts.ready.then(()=>{placeWord();frame(last,reduce);});
-  if(reduce){btn.hidden=true;return;}
-  // the loop runs past 5s, so it pauses on request and stops off-screen
-  document.documentElement.classList.add('gl-live');
-  let visible=true,held=false,clock=last,prev=performance.now();
-  new IntersectionObserver(e=>{visible=e[0].isIntersecting;}).observe(cv);
-  btn.addEventListener('click',()=>{held=!held;btn.setAttribute('aria-pressed',held);btn.textContent=held?'재생':'일시정지';});
-  (function loop(now){const dt=(now-prev)/1000;prev=now;if(visible&&!held&&!document.hidden){clock+=dt;frame(clock);}requestAnimationFrame(loop);})(prev);
+  const top=document.querySelector('.top'),hero=document.querySelector('.hero');
+  const links=[...document.querySelectorAll('.top nav a')],map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
+  const onScroll=()=>top.classList.toggle('is-solid',scrollY>hero.offsetHeight-80);
+  addEventListener('scroll',onScroll,{passive:true});onScroll();
+  if(!('IntersectionObserver' in window))return;
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const a=map.get(e.target.id);links.forEach(l=>l.classList.toggle('is-on',l===a));}),{rootMargin:'-45% 0px -50% 0px'});
+  map.forEach((a,id)=>{const s=document.getElementById(id);if(s)io.observe(s);});
 })();
 </script>
-<script>window.hallmarkSlots = (m) => { for (const [k, v] of Object.entries(m)) { const s = document.querySelector(`[data-slot="${k}"]`); if (!s) continue; const im = new Image(); im.src = typeof v === 'string' ? v : v.src; im.alt = (typeof v === 'object' && v.alt) || s.dataset.alt || ''; s.querySelectorAll(':scope > img').forEach((o) => o.remove()); s.prepend(im); } };
-document.querySelectorAll('[data-slot] img').forEach((i) => { if (i.complete && !i.naturalWidth) i.remove(); else i.addEventListener('error', () => i.remove(), { once: true }); });</script>
-
-
 <script>
-/* ---------- Mobile: scroll-spy tabs, CTA bar visibility, speaker dots ---------- */
 (function(){
-  const links=[...document.querySelectorAll('.gnb nav a')];
-  const map=new Map(links.map(a=>[a.getAttribute('href').slice(1),a]));
-  const nav=document.querySelector('.gnb nav');
-  if('IntersectionObserver' in window){
-    const io=new IntersectionObserver(es=>es.forEach(e=>{
-      if(!e.isIntersecting)return;
-      const a=map.get(e.target.id);if(!a)return;
-      links.forEach(l=>l.classList.toggle('is-on',l===a));
-      if(nav.scrollWidth>nav.clientWidth)nav.scrollTo({left:a.offsetLeft-24,behavior:'smooth'});
-    }),{rootMargin:'-45% 0px -50% 0px'});
-    map.forEach((a,id)=>{const s=document.getElementById(id);if(s)io.observe(s);});
-
-    const bar=document.querySelector('.mbar');const seen=new Set();
-    const io2=new IntersectionObserver(es=>{es.forEach(e=>e.isIntersecting?seen.add(e.target):seen.delete(e.target));bar.classList.toggle('is-hidden',seen.size>0);});
-    ['.hero','#register'].forEach(q=>{const el=document.querySelector(q);if(el)io2.observe(el);});
-  }
-  const lu=document.querySelector('.lineup'),dots=document.querySelector('.lineup-dots');
-  if(lu&&dots){
-    const ds=[...dots.children];
-    const sync=()=>{dots.hidden=lu.scrollWidth<=lu.clientWidth+4;const w=lu.firstElementChild.getBoundingClientRect().width;const i=Math.round(lu.scrollLeft/(w||1));ds.forEach((d,k)=>d.classList.toggle('on',k===Math.min(i,ds.length-1)));};
-    lu.addEventListener('scroll',()=>requestAnimationFrame(sync),{passive:true});addEventListener('resize',sync);sync();
-  }
+  const bar=document.querySelector('.mbar'),seen=new Set();
+  if(!('IntersectionObserver' in window)){bar.classList.remove('is-hidden');return;}
+  const io=new IntersectionObserver(es=>{es.forEach(e=>e.isIntersecting?seen.add(e.target):seen.delete(e.target));bar.classList.toggle('is-hidden',seen.size>0);});
+  ['.hero','#register','footer'].forEach(q=>{const el=document.querySelector(q);if(el)io.observe(el);});
 })();
 </script>
 </body>
