@@ -64,9 +64,8 @@ a{color:inherit}
 .dday{font-size:13px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums}
 
 /* Hero: flowing blue gradient */
-.hero{position:relative;overflow:hidden;isolation:isolate;min-height:min(82vh,780px);display:grid;place-items:center;text-align:center;background:#020611;padding:120px 24px 160px}
-#glow{position:absolute;inset:0;width:100%;height:100%;z-index:-1;display:block;background:#020611}
-.hero::after{content:"";position:absolute;inset:auto 0 0;height:90px;background:linear-gradient(to bottom,transparent,var(--bg));z-index:-1}
+.hero{position:relative;overflow:hidden;isolation:isolate;min-height:min(82vh,780px);display:grid;place-items:center;text-align:center;background:var(--bg);padding:120px 24px 160px}
+#glow{position:absolute;inset:0 0 -1px;width:100%;height:calc(100% + 1px);z-index:-1;display:block;background:var(--bg);-webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 62%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,#000 62%,transparent 100%)}
 .hero__k{font-size:15px;font-weight:600;color:#9aa6bb;mix-blend-mode:screen;letter-spacing:.02em}
 .hero h1{margin-top:18px;font-weight:800;font-size:clamp(40px,7.2vw,92px);line-height:1.12;letter-spacing:-.035em;color:#a9b6cc;mix-blend-mode:screen;text-wrap:balance}
 .hero h1 span{display:block}
@@ -569,13 +568,13 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
 </script>
 
 <script>
-/* ---------- Hero: Blue Flow Line (아티팩트 'Blue Flow Line'의 시퀀스 리본) · 다크 → 블루 플러드 → 다크 19초 루프 ---------- */
+/* ---------- Hero: Blue Flow Line (아티팩트 'Blue Flow Line'의 시퀀스 리본) · 다크 → 블루 플러드 → 다크 26초 루프 ---------- */
 (function(){
   const cv=document.getElementById('glow'),gl=cv.getContext('webgl',{alpha:false,antialias:false});
   if(!gl)return;
   const vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
   const fs=`precision highp float;
-  uniform vec2 R,OFF;uniform float T,HL;uniform vec3 BG;
+  uniform vec2 R,OFF;uniform float T,HL,FL;
   uniform float RA,OA,BA,ZA,VA,KA,SA,TWK;
   #define TAU 6.2831853
   const vec3 C=vec3(.1216,.3569,1.),C2=vec3(0.,.7608,1.);
@@ -609,6 +608,11 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
     float tot=vm+vsb+vg+1e-5,k=clamp(((vm+vg)*MIX*g+vsb*max(MIX,.15)*1.6)/tot,0.,1.);
     vec3 LC=mix(mix(C,C2,k),vec3(1.),HL);
     float a=1.-exp(-tot*DENS);
+    // ground: a faint brand-green → blue gradation, deepening to blue during the flood
+    vec2 u0=(gl_FragCoord.xy-.5*R)/R.y;
+    vec3 base=mix(vec3(.010,.072,.052),vec3(.016,.040,.125),smoothstep(-.9,.9,u0.x*.55+u0.y*.85));
+    base=mix(base,vec3(.071,.071,.071),smoothstep(.05,-.5,u0.y)*.55);
+    vec3 BG=mix(base,vec3(.107,.314,.774),FL);
     vec3 col=mix(BG,LC,a);
     col=mix(col,LC*mix(.8,1.,HL),smoothstep(.7,1.,a)*.6);
     col+=(hash(gl_FragCoord.xy+fract(T*97.)*100.)-.5)*.045;
@@ -619,22 +623,23 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
   gl.bindAttribLocation(pr,0,'p');gl.linkProgram(pr);if(!gl.getProgramParameter(pr,gl.LINK_STATUS))return;gl.useProgram(pr);
   gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
   gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
-  const U={};['R','OFF','T','HL','BG','RA','OA','BA','ZA','VA','KA','SA','TWK'].forEach(n=>U[n]=gl.getUniformLocation(pr,n));
+  const U={};['R','OFF','T','HL','FL','RA','OA','BA','ZA','VA','KA','SA','TWK'].forEach(n=>U[n]=gl.getUniformLocation(pr,n));
 
   // sequence keyframes, as authored in the Blue Flow Line artifact (19s, seamless)
-  const BASE=19,D=Math.PI/180;
+  // 원본 시퀀스의 흐름을 유지하되, 급한 회전(코너·수직)을 완만하게 낮추고 26초로 늘려 자연스럽게 조정
+  const BASE=26,D=Math.PI/180;
   const KEYS=[ // [rot°, offset, bend, blur, zoom, width, visibility, twist]
-    {t:0.0, n:'Dark',    v:[-6,-.40,-.90,.85,1.00,1.6,.60,.8]},
-    {t:3.0, n:'Emerge',  v:[-6,-.15,-.90,.70,1.00,1.8,.90,1.2]},
-    {t:5.5, n:'Flood',   v:[ 4, .08,-.60,.75,.55,2.4,1.00,.7]},
-    {t:7.5, n:'Release', v:[16, .22,-.35,.35,.80,1.6,1.00,1.6]},
-    {t:9.5, n:'Twist',   v:[24,-.08,-.25,.04,1.00,.9,1.00,2.4]},
-    {t:11.5,n:'Corner',  v:[48, .22,-.60,.06,1.00,1.3,1.00,1.8]},
-    {t:13.3,n:'Vertical',v:[78, .00, .10,.06,1.00,1.0,1.00,2.2]},
-    {t:15.3,n:'Unfold',  v:[12,-.38,-.15,.12,1.00,2.0,1.00,1.2]},
-    {t:17.2,n:'Sink',    v:[ 2,-.45,-.50,.50,1.00,1.6,.75,.9]},
+    {t:0.0, v:[-8,-.38,-.85,.80,1.00,1.6,.60,.8]},
+    {t:4.0, v:[-6,-.18,-.80,.62,1.00,1.8,.90,1.1]},
+    {t:7.5, v:[ 2, .02,-.62,.55,.78,2.2,1.00,.9]},
+    {t:10.5,v:[10, .12,-.44,.30,.90,1.7,1.00,1.4]},
+    {t:13.5,v:[18, .02,-.32,.10,1.00,1.15,1.00,2.0]},
+    {t:16.0,v:[26, .10,-.40,.08,1.00,1.3,1.00,1.8]},
+    {t:18.5,v:[32, .04,-.28,.10,1.00,1.2,1.00,1.9]},
+    {t:21.5,v:[14,-.22,-.30,.16,1.00,1.8,1.00,1.3]},
+    {t:24.0,v:[ 0,-.36,-.62,.48,1.00,1.6,.78,.9]},
   ];
-  const TONE=[[0,0],[3,.15],[4.8,.6],[6.2,1],[7,1],[8.6,.7],[11,.35],[19,0]];
+  const TONE=[[0,0],[4,.15],[6.5,.6],[8.5,1],[9.8,1],[12.5,.7],[16,.35],[26,0]];
   const sine=x=>x<0?0:x>1?1:.5-.5*Math.cos(Math.PI*x),cl=(x,a,b)=>Math.min(b,Math.max(a,x));
   function toneAt(t){for(let i=1;i<TONE.length;i++){const[a,va]=TONE[i-1],[b,vb]=TONE[i];if(t<=b)return va+(vb-va)*sine((t-a)/(b-a));}return 0;}
   function hermite(K,t){
@@ -644,20 +649,19 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
     const h00=2*u3-3*u2+1,h10=u3-2*u2+u,h01=-2*u3+3*u2,h11=u3-u2;
     return p1.v.map((_,k)=>{const m1=(p2.v[k]-p0.v[k])/(p2.t-p0.t)*dt,m2=(p3.v[k]-p1.v[k])/(p3.t-p1.t)*dt;return h00*p1.v[k]+h10*m1+h01*p2.v[k]+h11*m2;});
   }
-  const DARK=[.0078,.0235,.0667],FLOOD=[.1216*.88,.3569*.88,.88],FLOOD_MAX=.62; // 다크 페이지에 맞춰 플러드는 62%까지, 화이트 단계 없음
-  const lerp3=(a,b,x)=>a.map((v,i)=>v+(b[i]-v)*x);
+  const FLOOD_MAX=.5; // 다크 페이지에 맞춰 플러드는 50%까지, 화이트 단계 없음
   function size(){const d=Math.min(devicePixelRatio||1,1.5);cv.width=Math.round(cv.clientWidth*d);cv.height=Math.round(cv.clientHeight*d);gl.viewport(0,0,cv.width,cv.height);}
   function draw(sec){
     const ph=((sec/BASE)%1+1)%1,t=ph*BASE,v=hermite(KEYS,t),tone=toneAt(t);
-    const bg=lerp3(DARK,FLOOD,tone*FLOOD_MAX),hl=.25*Math.max(0,1-Math.abs(tone-1)*1.6);
-    gl.uniform2f(U.R,cv.width,cv.height);gl.uniform1f(U.T,ph);gl.uniform1f(U.HL,hl);gl.uniform3f(U.BG,...bg);
+    const hl=.22*Math.max(0,1-Math.abs(tone-1)*1.6);
+    gl.uniform2f(U.R,cv.width,cv.height);gl.uniform1f(U.T,ph);gl.uniform1f(U.HL,hl);gl.uniform1f(U.FL,tone*FLOOD_MAX);
     gl.uniform2f(U.OFF,0,cv.width>cv.height?-.04:-.08);
     gl.uniform1f(U.RA,v[0]*D);gl.uniform1f(U.OA,v[1]);gl.uniform1f(U.KA,v[2]);gl.uniform1f(U.BA,cl(v[3],0,1));
     gl.uniform1f(U.ZA,Math.max(.35,v[4]));gl.uniform1f(U.SA,Math.max(0,v[5]));gl.uniform1f(U.VA,cl(v[6],0,1));gl.uniform1f(U.TWK,v[7]);
     gl.drawArrays(gl.TRIANGLES,0,3);
   }
   size();addEventListener('resize',()=>{size();draw(clock);});
-  let clock=9.5,prev=performance.now(),visible=true; // 리본이 선명하게 꼬인 'Twist' 장면에서 시작
+  let clock=13.5,prev=performance.now(),visible=true; // 리본이 선명하게 꼬인 'Twist' 장면에서 시작
   draw(clock);
   if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
   if('IntersectionObserver' in window)new IntersectionObserver(e=>{visible=e[0].isIntersecting;}).observe(cv);
