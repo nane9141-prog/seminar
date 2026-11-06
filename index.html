@@ -583,7 +583,7 @@ html.rg-lock{overflow:hidden}
           <div><h3>페어몬트 앰배서더 서울</h3><p class="hall">B1 그랜드볼룸</p></div>
           <dl class="ways">
             <div><dt>주소</dt><dd><span id="addr">서울특별시 영등포구 여의대로 108</span><button class="copy" id="copyAddr" type="button">주소 복사</button></dd></div>
-            <div><dt>지하철</dt><dd>5·9호선 여의도역 인근 <span class="tbd">출구 확인</span></dd></div>
+            <div><dt>지하철</dt><dd>5·9호선 여의도역 인근</dd></div>
             <div><dt>주차</dt><dd>페어몬트 호텔 주차장 이용 시 무료<small class="fact-note">연결된 더현대 서울 주차장은 주차 지원이 되지 않습니다</small></dd></div>
           </dl>
           <div class="maplinks">
@@ -730,11 +730,12 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
     x.strokeStyle=K.l5;x.beginPath();x.moveTo(-10,y5);x.lineTo(w+10,y5);x.stroke();
     // venue block: 위 더현대 서울 / 아래 페어몬트 앰배서더 서울
     const vx=w*.44,vw=w*.32,vy=h*.12,vh=y5-18-h*.12,half=vh/2,gap=3;
-    x.fillStyle='#fff';rr(vx,vy,vw,half-gap/2,6);x.fill();
+    x.fillStyle='#2f2f2f';rr(vx,vy,vw,half-gap/2,6);x.fill();
+    x.strokeStyle='rgba(255,255,255,.4)';x.lineWidth=1.5;x.stroke();
     x.fillStyle=K.accent;rr(vx,vy+half+gap/2,vw,half-gap/2,6);x.fill();
     const fs=vw<150?12:14,cx=vx+vw/2;
     x.textAlign='center';x.textBaseline='middle';
-    x.fillStyle=K.ink;x.font='600 '+fs+'px '+K.body;x.fillText('더현대 서울',cx,vy+half/2);x.fillStyle=K.on;
+    x.fillStyle=K.on;x.font='600 '+fs+'px '+K.body;x.fillText('더현대 서울',cx,vy+half/2);x.fillStyle=K.on;
     const fy=vy+half+half/2,name=vw<210?['페어몬트','앰배서더 서울']:['페어몬트 앰배서더 서울'],lh=fs+4;
     const top=fy-((name.length)*lh+lh-2)/2+lh/2;
     x.font='700 '+fs+'px '+K.body;name.forEach((t,i)=>x.fillText(t,cx,top+i*lh));
