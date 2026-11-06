@@ -232,6 +232,9 @@ footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;c
   .spk{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:72%;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:-24px;padding-inline:24px;scroll-padding-inline:24px;scrollbar-width:none}
   .spk::-webkit-scrollbar{display:none}
   .spk li{scroll-snap-align:start}
+  .spk{cursor:grab}
+  .spk.is-drag{cursor:grabbing;scroll-snap-type:none;user-select:none}
+  .spk img{-webkit-user-drag:none;user-select:none}
   .loc{grid-template-columns:minmax(0,1fr)}
   .map{min-height:280px}
 }
@@ -240,7 +243,7 @@ footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;c
   .top__in{padding-inline:20px;height:56px}
   .brand svg{height:22px}
   .top .btn--sm{display:none}
-  .hero{padding:88px 20px;min-height:76svh}
+  .hero{padding:88px 20px;min-height:570px} /* 원티드 하이파이브 모바일 히어로와 동일 높이 */
   .hero h1{font-size:clamp(34px,10.4vw,48px)}
   .hero__meta{font-size:15px;flex-direction:column;gap:2px}
   .ttl{width:min(100%,360px)}
@@ -671,6 +674,26 @@ html.rg-lock{overflow:hidden}
     set('cd-d',String(d));set('cd-h',p(h));set('cd-m',p(m));
     document.getElementById('dday').textContent=d>0?'D-'+d:'D-DAY';}
   tick();setInterval(tick,1000);
+})();
+
+/* ---------- 연사 카드: 마우스 드래그로 가로 스크롤 (터치는 기본 스와이프) ---------- */
+(function(){
+  const s=document.querySelector('.spk');if(!s)return;
+  s.querySelectorAll('img').forEach(i=>i.draggable=false);
+  let down=false,x0=0,l0=0,dx=0,moved=false;
+  s.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'||e.button!==0||s.scrollWidth<=s.clientWidth+2)return;
+    down=true;moved=false;dx=0;x0=e.clientX;l0=s.scrollLeft;s.setPointerCapture(e.pointerId);s.classList.add('is-drag');});
+  s.addEventListener('pointermove',e=>{if(!down)return;dx=e.clientX-x0;if(Math.abs(dx)>4)moved=true;s.scrollLeft=l0-dx;});
+  function up(){if(!down)return;down=false;
+    const sr=s.getBoundingClientRect(),pl=parseFloat(getComputedStyle(s).scrollPaddingLeft)||0;
+    const pos=[...s.children].map(li=>li.getBoundingClientRect().left-sr.left+s.scrollLeft-pl);
+    let i=0,bd=1e9;pos.forEach((p,k)=>{const d=Math.abs(p-s.scrollLeft);if(d<bd){bd=d;i=k;}});
+    if(Math.abs(dx)>40){const cur=pos.findIndex(p=>p>=l0-2);const base=cur<0?0:cur;i=Math.max(0,Math.min(pos.length-1,base+(dx<0?1:-1)));}
+    const left=Math.max(0,Math.min(pos[i],s.scrollWidth-s.clientWidth));
+    s.scrollTo({left,behavior:'smooth'});
+    setTimeout(()=>s.classList.remove('is-drag'),450);}
+  s.addEventListener('pointerup',up);s.addEventListener('pointercancel',up);
+  s.addEventListener('click',e=>{if(moved){e.preventDefault();e.stopPropagation();moved=false;}},true);
 })();
 
 /* ---------- Copy address ---------- */
