@@ -713,7 +713,7 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
   function rr(X,Y,W,H,r){x.beginPath();if(x.roundRect)x.roundRect(X,Y,W,H,r);else x.rect(X,Y,W,H);}
   function pill(cx,cy,txt,bg,fg,K){x.font='700 12px '+K.body;const tw=x.measureText(txt).width+20;x.fillStyle=bg;rr(cx-tw/2,cy-11,tw,22,11);x.fill();x.fillStyle=fg;x.textAlign='center';x.textBaseline='middle';x.fillText(txt,cx,cy+1);x.textAlign='left';x.textBaseline='alphabetic';}
   function draw(){
-    const K={ink:tk('--color-ink'),block:tk('--color-map-block'),block2:'#1d2a45',rule:tk('--color-rule-on-ink'),on:tk('--color-on-ink'),muted:tk('--color-on-ink-muted'),accent:tk('--color-accent'),l5:tk('--color-line5'),l9:tk('--color-line9'),body:tk('--font-body')};
+    const K={ink:tk('--color-ink'),block:tk('--color-map-block'),rule:tk('--color-rule-on-ink'),on:tk('--color-on-ink'),muted:tk('--color-on-ink-muted'),accent:tk('--color-accent'),l5:tk('--color-line5'),l9:tk('--color-line9'),body:tk('--font-body')};
     const d=Math.min(devicePixelRatio||1,2),w=c.clientWidth,h=c.clientHeight;
     c.width=w*d;c.height=h*d;x.setTransform(d,0,0,d,0,0);x.clearRect(0,0,w,h);
     // city blocks: a loose grid, the roads are the gaps
@@ -730,12 +730,11 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
     x.strokeStyle=K.l5;x.beginPath();x.moveTo(-10,y5);x.lineTo(w+10,y5);x.stroke();
     // venue block: 위 더현대 서울 / 아래 페어몬트 앰배서더 서울
     const vx=w*.44,vw=w*.32,vy=h*.12,vh=y5-18-h*.12,half=vh/2,gap=3;
-    x.fillStyle=K.block2;rr(vx,vy,vw,half-gap/2,6);x.fill();
-    x.strokeStyle=K.accent;x.lineWidth=1.5;x.stroke();
+    x.fillStyle='#fff';rr(vx,vy,vw,half-gap/2,6);x.fill();
     x.fillStyle=K.accent;rr(vx,vy+half+gap/2,vw,half-gap/2,6);x.fill();
     const fs=vw<150?12:14,cx=vx+vw/2;
     x.textAlign='center';x.textBaseline='middle';
-    x.fillStyle=K.on;x.font='600 '+fs+'px '+K.body;x.fillText('더현대 서울',cx,vy+half/2);
+    x.fillStyle=K.ink;x.font='600 '+fs+'px '+K.body;x.fillText('더현대 서울',cx,vy+half/2);x.fillStyle=K.on;
     const fy=vy+half+half/2,name=vw<210?['페어몬트','앰배서더 서울']:['페어몬트 앰배서더 서울'],lh=fs+4;
     const top=fy-((name.length)*lh+lh-2)/2+lh/2;
     x.font='700 '+fs+'px '+K.body;name.forEach((t,i)=>x.fillText(t,cx,top+i*lh));
