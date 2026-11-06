@@ -324,6 +324,91 @@ footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;c
 /* 2번 섹션 본문: 문장 사이 간격 없이 한 단락처럼 */
 .intro__p,.intro .intro__p{gap:0!important;line-height:1.6}
 .intro__p p:last-child{margin-top:18px!important}
+
+/* ---------- 사전등록 모달 ---------- */
+html.rg-lock{overflow:hidden}
+.rg{overflow:hidden;padding:0;border:0;background:transparent;color:var(--fg);max-width:none;max-height:none;width:100%;height:100%;margin:0;inset:0}
+.rg::backdrop{background:rgba(0,0,0,.66);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.rg__box{position:relative;margin:max(32px,6vh) auto;width:min(600px,calc(100% - 32px));background:#181818;border:1px solid var(--line);border-radius:20px;box-shadow:0 30px 80px rgba(0,0,0,.5);display:flex;flex-direction:column;max-height:calc(100% - max(64px,12vh))}
+.rg__hd{display:flex;align-items:flex-start;gap:16px;padding:28px 32px 20px;border-bottom:1px solid var(--line)}
+.rg__hd h2{font-size:24px;font-weight:800;letter-spacing:-.02em;line-height:1.3}
+.rg__hd p{margin-top:4px;font-size:14px;color:var(--fg-3)}
+.rg__hd p b{color:var(--blue);font-weight:700}
+.rg__x{margin-left:auto;flex:none;width:40px;height:40px;border:0;border-radius:10px;background:#262626;color:#fff;cursor:pointer;display:grid;place-items:center}
+.rg__x:hover{background:#303030}
+.rg__x svg{width:18px;height:18px}
+.rg__bd{padding:24px 32px 8px;overflow:auto;overscroll-behavior:contain;min-height:0;flex:1 1 auto}
+.rg__ft{padding:16px 32px 28px;border-top:1px solid var(--line)}
+.rg__ft .btn{width:100%}
+.rg__ft .btn[disabled]{opacity:.5;cursor:default}
+.rg form{display:grid;gap:20px}
+.rg fieldset{border:0;margin:0;padding:0;display:grid;gap:16px}
+.rg .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rg [hidden]{display:none!important}
+.rg label.f{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 6px;font-size:14px;font-weight:600;color:var(--fg-2)}
+.rg label.f>input,.rg label.f>select,.rg label.f>textarea,.rg label.f>.err{flex-basis:100%;margin-top:4px}
+
+.rg label.f i{font-style:normal;color:var(--blue)}
+.rg label.f small{font-weight:400;color:var(--fg-3)}
+.rg input[type=text],.rg input[type=tel],.rg input[type=email],.rg input[type=search],.rg select,.rg textarea{width:100%;min-height:50px;padding:12px 16px;border:1px solid #333;border-radius:12px;background:#111;color:#fff;font:500 16px/1.4 var(--font);transition:border-color .15s}
+.rg textarea{min-height:96px;resize:vertical}
+.rg select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,#8a8a8a 50%),linear-gradient(135deg,#8a8a8a 50%,transparent 50%);background-position:calc(100% - 22px) 22px,calc(100% - 16px) 22px;background-size:6px 6px;background-repeat:no-repeat}
+.rg input::placeholder,.rg textarea::placeholder{color:#5f5f5f}
+.rg input:focus,.rg select:focus,.rg textarea:focus{outline:0;border-color:var(--blue)}
+.rg .bad{border-color:#ff6b6b!important}
+.rg .err{font-size:13px;font-weight:500;color:#ff8a8a}
+.rg .hint{font-size:13px;font-weight:400;color:var(--fg-3);line-height:1.5}
+/* 회사 검색 */
+.cs{position:relative}
+.cs__sel{display:flex;align-items:center;gap:12px;min-height:50px;padding:10px 10px 10px 16px;border:1px solid var(--blue);border-radius:12px;background:#0f1726}
+.cs__sel b{font-size:16px}
+.cs__sel span{font-size:13px;color:var(--fg-3)}
+.cs__sel button{margin-left:auto;border:0;background:#22314d;color:#cfe0ff;border-radius:8px;padding:8px 12px;font:600 13px/1 var(--font);cursor:pointer}
+.cs__list{position:absolute;z-index:3;left:0;right:0;top:calc(100% + 6px);margin:0;padding:6px;list-style:none;background:#1f1f1f;border:1px solid #333;border-radius:12px;max-height:280px;overflow:auto;box-shadow:0 16px 40px rgba(0,0,0,.45)}
+.cs__list li{display:flex;align-items:center;gap:10px;padding:12px;border-radius:8px;cursor:pointer;font-size:15px}
+.cs__list li small{font-size:12px;color:var(--fg-3)}
+.cs__list li em{margin-left:auto;font-style:normal;font-size:12px;font-weight:700;color:var(--blue);white-space:nowrap}
+.cs__list li.off{cursor:default;color:var(--fg-3)}
+.cs__list li.off em{color:#7a7a7a}
+.cs__list li[aria-selected=true]:not(.off){background:#2a3550}
+.cs__list li.man{border-top:1px solid #333;margin-top:4px;padding-top:14px;color:#cfe0ff}
+.cs__list li.empty{cursor:default;color:var(--fg-3)}
+.cs__list mark{background:none;color:var(--blue);font-weight:700}
+.man-box{display:grid;gap:12px;padding:16px;border-radius:12px;background:#1e1e1e;border:1px dashed #3a3a3a}
+.man-box p{font-size:13px;color:#ffcf70;line-height:1.5}
+/* 체크 */
+.ck{display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.5;cursor:pointer}
+.ck input{flex:none;width:20px;height:20px;margin:2px 0 0;accent-color:var(--blue-2)}
+.ck small{color:var(--fg-3)}
+.agree{display:grid;gap:12px;padding:16px;border-radius:12px;background:#1e1e1e}
+.agree details summary{cursor:pointer;font-size:13px;color:var(--fg-3);list-style:none;text-decoration:underline;text-underline-offset:3px;margin-left:30px;width:max-content}
+.agree details summary::-webkit-details-marker{display:none}
+.agree details div{margin:8px 0 0 30px;font-size:13px;color:var(--fg-3);line-height:1.6}
+.hp{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden}
+/* 결과 */
+.rg__done{padding:40px 32px 12px;text-align:center}
+.rg__done .ic{width:64px;height:64px;margin:0 auto 20px;border-radius:50%;display:grid;place-items:center;background:rgba(47,107,255,.16);color:var(--blue)}
+.rg__done .ic.warn{background:rgba(255,183,77,.14);color:#ffb74d}
+.rg__done .ic svg{width:30px;height:30px}
+.rg__done h3{font-size:24px;font-weight:800;letter-spacing:-.02em}
+.rg__done p{margin-top:12px;color:var(--fg-2);font-size:15px;line-height:1.7}
+.rg__sum{margin:24px 0 0;padding:16px 20px;border-radius:12px;background:#1e1e1e;text-align:left;display:grid;gap:8px;font-size:14px}
+.rg__sum div{display:grid;grid-template-columns:72px 1fr;gap:12px}
+.rg__sum dt{color:var(--fg-3)}
+.rg__sum dd{margin:0;font-weight:600}
+.rg__spin{width:18px;height:18px;border:2px solid rgba(255,255,255,.35);border-top-color:#fff;border-radius:50%;animation:rgspin .7s linear infinite}
+@keyframes rgspin{to{transform:rotate(360deg)}}
+@media (max-width:640px){
+  .rg__box{margin:0;width:100%;height:100%;max-height:none;border-radius:0;border:0}
+  .rg__hd{padding:calc(18px + env(safe-area-inset-top,0px)) 20px 16px}
+  .rg__hd h2{font-size:21px}
+  .rg__bd{padding:20px 20px 8px;flex:1}
+  .rg__ft{padding:12px 20px calc(16px + env(safe-area-inset-bottom,0px))}
+  .rg .row2{grid-template-columns:1fr}
+  .rg__done{padding:40px 20px 12px}
+}
+@media (prefers-reduced-motion:reduce){.rg__spin{animation-duration:2s}}
+.cs__back{border:0;background:none;padding:0;color:#cfe0ff;font:600 13px/1 var(--font);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 </style>
 </head>
 <body>
@@ -455,8 +540,7 @@ footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;c
       <p class="reg__k">정원 300명 · 선착순 마감</p>
       <p class="reg__big">사전등록</p>
       <p class="reg__p">등록 시 남겨주신 사전질문은 Q&amp;A 세션에서 우선 답변드립니다.</p>
-      <a class="btn" href="#register" id="formLink">사전등록 페이지로 이동</a>
-      <p class="reg__note"><span class="tbd">외부 등록 폼(리캐치 등) URL 연결 예정</span></p>
+      <a class="btn" href="#register" id="formLink">사전등록하기</a>
       <dl class="facts">
         <div><dt>대상</dt><dd>2027년 전자주총 의무화 기업<small class="fact-note">대상 기업 당 2명 제한</small></dd></div>
         <div><dt>정원</dt><dd>300명 (선착순)</dd></div>
@@ -466,8 +550,8 @@ footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;c
       <h3 class="guide-h" id="guide">이렇게 참석하세요</h3>
       <p class="guide-p">별도 입장권은 없습니다. 현장에서 사전등록 정보로 본인 확인 후 네임태그를 받으시면 됩니다.</p>
       <ol class="steps">
-        <li><h4>사전등록</h4><p>등록 페이지에서 소속과 연락처를 입력합니다.</p></li>
-        <li><h4>확인 메일</h4><p>등록 완료 메일을 받고, 행사 전날 안내 문자를 받습니다.</p></li>
+        <li><h4>사전등록</h4><p>회사를 검색해 선택하고 연락처를 입력합니다. 기업당 2명까지 선착순입니다.</p></li>
+        <li><h4>확인 메일</h4><p>등록 완료 메일을 받고, 행사 전날 안내 메일을 받습니다.</p></li>
         <li><h4>현장 본인 확인</h4><p>B1 등록 데스크에서 이름과 소속을 확인하고 네임태그를 받습니다.</p></li>
         <li><h4>설명회 참석</h4><p>종료 후 발표자료와 설문 안내를 메일로 드립니다.</p></li>
       </ol>
@@ -502,6 +586,9 @@ footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;c
         <details><summary>온라인 생중계나 다시보기가 있나요?</summary><p>이번 설명회는 오프라인으로만 진행하며 생중계와 다시보기는 제공하지 않습니다. 발표자료는 참석자에게 메일로 드립니다.</p></details>
         <details><summary>입장권이나 QR코드가 필요한가요?</summary><p>필요 없습니다. 현장 등록 데스크에서 사전등록하신 이름과 소속을 확인한 뒤 네임태그를 드립니다.</p></details>
         <details><summary>정원이 있나요?</summary><p>300명 선착순입니다. 정원이 차면 등록이 마감됩니다.</p></details>
+        <details><summary>한 회사에서 몇 명까지 신청할 수 있나요?</summary><p>2027년 전자주총 의무화 대상 기업(최근 사업연도 말 자산총액 2조원 이상 상장회사)별로 2명까지 선착순으로 등록됩니다. 같은 회사 담당자끼리 참석 인원을 미리 맞춰주세요.</p></details>
+        <details><summary>회사 검색에 우리 회사가 나오지 않아요.</summary><p>검색 목록 맨 아래 '직접 입력하기'로 신청해 주세요. 운영팀 확인 후 영업일 1일 이내에 승인 여부를 메일로 안내드리며, 승인 시점에 잔여석이 있어야 확정됩니다.</p></details>
+        <details><summary>신청을 취소하거나 참석자를 바꾸고 싶어요.</summary><p>취소는 등록 완료 메일의 취소 링크로 할 수 있습니다. 참석자 변경은 seminar@irkudos.co.kr로 문의해 주세요.</p></details>
         <details><summary>질문은 어떻게 하나요?</summary><p>등록할 때 사전질문을 남겨주시면 Q&amp;A 세션에서 우선 답변드립니다. 현장 질의도 받습니다.</p></details>
         <details><summary>시연에 참여하려면 무엇이 필요한가요?</summary><p>스마트폰에 현장표결 앱 주주PASS를 설치해 오시면 가상의 주주총회에서 직접 투표에 참여할 수 있습니다.</p></details>
         <details><summary>주차 지원이 되나요?</summary><p><span class="tbd">확정 후 기재</span></p></details>
@@ -536,6 +623,16 @@ footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;c
     </div>
   </div>
 </footer>
+
+<dialog class="rg" id="rg" aria-labelledby="rgTitle">
+  <div class="rg__box">
+    <div class="rg__hd">
+      <div><h2 id="rgTitle">사전등록</h2><p id="rgSub">2026.11.30 (월) 13:30 · 페어몬트 앰배서더 서울 B1</p></div>
+      <button class="rg__x" type="button" data-close aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div id="rgView"></div>
+  </div>
+</dialog>
 
 <div class="mbar is-hidden" aria-label="사전등록">
   <span>11월 30일 (월), 여의도<b>정원 300명 선착순</b></span>
@@ -732,5 +829,244 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
   (function loop(now){const dt=Math.min(.1,(now-prev)/1000);prev=now;if(visible&&!document.hidden){t=(t+dt)%LOOP;draw();}requestAnimationFrame(loop);})(prev);
 })();
 </script>
+<script>
+/* ---------- 사전등록 모달 (Supabase) ---------- */
+(function(){
+  const API='https://zrhtqpzgubaqzsdaxhvt.supabase.co/rest/v1/rpc/',KEY='sb_publishable_JwET6KLGmdYBkOIIttgOOQ_HEpCKLar',CONTACT='seminar@irkudos.co.kr';
+  const rpc=(fn,body)=>fetch(API+fn,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify(body||{})}).then(r=>{if(!r.ok)throw new Error(r.status);return r.json();});
+  const dlg=document.getElementById('rg'),view=document.getElementById('rgView'),sub=document.getElementById('rgSub');
+  const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const ICON={ok:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+    wait:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+    info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>'};
+  const SUB0=sub.textContent;
+  let companies=null,state=null,picked=null,manual=false,formEl=null,busy=false;
+
+  /* --- 한글 초성 검색 --- */
+  const CHO='ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ';
+  const cho=s=>[...s].map(ch=>{const c=ch.charCodeAt(0)-44032;return c>=0&&c<11172?CHO[Math.floor(c/588)]:ch;}).join('');
+  const norm=s=>String(s).toLowerCase().replace(/\s|\(주\)|㈜|주식회사/g,'');
+
+  /* --- 열기/닫기 --- */
+  function open(){
+    if(!dlg.open){dlg.showModal();document.documentElement.classList.add('rg-lock');}
+    if(!formEl)renderForm();
+    load();
+  }
+  function close(){dlg.close();}
+  dlg.addEventListener('close',()=>document.documentElement.classList.remove('rg-lock'));
+  dlg.addEventListener('click',e=>{if(e.target===dlg||e.target.closest('[data-close]'))close();});
+  document.querySelectorAll('a[href="#register"]').forEach(a=>{
+    if(a.closest('.top nav,.gnb'))return; // 메뉴 링크는 섹션 이동 유지
+    a.addEventListener('click',e=>{e.preventDefault();open();});
+  });
+
+  async function load(){
+    try{
+      const [st,list]=await Promise.all([rpc('event_status'),rpc('list_companies')]);
+      state=st;companies=list.map(c=>({...c,n:norm(c.name),ch:cho(norm(c.name))}));
+      if(!st.open||st.remaining<=0){renderClosed();return;}
+      sub.innerHTML=esc(SUB0)+' · 잔여 <b>'+st.remaining+'</b>석';
+      const inp=formEl&&formEl.querySelector('#rgCo');
+      if(inp){inp.disabled=false;inp.placeholder='회사명 또는 종목코드 검색';if(document.activeElement===inp)search();}
+      if(picked){const p=companies.find(c=>c.id===picked.id);if(p){picked=p;showPicked();}}
+    }catch(_){
+      const inp=formEl&&formEl.querySelector('#rgCo');
+      if(inp){inp.placeholder='목록을 불러오지 못했습니다. 잠시 후 다시 열어주세요';}
+    }
+  }
+
+  /* --- 신청 폼 --- */
+  function renderForm(){
+    picked=null;manual=false;
+    view.innerHTML=`
+<div class="rg__bd"><form id="rgForm" novalidate autocomplete="on">
+  <fieldset>
+    <label class="f" for="rgCo">회사 <i>*</i><small>2027년 전자주총 의무화 대상 기업 · 기업당 2명 선착순</small></label>
+    <div class="cs" id="cs">
+      <input type="search" id="rgCo" role="combobox" aria-expanded="false" aria-controls="csList" aria-autocomplete="list" autocomplete="off" placeholder="기업 목록 불러오는 중…" disabled>
+      <ul class="cs__list" id="csList" role="listbox" hidden></ul>
+    </div>
+    <div class="cs__sel" id="csSel" hidden></div>
+    <span class="err" id="errCo" hidden></span>
+    <div class="man-box" id="manBox" hidden>
+      <p>목록에 없는 기업은 운영팀 확인 후 확정됩니다. 영업일 1일 이내에 메일로 안내드리며, 승인 시점에 잔여석이 있어야 등록됩니다.</p>
+      <label class="f">회사명 <i>*</i><input type="text" name="company_name" maxlength="80" autocomplete="organization"></label>
+      <label class="f">사업자등록번호 또는 종목코드 <i>*</i><input type="text" name="biz_no" maxlength="20" inputmode="numeric" placeholder="예: 123-45-67890"></label>
+      <div><button type="button" class="cs__back" id="manBack">← 목록에서 다시 찾기</button></div>
+    </div>
+  </fieldset>
+  <fieldset>
+    <div class="row2">
+      <label class="f">이름 <i>*</i><input type="text" name="name" maxlength="30" autocomplete="name" required></label>
+      <label class="f">직급 <i>*</i><input type="text" name="title" maxlength="30" autocomplete="organization-title" required></label>
+    </div>
+    <label class="f">부서 <i>*</i><input type="text" name="dept" maxlength="50" required></label>
+    <div class="row2">
+      <label class="f">휴대폰 <i>*</i><input type="tel" name="phone" maxlength="13" inputmode="numeric" autocomplete="tel-national" placeholder="010-0000-0000" required></label>
+      <label class="f">이메일 <i>*</i><input type="email" name="email" maxlength="120" autocomplete="email" placeholder="회사 이메일 권장" required></label>
+    </div>
+  </fieldset>
+  <fieldset>
+    <label class="f">관심 세션 <small>(선택)</small>
+      <select name="session"><option value="">선택 안 함</option><option>1부 · 상법 개정 관련 영향 및 대응방안</option><option>2부 · 상법 개정과 전자주총이 몰고 올 기업 경영의 지각변동</option><option>3부 · 전자주총 솔루션 소개 및 가상 주주총회 시연</option></select></label>
+    <label class="f">사전질문 <small>(선택) Q&amp;A 세션에서 우선 답변드립니다</small><textarea name="question" maxlength="1000"></textarea></label>
+    <label class="ck"><input type="checkbox" name="consult"><span>전자주총 도입 개별 상담을 희망합니다 <small>(선택)</small></span></label>
+  </fieldset>
+  <div class="agree">
+    <label class="ck"><input type="checkbox" name="agree_privacy" required><span>개인정보 수집·이용에 동의합니다 <i style="font-style:normal;color:var(--blue)">(필수)</i></span></label>
+    <details><summary>내용 보기</summary><div>수집 항목: 회사명, 이름, 부서, 직급, 휴대폰 번호, 이메일, 사전질문<br>이용 목적: 설명회 참석 확인, 안내 메일 발송, 현장 본인 확인<br>보유 기간: 행사 종료 후 6개월 이내 파기<br>동의를 거부할 수 있으며, 거부 시 사전등록이 제한됩니다.</div></details>
+    <label class="ck"><input type="checkbox" name="agree_marketing"><span>IR큐더스의 서비스·행사 안내 수신에 동의합니다 <small>(선택)</small></span></label>
+    <span class="err" id="errAgree" hidden></span>
+  </div>
+  <div class="hp" aria-hidden="true"><label>홈페이지<input type="text" name="hp" tabindex="-1" autocomplete="off"></label></div>
+</form></div>
+<div class="rg__ft"><p class="err" id="rgErr" hidden style="margin-bottom:12px"></p><button class="btn" type="submit" form="rgForm" id="rgSubmit">사전등록 신청</button></div>`;
+    formEl=view.querySelector('form');
+    bindForm();
+  }
+
+  function bindForm(){
+    const f=formEl,inp=f.querySelector('#rgCo'),list=f.querySelector('#csList');
+    let items=[],act=-1;
+    function setOpen(o){list.hidden=!o;inp.setAttribute('aria-expanded',o);}
+    function hl(name,q){const i=name.toLowerCase().indexOf(q.toLowerCase());return i<0||!q?esc(name):esc(name.slice(0,i))+'<mark>'+esc(name.slice(i,i+q.length))+'</mark>'+esc(name.slice(i+q.length));}
+    window.__rgSearch=search;
+    function search(){
+      if(!companies)return;
+      const raw=inp.value.trim(),q=norm(raw),isCho=/^[ㄱ-ㅎ]+$/.test(q);
+      let res=[];
+      if(q){
+        const a=[],b=[];
+        companies.forEach(c=>{
+          const hit=isCho?c.ch.includes(q):(c.n.includes(q)||c.code.includes(q));
+          if(hit)((isCho?c.ch.startsWith(q):c.n.startsWith(q))?a:b).push(c);
+        });
+        res=a.concat(b).slice(0,30);
+      }
+      items=res;act=res.findIndex(c=>c.remaining>0);
+      list.innerHTML=(q?(res.length?res.map((c,i)=>`<li role="option" id="cs${i}" data-i="${i}" class="${c.remaining>0?'':'off'}" aria-disabled="${c.remaining<=0}" aria-selected="${i===act}"><span>${hl(c.name,raw)} <small>${esc(c.market||'')} ${esc(c.code)}</small></span><em>${c.remaining>0?'잔여 '+c.remaining+'석':'마감'}</em></li>`).join(''):'<li class="empty">검색 결과가 없습니다</li>'):'')+
+        `<li role="option" class="man" data-man="1">목록에 회사가 없나요? 직접 입력하기</li>`;
+      setOpen(true);syncAct();
+    }
+    function syncAct(){list.querySelectorAll('li[data-i]').forEach(li=>li.setAttribute('aria-selected',+li.dataset.i===act));
+      const el=list.querySelector('#cs'+act);inp.setAttribute('aria-activedescendant',el?el.id:'');if(el)el.scrollIntoView({block:'nearest'});}
+    function choose(c){if(!c||c.remaining<=0)return;picked=c;manual=false;setOpen(false);showPicked();clearErr('Co');f.querySelector('[name=name]').focus();}
+    inp.addEventListener('input',search);
+    inp.addEventListener('focus',()=>{if(companies)search();});
+    inp.addEventListener('blur',()=>setTimeout(()=>setOpen(false),120));
+    inp.addEventListener('keydown',e=>{
+      if(list.hidden&&e.key!=='ArrowDown')return;
+      const ok=items.map((c,i)=>c.remaining>0?i:-1).filter(i=>i>=0);
+      if(e.key==='ArrowDown'){e.preventDefault();if(list.hidden){search();return;}const k=ok.indexOf(act);act=ok[Math.min(k+1,ok.length-1)]??act;syncAct();}
+      else if(e.key==='ArrowUp'){e.preventDefault();const k=ok.indexOf(act);act=ok[Math.max(k-1,0)]??act;syncAct();}
+      else if(e.key==='Enter'){e.preventDefault();if(act>=0)choose(items[act]);}
+      else if(e.key==='Escape'){e.preventDefault();e.stopPropagation();setOpen(false);}
+    });
+    dlg.addEventListener('cancel',e=>{if(!list.hidden){e.preventDefault();setOpen(false);}});
+    list.addEventListener('mousedown',e=>e.preventDefault());
+    list.addEventListener('click',e=>{const li=e.target.closest('li');if(!li)return;
+      if(li.dataset.man){setManual(true);return;}
+      if(li.dataset.i!=null)choose(items[+li.dataset.i]);});
+    f.querySelector('#manBack').addEventListener('click',()=>{setManual(false);inp.focus();});
+    const ph=f.querySelector('[name=phone]');
+    ph.addEventListener('input',()=>{const d=ph.value.replace(/\D/g,'').slice(0,11);ph.value=d.length<4?d:d.length<8?d.slice(0,3)+'-'+d.slice(3):d.slice(0,3)+'-'+d.slice(3,d.length-4)+'-'+d.slice(-4);});
+    f.addEventListener('input',e=>{const t=e.target;if(t.classList.contains('bad'))clearField(t);});
+    f.addEventListener('change',e=>{if(e.target.name==='agree_privacy')clearErr('Agree');});
+    f.addEventListener('submit',submit);
+  }
+  function setManual(on){
+    manual=on;picked=null;const f=formEl;
+    f.querySelector('#manBox').hidden=!on;f.querySelector('#cs').hidden=on;f.querySelector('#csSel').hidden=true;clearErr('Co');
+    if(on){const n=f.querySelector('[name=company_name]');n.value=f.querySelector('#rgCo').value.trim();n.focus();}
+  }
+  function showPicked(){
+    const f=formEl,sel=f.querySelector('#csSel');
+    f.querySelector('#cs').hidden=true;f.querySelector('#manBox').hidden=true;sel.hidden=false;
+    sel.innerHTML=`<b>${esc(picked.name)}</b><span>${esc(picked.market||'')} ${esc(picked.code)} · 잔여 ${picked.remaining}석</span><button type="button">변경</button>`;
+    sel.querySelector('button').onclick=()=>{picked=null;sel.hidden=true;f.querySelector('#cs').hidden=false;const i=f.querySelector('#rgCo');i.value='';i.focus();};
+  }
+
+  /* --- 검증 --- */
+  function fieldErr(input,msg){input.classList.add('bad');const lab=input.closest('label');let s=lab.querySelector('.err');if(!s){s=document.createElement('span');s.className='err';lab.appendChild(s);}s.textContent=msg;}
+  function clearField(input){input.classList.remove('bad');const s=input.closest('label')?.querySelector('.err');if(s)s.remove();}
+  function showErr(id,msg){const s=formEl.querySelector('#err'+id);s.textContent=msg;s.hidden=false;}
+  function clearErr(id){const s=formEl&&formEl.querySelector('#err'+id);if(s)s.hidden=true;}
+  function generalErr(msg){const s=view.querySelector('#rgErr');if(!s)return;s.textContent=msg||'';s.hidden=!msg;}
+  function validate(){
+    const f=formEl,v=n=>f.elements[n].value.trim();let first=null;
+    const need=(n,ok,msg)=>{if(!ok){fieldErr(f.elements[n],msg);first=first||f.elements[n];}};
+    if(manual){need('company_name',v('company_name').length>=2,'회사명을 입력해 주세요');need('biz_no',v('biz_no').replace(/\D/g,'').length>=6,'사업자등록번호 또는 종목코드를 입력해 주세요');}
+    else if(!picked){showErr('Co','회사를 검색해서 선택하거나 직접 입력해 주세요');first=first||f.querySelector('#rgCo');}
+    need('name',v('name').length>=2,'이름을 입력해 주세요');
+    need('title',v('title').length>=1,'직급을 입력해 주세요');
+    need('dept',v('dept').length>=1,'부서를 입력해 주세요');
+    need('phone',/^01[016789]\d{7,8}$/.test(v('phone').replace(/\D/g,'')),'휴대폰 번호를 확인해 주세요');
+    need('email',/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v('email')),'이메일 주소를 확인해 주세요');
+    if(!f.elements.agree_privacy.checked){showErr('Agree','개인정보 수집·이용에 동의해 주세요');first=first||f.elements.agree_privacy;}
+    if(first){first.focus({preventScroll:false});first.scrollIntoView({block:'center',behavior:'smooth'});}
+    return !first;
+  }
+
+  /* --- 제출 --- */
+  async function submit(e){
+    e.preventDefault();if(busy)return;generalErr('');
+    if(!validate())return;
+    const f=formEl,v=n=>f.elements[n].value.trim(),btn=view.querySelector('#rgSubmit');
+    const p={name:v('name'),title:v('title'),dept:v('dept'),phone:v('phone'),email:v('email'),session:v('session'),question:v('question'),
+      consult:f.elements.consult.checked,agree_privacy:true,agree_marketing:f.elements.agree_marketing.checked,hp:f.elements.hp.value};
+    if(manual){p.company_name=v('company_name');p.biz_no=v('biz_no');}else p.company_id=picked.id;
+    busy=true;btn.disabled=true;btn.innerHTML='<span class="rg__spin" aria-hidden="true"></span>접수 중…';
+    try{
+      const r=await rpc('register',{p});
+      if(r.ok){formEl=null;renderDone(r);load();return;}
+      if(r.code==='company_full'){await load();showPickedReset();showErr('Co','이 기업은 사전등록 2명이 모두 마감되었습니다. 같은 회사 담당자와 참석 인원을 확인해 주세요.');formEl.querySelector('#errCo').scrollIntoView({block:'center',behavior:'smooth'});}
+      else if(r.code==='duplicate')generalErr('이미 같은 이메일 또는 휴대폰 번호로 신청된 내역이 있습니다. 변경이 필요하면 '+CONTACT+'로 문의해 주세요.');
+      else if(r.code==='full'||r.code==='closed'){formEl=null;renderClosed();}
+      else generalErr('입력 내용을 다시 확인해 주세요.');
+    }catch(_){generalErr('일시적인 오류로 접수하지 못했습니다. 잠시 후 다시 시도해 주세요.');}
+    finally{busy=false;const b=view.querySelector('#rgSubmit');if(b){b.disabled=false;b.textContent='사전등록 신청';}}
+  }
+  function showPickedReset(){if(!formEl)return;picked=null;formEl.querySelector('#csSel').hidden=true;formEl.querySelector('#cs').hidden=false;}
+
+  /* --- 결과 화면 --- */
+  function summary(r){return `<dl class="rg__sum"><div><dt>신청번호</dt><dd>No. ${esc(r.reg_no)}</dd></div><div><dt>회사</dt><dd>${esc(r.company)}</dd></div><div><dt>이름</dt><dd>${esc(r.name)}</dd></div><div><dt>이메일</dt><dd>${esc(r.email)}</dd></div></dl>`;}
+  function renderDone(r){
+    const ok=r.status==='confirmed';
+    view.innerHTML=`<div class="rg__bd"><div class="rg__done">
+      <div class="ic ${ok?'':'warn'}">${ok?ICON.ok:ICON.wait}</div>
+      <h3>${ok?'사전등록이 완료되었습니다':'신청이 접수되었습니다'}</h3>
+      <p>${ok?'입력하신 이메일로 등록 완료 메일을 보내드렸습니다.<br>행사 당일 등록 데스크에서 성함과 회사명으로 본인 확인 후 입장하실 수 있습니다.'
+            :'직접 입력하신 기업은 운영팀 확인 후 확정됩니다.<br>영업일 1일 이내에 승인 여부를 메일로 안내드립니다.'}</p>
+      ${summary(r)}</div></div>
+      <div class="rg__ft"><button class="btn" type="button" data-close>확인</button></div>`;
+  }
+  function renderClosed(){
+    formEl=null;sub.textContent=SUB0;
+    view.innerHTML=`<div class="rg__bd"><div class="rg__done"><div class="ic warn">${ICON.info}</div>
+      <h3>사전등록이 마감되었습니다</h3><p>정원 300명이 모두 찼습니다. 참석 문의는 ${CONTACT}로 보내주세요.</p></div></div>
+      <div class="rg__ft"><button class="btn btn--ghost" type="button" data-close>닫기</button></div>`;
+  }
+
+  /* --- 메일의 취소 링크 (?cancel=토큰) --- */
+  const tok=new URLSearchParams(location.search).get('cancel');
+  if(tok&&/^[0-9a-f-]{36}$/i.test(tok)){
+    history.replaceState(null,'',location.pathname+location.hash);
+    dlg.showModal();document.documentElement.classList.add('rg-lock');
+    view.innerHTML=`<div class="rg__bd"><div class="rg__done"><div class="ic warn">${ICON.info}</div>
+      <h3>사전등록을 취소하시겠어요?</h3><p>취소하면 다른 분께 자리가 돌아갑니다.<br>다시 참석하려면 새로 신청해야 하며, 그때 잔여석이 있어야 등록됩니다.</p></div></div>
+      <div class="rg__ft" style="display:grid;gap:8px"><button class="btn" type="button" id="rgCancelGo">사전등록 취소하기</button><button class="btn btn--ghost" type="button" data-close>유지하기</button></div>`;
+    view.querySelector('#rgCancelGo').onclick=async e=>{
+      e.currentTarget.disabled=true;
+      let r={ok:false};try{r=await rpc('cancel_registration',{p_token:tok});}catch(_){}
+      view.innerHTML=`<div class="rg__bd"><div class="rg__done"><div class="ic ${r.ok?'':'warn'}">${r.ok?ICON.ok:ICON.info}</div>
+        <h3>${r.ok?'사전등록이 취소되었습니다':'취소할 신청을 찾지 못했습니다'}</h3>
+        <p>${r.ok?esc(r.company)+' '+esc(r.name)+'님의 사전등록이 취소되었습니다.':'이미 취소되었거나 유효하지 않은 링크입니다. 문의: '+CONTACT}</p></div></div>
+        <div class="rg__ft"><button class="btn btn--ghost" type="button" data-close>닫기</button></div>`;
+    };
+  }
+})();
+</script>
+
 </body>
 </html>
