@@ -74,9 +74,9 @@ a{color:inherit}
 .hero.is-gl .hero__k,.hero.is-gl h1,.hero.is-gl .hero__meta{color:transparent!important;text-shadow:none!important}
 .hero.is-gl .ttl img{opacity:0}
 /* 타이틀 락업(SVG): 왼쪽 정렬 디자인 그대로, 블록만 가운데 */
-.ttl{margin:0 auto;width:min(760px,56vw)}
+.ttl{margin:0 auto;width:min(760px,50vw,86vh)}
 .ttl img{display:block;width:100%;height:auto}
-.ttl+.hero__meta{width:min(760px,56vw);margin:22px auto 0;justify-content:flex-start;text-align:left}
+.ttl+.hero__meta{width:min(760px,50vw,86vh);margin:22px auto 0;justify-content:flex-start;text-align:left}
 .hero__meta{margin-top:28px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;font-size:17px;font-weight:600;color:rgba(255,255,255,.9)}
 .hero__meta i{font-style:normal;opacity:.5}
 
@@ -200,13 +200,15 @@ section{padding-block:140px}
 /* Footer */
 footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;color:var(--fg-3)}
 .ft{display:flex;flex-wrap:wrap;justify-content:space-between;gap:32px}
-.ft .brand svg{height:28px}
+.ft .brand svg{height:40px;display:block}
+.ft__name{margin:14px 0 0;font-size:15px;font-weight:600;color:var(--fg-2)}
 .ft dl{margin:16px 0 0;display:grid;gap:6px}
 .ft dl div{display:flex;gap:12px}
 .ft dt{min-width:32px}
 .ft dd{margin:0;color:var(--fg-2)}
 .legal{display:grid;gap:4px;justify-items:end;text-align:right}
 .legal a{padding-block:6px;display:inline-block}
+.legal span a{padding-block:0}
 
 /* Mobile CTA bar */
 .mbar{display:none}
@@ -319,7 +321,7 @@ footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;c
   .faq details p{font-size:17px}
   .ft dl,footer{font-size:15px}
 }
-@media (max-width:640px){ .brand svg{height:24px} }
+@media (max-width:640px){ .brand svg{height:24px} .ft .brand svg{height:34px} }
 
 /* 2번 섹션 본문: 문장 사이 간격 없이 한 단락처럼 */
 .intro__p,.intro .intro__p{gap:0!important;line-height:1.6}
@@ -615,11 +617,11 @@ html.rg-lock{overflow:hidden}
     <polygon points="100.24 114.76 193.33 0 84.43 0 0 104.5 0 141.73 0 141.73 0 178.96 23.95 208.6 100.24 114.76" class="lg-b"/>
     <polygon points="29.97 216.05 84.43 283.46 193.33 283.46 84.36 149.13 29.97 216.05" class="lg-b"/>
   </g></svg></span>
-      <dl><div><dt>주최</dt><dd>IR큐더스</dd></div><div><dt>협력</dt><dd>김앤장 법률사무소 · 법무법인 율촌 · 스트리밍코리아</dd></div></dl>
+      <p class="ft__name">전자주주총회플랫폼 시연 설명회</p>
     </div>
     <div class="legal">
-      <span>문의 <span class="tbd">담당자 연락처·메일</span></span>
-      <a href="#">개인정보처리방침</a>
+      <span>문의 <a href="mailto:seminar@irkudos.co.kr">seminar@irkudos.co.kr</a></span>
+      <span>대표번호 <a href="tel:02-6011-2000">02-6011-2000</a></span>
       <span>© 2026 IR KUDOS. All rights reserved.</span>
     </div>
   </div>
