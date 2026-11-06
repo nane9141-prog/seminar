@@ -234,7 +234,7 @@ footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;c
   .spk li{scroll-snap-align:start}
   .spk{cursor:grab}
   .spk.is-drag{cursor:grabbing;scroll-snap-type:none;user-select:none}
-  .spk img{-webkit-user-drag:none;user-select:none}
+  .spk,.spk *{-webkit-user-drag:none;user-select:none;-webkit-user-select:none}
   .loc{grid-template-columns:minmax(0,1fr)}
   .map{min-height:280px}
 }
@@ -681,8 +681,10 @@ html.rg-lock{overflow:hidden}
   const s=document.querySelector('.spk');if(!s)return;
   s.querySelectorAll('img').forEach(i=>i.draggable=false);
   let down=false,x0=0,l0=0,dx=0,moved=false;
-  s.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'||e.button!==0||s.scrollWidth<=s.clientWidth+2)return;
-    down=true;moved=false;dx=0;x0=e.clientX;l0=s.scrollLeft;s.setPointerCapture(e.pointerId);s.classList.add('is-drag');});
+  s.addEventListener('dragstart',e=>e.preventDefault());
+  s.addEventListener('pointerdown',e=>{if(e.pointerType==='touch'||e.button!==0||s.scrollWidth<=s.clientWidth+2)return;
+    e.preventDefault(); // 텍스트 선택·이미지 끌기 대신 스크롤
+    down=true;moved=false;dx=0;x0=e.clientX;l0=s.scrollLeft;try{s.setPointerCapture(e.pointerId);}catch(_){}s.classList.add('is-drag');});
   s.addEventListener('pointermove',e=>{if(!down)return;dx=e.clientX-x0;if(Math.abs(dx)>4)moved=true;s.scrollLeft=l0-dx;});
   function up(){if(!down)return;down=false;
     const sr=s.getBoundingClientRect(),pl=parseFloat(getComputedStyle(s).scrollPaddingLeft)||0;
