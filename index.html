@@ -1023,7 +1023,7 @@ void main(){
     ['C0','C1','C2','C3'].forEach((n,i)=>gl.uniform3f(U1[n],...hex(S['c'+i])));
     gl.uniform3f(U1.ACC,...hex(S.acc));gl.uniform1f(U1.AMT,S.amt*v[3]);gl.uniform1f(U1.WHITE,S.white+v[0]);
     gl.uniform1f(U1.SCALE,S.scale);gl.uniform1f(U1.WARP,S.warp*v[2]);gl.uniform1f(U1.CAM,S.cam);
-    gl.uniform1f(U1.SPEC,S.spec);gl.uniform1f(U1.CREST,1.3*(.5-.5*Math.cos(ph*Math.PI*4))); // 경계 광택 0–1.3 자동 변화 (루프당 2회)gl.uniform1f(U1.DARK,Math.max(0,Math.min(1,v[4])));gl.uniform1f(U1.ZOOM,v[1]);
+    gl.uniform1f(U1.SPEC,S.spec);gl.uniform1f(U1.CREST,1.3*(.5-.5*Math.cos(ph*Math.PI*4)));/* 경계 광택 0–1.3 자동 변화 (루프당 2회) */gl.uniform1f(U1.DARK,Math.max(0,Math.min(1,v[4])));gl.uniform1f(U1.ZOOM,v[1]);
     gl.drawArrays(gl.TRIANGLES,0,3);
     gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.useProgram(pr2);
     gl.uniform2f(U2.R,cv.width,cv.height);gl.uniform1f(U2.T,ph);
