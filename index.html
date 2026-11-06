@@ -722,9 +722,9 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
 </script>
 
 <script>
-/* ---------- Hero: Blue Bloom Gradient (아티팩트 'Blue Bloom Gradient' 기본값 그대로 · 시퀀스 20초 루프 · 효과: 도트(투표 기호) + 등고선(해칭)) ---------- */
+/* ---------- Hero: Blue Bloom Gradient (아티팩트 'Blue Bloom Gradient' 기본값 그대로 · 시퀀스 35초 루프 · 효과 A: 도트 투표 기호 6–16s · 효과 B: 도트 플러스 20–30s) ---------- */
 (function(){
-  const LOOP=20.0,cv=document.getElementById('glow'),gl=cv.getContext('webgl',{alpha:false,antialias:false});
+  const LOOP=35.0,cv=document.getElementById('glow'),gl=cv.getContext('webgl',{alpha:false,antialias:false});
   if(!gl)return;
   const vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
   const fs1=`
@@ -940,8 +940,8 @@ void main(){
   // settings = artifact defaults
   const S={thr:.35,amt:.03,white:0,scale:1,warp:1,cam:1,spec:1,crest:1,grain:.016,
     c0:'#2828cc',c1:'#1466ff',c2:'#52b8ff',c3:'#e0f2ff',acc:'#2ee6c8',
-    fx:[{type:1,mode:0,start:.30,dur:.15,trans:.05,size:10,amt:.2,glyph:0,dset:1},
-        {type:4,mode:0,start:.80,dur:.14,trans:.05,size:3,amt:.26,glyph:0,dset:4}]};
+    fx:[{type:1,mode:0,start:6/35,dur:10/35,trans:4/35,size:10,amt:.5,glyph:0,dset:1},
+        {type:1,mode:0,start:20/35,dur:10/35,trans:4/35,size:10,amt:.5,glyph:0,dset:3}]};
   const hex=h=>[1,3,5].map(i=>parseInt(h.substr(i,2),16)/255);
   const KEYS=[
     {t:0,v:[-0.24,1.00,0.8,0.0,0.55]},{t:3,v:[-0.10,0.95,1.0,0.3,0.18]},{t:6,v:[0.14,0.72,1.1,0.6,0.00]},
