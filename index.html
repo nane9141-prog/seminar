@@ -723,7 +723,7 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
       const X=cols[i]*w+g/2,Y=rows[j]*h+g/2,W=(cols[i+1]-cols[i])*w-g,H=(rows[j+1]-rows[j])*h-g;
       rr(X,Y,W,H,4);x.fill();x.stroke();
     }
-    // subway (참고 약도 기준): 5호선 가로 — 신길 · 여의도 · 여의나루 / 9호선 세로 — 국회의사당 · 여의도 · 샛강
+    // subway (참고 약도 기준): 5호선 가로 — 여의도 · 여의나루 / 9호선 세로 — 국회의사당 · 여의도 · 샛강
     const y5=h*.66,x9=w*.27,sw=w<520?5:6;
     x.lineCap='round';x.lineWidth=sw;
     x.strokeStyle=K.l9;x.beginPath();x.moveTo(x9,-10);x.lineTo(x9,h+10);x.stroke();
@@ -748,7 +748,6 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
       x.fillStyle=K.on;x.font=(transfer?'700 ':'500 ')+(w<520?12:13)+'px '+K.body;x.textAlign=align;x.textBaseline='middle';
       x.fillText(label,X+dx,Y+dy);x.textAlign='left';x.textBaseline='alphabetic';
     }
-    st(w*.08,y5,'신길',0,24,'center');
     st(w*.9,y5,'여의나루',0,24,'center');
     st(x9,h*.16,'국회의사당',-16,0,'right');
     st(x9,h*.9,'샛강',16,0,'left');
