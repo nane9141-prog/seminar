@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>사전등록 관리 | 전자주주총회플랫폼 시연 설명회</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#121212;--card:#1b1b1b;--card-2:#232323;--line:#2c2c2c;
+  --fg:#fff;--fg-2:#c7c7c7;--fg-3:#8a8a8a;
+  --blue:#5ea2ff;--blue-2:#2f6bff;--blue-3:#4a80ff;
+  --ok:#5ed39a;--warn:#ffb74d;--bad:#ff7a7a;
+  --font:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 14px/1.5 var(--font);-webkit-font-smoothing:antialiased;word-break:keep-all}
+button,input,select,textarea{font:inherit;color:inherit}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;padding:0 14px;border-radius:8px;border:0;background:var(--blue-2);color:#fff;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn:hover{background:var(--blue-3)}
+.btn:disabled{opacity:.5;cursor:default}
+.btn--ghost{background:#2a2a2a}.btn--ghost:hover{background:#343434}
+.btn--ok{background:#1f6b46}.btn--ok:hover{background:#26805a}
+.btn--bad{background:#5a2626}.btn--bad:hover{background:#6e2d2d}
+.btn--sm{min-height:30px;padding:0 10px;font-size:12px;border-radius:7px}
+
+/* 로그인 */
+.login{min-height:100svh;display:grid;place-items:center;padding:24px}
+.login form{width:min(380px,100%);background:var(--card);border:1px solid var(--line);border-radius:16px;padding:32px;display:grid;gap:16px}
+.login h1{font-size:20px;font-weight:800;letter-spacing:-.02em}
+.login p{color:var(--fg-3);font-size:13px;margin:-8px 0 4px}
+.login label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--fg-2)}
+.login input{min-height:46px;padding:0 14px;border:1px solid #333;border-radius:10px;background:#111;font-size:15px}
+.login input:focus{outline:0;border-color:var(--blue)}
+.login .btn{min-height:46px;font-size:15px}
+.login .err{color:var(--bad);font-size:13px}
+
+/* 앱 */
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:16px;padding:14px 24px;background:rgba(18,18,18,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top h1{font-size:16px;font-weight:800}
+.top h1 small{display:block;font-size:12px;font-weight:500;color:var(--fg-3)}
+.top .me{margin-left:auto;display:flex;align-items:center;gap:10px;color:var(--fg-3);font-size:13px}
+main{padding:24px;max-width:1600px;margin:0 auto;display:grid;gap:20px}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.stat span{display:block;font-size:12px;color:var(--fg-3);font-weight:600}
+.stat b{display:block;margin-top:4px;font-size:26px;font-weight:800;letter-spacing:-.02em}
+.stat b small{font-size:14px;color:var(--fg-3);font-weight:600}
+.stat.is-warn b{color:var(--warn)}
+.bar{height:6px;margin-top:10px;border-radius:9px;background:#2a2a2a;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--blue-2)}
+.ctrl{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.tabs{display:flex;gap:4px;max-width:100%;overflow-x:auto;padding:4px;background:var(--card);border:1px solid var(--line);border-radius:10px}
+.tabs button{white-space:nowrap;border:0;background:none;padding:7px 12px;border-radius:7px;font-size:13px;font-weight:600;color:var(--fg-3);cursor:pointer}
+.tabs button[aria-pressed=true]{background:#2c2c2c;color:#fff}
+.tabs button em{font-style:normal;margin-left:4px;color:var(--fg-3);font-weight:500}
+.tabs button[aria-pressed=true] em{color:var(--blue)}
+.search{flex:1 1 240px;max-width:360px;min-height:38px;padding:0 12px;border:1px solid #333;border-radius:10px;background:#111}
+.search:focus{outline:0;border-color:var(--blue)}
+.ctrl .right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.tw{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:auto;max-height:calc(100svh - 300px)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{position:sticky;top:0;z-index:1;background:#202020;font-size:12px;color:var(--fg-3);font-weight:700;white-space:nowrap}
+tbody tr:hover{background:#1f1f1f}
+td.num{color:var(--fg-3);white-space:nowrap}
+td .sub{display:block;color:var(--fg-3);font-size:12px}
+td.nw{white-space:nowrap}
+.pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:12px;font-weight:700;white-space:nowrap}
+.pill.confirmed{background:rgba(94,211,154,.14);color:var(--ok)}
+.pill.pending{background:rgba(255,183,77,.14);color:var(--warn)}
+.pill.rejected{background:rgba(255,122,122,.12);color:var(--bad)}
+.pill.cancelled{background:#2a2a2a;color:var(--fg-3)}
+.tag{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:5px;background:#3a2f17;color:var(--warn);font-size:11px;font-weight:700;vertical-align:1px}
+.q{max-width:280px;color:var(--fg-2);white-space:pre-wrap;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;cursor:pointer}
+.q.open{-webkit-line-clamp:unset}
+.memo{width:100%;min-width:160px;min-height:32px;padding:6px 8px;border:1px solid transparent;border-radius:6px;background:transparent;resize:vertical;font-size:13px}
+.memo:hover{border-color:#333}
+.memo:focus{outline:0;border-color:var(--blue);background:#111}
+.acts{display:flex;gap:6px}
+.empty{padding:48px;text-align:center;color:var(--fg-3)}
+.co td{vertical-align:middle}
+.co .full{color:var(--fg-3)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:50;max-width:min(560px,calc(100% - 32px));padding:12px 18px;border-radius:10px;background:#2b2b2b;border:1px solid #3a3a3a;font-size:14px;box-shadow:0 12px 30px rgba(0,0,0,.4)}
+.toast.bad{background:#3a1d1d;border-color:#5a2a2a}
+.setting{display:flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;background:var(--card);border:1px solid var(--line);border-radius:10px;font-size:13px;color:var(--fg-2)}
+.setting b{color:#fff}
+@media (max-width:960px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:16px}.top{padding:12px 16px}.tw{max-height:none}}
+</style>
+</head>
+<body>
+
+<section class="login" id="login" hidden>
+  <form id="loginForm">
+    <h1>사전등록 관리</h1>
+    <p>전자주주총회플랫폼 시연 설명회 · 운영자 전용</p>
+    <label>아이디<input name="id" autocomplete="username" required autofocus></label>
+    <label>비밀번호<input name="pw" type="password" autocomplete="current-password" required></label>
+    <span class="err" id="loginErr" hidden></span>
+    <button class="btn" type="submit">로그인</button>
+  </form>
+</section>
+
+<div id="app" hidden>
+  <header class="top">
+    <h1>사전등록 관리<small>2026.11.30 (월) 전자주주총회플랫폼 시연 설명회</small></h1>
+    <div class="me"><span id="me"></span><button class="btn btn--ghost btn--sm" id="logout" type="button">로그아웃</button></div>
+  </header>
+  <main>
+    <div class="stats" id="stats"></div>
+    <div class="ctrl">
+      <div class="tabs" id="tabs" role="group" aria-label="상태">
+        <button type="button" data-f="all" aria-pressed="true">전체<em></em></button>
+        <button type="button" data-f="confirmed" aria-pressed="false">확정<em></em></button>
+        <button type="button" data-f="pending" aria-pressed="false">승인 대기<em></em></button>
+        <button type="button" data-f="rejected" aria-pressed="false">반려<em></em></button>
+        <button type="button" data-f="cancelled" aria-pressed="false">취소<em></em></button>
+        <button type="button" data-f="company" aria-pressed="false">기업별</button>
+      </div>
+      <input class="search" id="q" type="search" placeholder="회사·이름·이메일·휴대폰 검색">
+      <div class="right">
+        <div class="setting">접수 <b id="openState">-</b><button class="btn btn--ghost btn--sm" id="toggleOpen" type="button">-</button></div>
+        <button class="btn btn--ghost" id="reload" type="button">새로고침</button>
+        <button class="btn btn--ghost" id="remind" type="button">리마인드 메일</button>
+        <button class="btn" id="csv" type="button">엑셀(CSV) 내려받기</button>
+      </div>
+    </div>
+    <div class="tw" id="tw"></div>
+  </main>
+</div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+  const URL_='https://zrhtqpzgubaqzsdaxhvt.supabase.co',KEY='sb_publishable_JwET6KLGmdYBkOIIttgOOQ_HEpCKLar',DOMAIN='@ops.irkudos.co.kr';
+  const sb=supabase.createClient(URL_,KEY,{auth:{persistSession:true,autoRefreshToken:true}});
+  const $=s=>document.querySelector(s);
+  const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const ST={confirmed:'확정',pending:'승인 대기',rejected:'반려',cancelled:'취소'};
+  let rows=[],settings={},filter='all',timer=null;
+
+  function toast(msg,bad){const t=$('#toast');t.textContent=msg;t.className='toast'+(bad?' bad':'');t.hidden=false;clearTimeout(t._t);t._t=setTimeout(()=>t.hidden=true,bad?6000:2500);}
+  const fmtPhone=p=>p&&p.length===11?p.slice(0,3)+'-'+p.slice(3,7)+'-'+p.slice(7):p&&p.length===10?p.slice(0,3)+'-'+p.slice(3,6)+'-'+p.slice(6):p||'';
+  const fmtDate=d=>{if(!d)return'';const x=new Date(d);const p=n=>String(n).padStart(2,'0');return `${x.getMonth()+1}/${x.getDate()} ${p(x.getHours())}:${p(x.getMinutes())}`;};
+  const who=e=>e?e.replace(DOMAIN,''):'';
+  const norm=s=>String(s||'').toLowerCase().replace(/\s|\(주\)|㈜|주식회사|-/g,'');
+
+  /* --- 로그인 --- */
+  async function boot(){
+    const {data:{session}}=await sb.auth.getSession();
+    if(!session){showLogin();return;}
+    const {data:ok}=await sb.rpc('is_admin');
+    if(!ok){await sb.auth.signOut();showLogin('운영자 권한이 없는 계정입니다.');return;}
+    $('#login').hidden=true;$('#app').hidden=false;$('#me').textContent=who(session.user.email);
+    await load();
+    clearInterval(timer);timer=setInterval(()=>{if(!document.hidden)load(true);},30000);
+  }
+  function showLogin(err){$('#app').hidden=true;$('#login').hidden=false;const e=$('#loginErr');e.textContent=err||'';e.hidden=!err;}
+  $('#loginForm').addEventListener('submit',async e=>{
+    e.preventDefault();const f=e.currentTarget,id=f.id.value.trim(),btn=f.querySelector('button');
+    btn.disabled=true;
+    const {error}=await sb.auth.signInWithPassword({email:id.includes('@')?id:id+DOMAIN,password:f.pw.value});
+    btn.disabled=false;
+    if(error){showLogin('아이디 또는 비밀번호를 확인해 주세요.');return;}
+    f.pw.value='';boot();
+  });
+  $('#logout').addEventListener('click',async()=>{clearInterval(timer);await sb.auth.signOut();showLogin();});
+
+  /* --- 데이터 --- */
+  async function load(quiet){
+    const [r,s]=await Promise.all([
+      sb.from('registrations').select('*,companies(code,market)').order('created_at',{ascending:false}),
+      sb.from('settings').select('key,value')
+    ]);
+    if(r.error){toast('불러오지 못했습니다: '+r.error.message,true);return;}
+    rows=r.data;settings=Object.fromEntries((s.data||[]).map(x=>[x.key,x.value]));
+    render();if(!quiet)toast('최신 내역을 불러왔습니다');
+  }
+
+  function render(){
+    const cap=+settings.capacity||300,c=k=>rows.filter(r=>r.status===k).length,conf=c('confirmed'),pend=c('pending');
+    const cos=new Set(rows.filter(r=>r.status==='confirmed').map(r=>r.company_id||norm(r.company_name))).size;
+    $('#stats').innerHTML=
+      `<div class="stat"><span>확정</span><b>${conf}<small> / ${cap}명</small></b><div class="bar"><i style="width:${Math.min(100,conf/cap*100)}%"></i></div></div>`+
+      `<div class="stat"><span>잔여석</span><b>${Math.max(cap-conf,0)}<small>석</small></b></div>`+
+      `<div class="stat ${pend?'is-warn':''}"><span>승인 대기</span><b>${pend}<small>건</small></b></div>`+
+      `<div class="stat"><span>참석 기업</span><b>${cos}<small>개사</small></b></div>`+
+      `<div class="stat"><span>반려 · 취소</span><b>${c('rejected')}<small> · ${c('cancelled')}</small></b></div>`;
+    const counts={all:rows.length,confirmed:conf,pending:pend,rejected:c('rejected'),cancelled:c('cancelled')};
+    document.querySelectorAll('#tabs button').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.f===filter);const em=b.querySelector('em');if(em)em.textContent=counts[b.dataset.f];});
+    const open=settings.open==='true';$('#openState').textContent=open?'열림':'닫힘';$('#openState').style.color=open?'var(--ok)':'var(--bad)';
+    $('#toggleOpen').textContent=open?'접수 닫기':'접수 열기';
+    filter==='company'?renderCompanies():renderRows();
+  }
+
+  function visible(){
+    const q=norm($('#q').value);
+    return rows.filter(r=>(filter==='all'||r.status===filter)&&(!q||[r.company_name,r.name,r.email,r.phone,r.dept,r.biz_no,r.companies&&r.companies.code].some(v=>norm(v).includes(q))));
+  }
+
+  function renderRows(){
+    const list=visible();
+    if(!list.length){$('#tw').innerHTML='<div class="empty">해당하는 신청이 없습니다</div>';return;}
+    $('#tw').innerHTML=`<table><thead><tr><th>No.</th><th>상태</th><th>회사</th><th>이름</th><th>부서 · 직급</th><th>연락처</th><th>사전질문</th><th>신청</th><th>처리</th><th>메모</th><th></th></tr></thead><tbody>${list.map(r=>`
+<tr data-id="${r.id}">
+  <td class="num">${r.reg_no}</td>
+  <td><span class="pill ${r.status}">${ST[r.status]}</span></td>
+  <td>${esc(r.company_name)}${r.is_manual?'<span class="tag">직접입력</span>':''}<span class="sub">${r.companies?esc(r.companies.market+' '+r.companies.code):esc(r.biz_no||'')}</span></td>
+  <td class="nw"><b>${esc(r.name)}</b></td>
+  <td>${esc(r.dept||'')}<span class="sub">${esc(r.title||'')}</span></td>
+  <td class="nw">${esc(fmtPhone(r.phone))}<span class="sub">${esc(r.email)}</span></td>
+  <td>${r.question?`<div class="q" title="클릭해서 펼치기">${esc(r.question)}</div>`:''}</td>
+  <td class="nw">${fmtDate(r.created_at)}</td>
+  <td class="nw">${r.decided_at?fmtDate(r.decided_at)+`<span class="sub">${esc(who(r.decided_by))}</span>`:''}</td>
+  <td><textarea class="memo" rows="1" placeholder="메모">${esc(r.memo||'')}</textarea></td>
+  <td><div class="acts">${actions(r)}</div></td>
+</tr>`).join('')}</tbody></table>`;
+  }
+  function actions(r){
+    if(r.status==='pending')return '<button class="btn btn--ok btn--sm" data-a="approved">승인</button><button class="btn btn--bad btn--sm" data-a="rejected">반려</button>';
+    if(r.status==='confirmed')return '<button class="btn btn--ghost btn--sm" data-a="cancelled">취소</button>';
+    return '';
+  }
+
+  function renderCompanies(){
+    const q=norm($('#q').value),per=+settings.per_company||2,map=new Map();
+    rows.filter(r=>r.status==='confirmed'||r.status==='pending').forEach(r=>{
+      const k=r.company_id?'c'+r.company_id:'m'+norm(r.company_name);
+      if(!map.has(k))map.set(k,{name:r.company_name,code:r.companies?r.companies.market+' '+r.companies.code:'직접입력',conf:[],pend:[]});
+      map.get(k)[r.status==='confirmed'?'conf':'pend'].push(r.name);
+    });
+    const list=[...map.values()].filter(c=>!q||norm(c.name).includes(q)).sort((a,b)=>b.conf.length-a.conf.length||a.name.localeCompare(b.name,'ko'));
+    if(!list.length){$('#tw').innerHTML='<div class="empty">신청한 기업이 없습니다</div>';return;}
+    $('#tw').innerHTML=`<table class="co"><thead><tr><th>회사</th><th>구분</th><th>확정</th><th>확정자</th><th>승인 대기</th></tr></thead><tbody>${list.map(c=>`
+<tr><td><b>${esc(c.name)}</b></td><td class="nw">${esc(c.code)}</td><td class="nw ${c.conf.length>=per?'full':''}">${c.conf.length} / ${per}${c.conf.length>=per?' · 마감':''}</td><td>${esc(c.conf.join(', '))}</td><td>${esc(c.pend.join(', '))}</td></tr>`).join('')}</tbody></table>`;
+  }
+
+  /* --- 처리 --- */
+  const LABEL={approved:'승인',rejected:'반려',cancelled:'취소'};
+  $('#tw').addEventListener('click',async e=>{
+    const q=e.target.closest('.q');if(q){q.classList.toggle('open');return;}
+    const b=e.target.closest('[data-a]');if(!b)return;
+    const tr=b.closest('tr'),r=rows.find(x=>x.id===tr.dataset.id),a=b.dataset.a;
+    const mail=a==='approved'?'등록 완료 메일':a==='rejected'?'반려 안내 메일':'취소 안내 메일';
+    if(!confirm(`${r.company_name} ${r.name}님을 ${LABEL[a]} 처리할까요?\n신청자에게 ${mail}이 발송됩니다.`))return;
+    tr.querySelectorAll('button').forEach(x=>x.disabled=true);
+    const {error}=await sb.from('registrations').update({status:a}).eq('id',r.id);
+    if(error){toast(error.message,true);tr.querySelectorAll('button').forEach(x=>x.disabled=false);return;}
+    toast(`${r.name}님 ${LABEL[a]} 처리했습니다`);load(true);
+  });
+  $('#tw').addEventListener('change',async e=>{
+    if(!e.target.classList.contains('memo'))return;
+    const id=e.target.closest('tr').dataset.id,v=e.target.value.trim();
+    const {error}=await sb.from('registrations').update({memo:v||null}).eq('id',id);
+    if(error)toast('메모 저장 실패: '+error.message,true);else{const r=rows.find(x=>x.id===id);if(r)r.memo=v;toast('메모를 저장했습니다');}
+  });
+  $('#tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;filter=b.dataset.f;render();});
+  $('#q').addEventListener('input',()=>filter==='company'?renderCompanies():renderRows());
+  $('#reload').addEventListener('click',()=>load());
+  $('#toggleOpen').addEventListener('click',async()=>{
+    const open=settings.open==='true';
+    if(!confirm(open?'사전등록 접수를 닫을까요?\n사이트에서 신청할 수 없게 됩니다.':'사전등록 접수를 다시 열까요?'))return;
+    const {error}=await sb.from('settings').update({value:open?'false':'true'}).eq('key','open');
+    if(error){toast(error.message,true);return;}load(true);toast(open?'접수를 닫았습니다':'접수를 열었습니다');
+  });
+  $('#remind').addEventListener('click',async()=>{
+    const n=rows.filter(r=>r.status==='confirmed').length;
+    if(!n){toast('확정자가 없습니다',true);return;}
+    if(!confirm(`확정자 ${n}명 전원에게 행사 전날 리마인드 메일을 보낼까요?\n행사 하루 전(11/29)에 한 번만 보내주세요.`))return;
+    const {data,error}=await sb.rpc('admin_send_reminders');
+    error?toast(error.message,true):toast(`리마인드 메일 ${data}건 발송을 요청했습니다`);
+  });
+  $('#csv').addEventListener('click',()=>{
+    const list=filter==='company'?rows:visible();
+    const head=['No.','상태','회사','종목코드','직접입력','사업자번호/종목코드','이름','부서','직급','휴대폰','이메일','사전질문','신청일시','처리일시','처리자','메모'];
+    const cell=v=>{v=v==null?'':String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
+    const lines=[head.join(',')].concat(list.slice().sort((a,b)=>a.reg_no-b.reg_no).map(r=>[r.reg_no,ST[r.status],r.company_name,r.companies?r.companies.code:'',r.is_manual?'Y':'',r.biz_no,r.name,r.dept,r.title,fmtPhone(r.phone),r.email,r.question,
+      r.created_at&&new Date(r.created_at).toLocaleString('ko-KR'),r.decided_at&&new Date(r.decided_at).toLocaleString('ko-KR'),who(r.decided_by),r.memo].map(cell).join(',')));
+    const a=document.createElement('a'),d=new Date(),p=n=>String(n).padStart(2,'0');
+    a.href=URL.createObjectURL(new Blob(['﻿'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'}));
+    a.download=`사전등록_${filter==='all'||filter==='company'?'전체':ST[filter]}_${d.getMonth()+1}${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}.csv`;
+    a.click();URL.revokeObjectURL(a.href);
+  });
+  sb.auth.onAuthStateChange(ev=>{if(ev==='SIGNED_OUT')showLogin();});
+  boot();
+})();
+</script>
+</body>
+</html>
