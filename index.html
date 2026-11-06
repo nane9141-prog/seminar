@@ -98,6 +98,16 @@ section{padding-block:140px}
 .count div{display:flex;align-items:baseline;gap:6px}
 .count b{font-size:40px;font-weight:800;letter-spacing:-.02em}
 .count span{font-size:14px;color:var(--fg-3)}
+/* 분이 바뀔 때: 바뀐 자리 숫자만 위로 밀려 올라가고 새 숫자가 아래에서 올라옴 + 블루 플래시 */
+.count b .dg{display:inline-block;position:relative;clip-path:inset(-2px 0);font-size:inherit;color:inherit}
+.count .dg i{display:block;font-style:normal}
+.count .dg i.o{position:absolute;inset:0;animation:cdOut .7s cubic-bezier(.65,0,.25,1) forwards}
+.count .dg i.n{animation:cdIn .7s cubic-bezier(.65,0,.25,1) both}
+.count b.is-tick{animation:cdFlash 1.4s ease-out}
+@keyframes cdOut{to{transform:translateY(-105%);opacity:0;filter:blur(3px)}}
+@keyframes cdIn{from{transform:translateY(105%);opacity:0;filter:blur(3px)}}
+@keyframes cdFlash{0%,30%{color:var(--blue);text-shadow:0 0 18px rgba(20,102,255,.55)}100%{text-shadow:0 0 0 rgba(20,102,255,0)}}
+@media (prefers-reduced-motion:reduce){.count .dg i,.count b.is-tick{animation:none}.count .dg i.o{display:none}}
 .intro .btn{margin-top:44px}
 
 /* Program cards */
@@ -647,10 +657,20 @@ html.rg-lock{overflow:hidden}
 /* ---------- Countdown ---------- */
 (function(){
   const target=new Date('2026-11-30T13:30:00+09:00').getTime(),p=n=>String(n).padStart(2,'0');
+  // 자리별 숫자를 span으로 나눠 두고, 값이 바뀌면 바뀐 자리만 롤링 애니메이션
+  const prev={};
+  function set(id,val){
+    const el=document.getElementById(id);if(prev[id]===val)return;
+    const old=prev[id];prev[id]=val;
+    if(old===undefined||old.length!==val.length){el.innerHTML=[...val].map(c=>'<span class="dg"><i class="n" style="animation:none">'+c+'</i></span>').join('');return;}
+    const dg=el.querySelectorAll('.dg');
+    [...val].forEach((c,i)=>{if(old[i]===c)return;dg[i].innerHTML='<i class="o">'+old[i]+'</i><i class="n">'+c+'</i>';});
+    el.classList.remove('is-tick');void el.offsetWidth;el.classList.add('is-tick');
+  }
   function tick(){const ms=Math.max(0,target-Date.now()),d=Math.floor(ms/864e5),h=Math.floor(ms/36e5)%24,m=Math.floor(ms/6e4)%60;
-    document.getElementById('cd-d').textContent=d;document.getElementById('cd-h').textContent=p(h);document.getElementById('cd-m').textContent=p(m);
+    set('cd-d',String(d));set('cd-h',p(h));set('cd-m',p(m));
     document.getElementById('dday').textContent=d>0?'D-'+d:'D-DAY';}
-  tick();setInterval(tick,30000);
+  tick();setInterval(tick,1000);
 })();
 
 /* ---------- Copy address ---------- */
