@@ -578,7 +578,7 @@ html.rg-lock{overflow:hidden}
     <div class="wrap">
       <div class="sec-h"><h2>오시는 길</h2></div>
       <div class="loc">
-        <div class="map"><canvas id="mapc" role="img" aria-label="여의도 위치 약도: 여의도역 5·9호선 인근 페어몬트 앰배서더 서울"></canvas></div>
+        <div class="map"><canvas id="mapc" role="img" aria-label="여의도 위치 약도: 5·9호선 여의도역과 5호선 여의나루역 사이, 더현대 서울(위)과 페어몬트 앰배서더 서울(아래)"></canvas></div>
         <div class="lc">
           <div><h3>페어몬트 앰배서더 서울</h3><p class="hall">B1 그랜드볼룸</p></div>
           <dl class="ways">
@@ -713,7 +713,7 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
   function rr(X,Y,W,H,r){x.beginPath();if(x.roundRect)x.roundRect(X,Y,W,H,r);else x.rect(X,Y,W,H);}
   function pill(cx,cy,txt,bg,fg,K){x.font='700 12px '+K.body;const tw=x.measureText(txt).width+20;x.fillStyle=bg;rr(cx-tw/2,cy-11,tw,22,11);x.fill();x.fillStyle=fg;x.textAlign='center';x.textBaseline='middle';x.fillText(txt,cx,cy+1);x.textAlign='left';x.textBaseline='alphabetic';}
   function draw(){
-    const K={ink:tk('--color-ink'),block:tk('--color-map-block'),rule:tk('--color-rule-on-ink'),on:tk('--color-on-ink'),muted:tk('--color-on-ink-muted'),accent:tk('--color-accent'),l5:tk('--color-line5'),l9:tk('--color-line9'),body:tk('--font-body')};
+    const K={ink:tk('--color-ink'),block:tk('--color-map-block'),block2:'#1d2a45',rule:tk('--color-rule-on-ink'),on:tk('--color-on-ink'),muted:tk('--color-on-ink-muted'),accent:tk('--color-accent'),l5:tk('--color-line5'),l9:tk('--color-line9'),body:tk('--font-body')};
     const d=Math.min(devicePixelRatio||1,2),w=c.clientWidth,h=c.clientHeight;
     c.width=w*d;c.height=h*d;x.setTransform(d,0,0,d,0,0);x.clearRect(0,0,w,h);
     // city blocks: a loose grid, the roads are the gaps
@@ -723,26 +723,42 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
       const X=cols[i]*w+g/2,Y=rows[j]*h+g/2,W=(cols[i+1]-cols[i])*w-g,H=(rows[j+1]-rows[j])*h-g;
       rr(X,Y,W,H,4);x.fill();x.stroke();
     }
-    // venue block (brand blue) with a pin
-    const vx=cols[2]*w+g/2,vy=rows[1]*h+g/2,vw=(cols[3]-cols[2])*w-g,vh=(rows[3]-rows[1])*h-g;
-    x.fillStyle=K.accent;rr(vx,vy,vw,vh,6);x.fill();
-    const px=vx+vw/2,py=vy+vh*.38;
-    x.fillStyle=K.on;x.beginPath();x.arc(px,py-6,11,Math.PI,0);x.lineTo(px,py+12);x.closePath();x.fill();
-    x.fillStyle=K.accent;x.beginPath();x.arc(px,py-6,4.5,0,Math.PI*2);x.fill();
-    x.fillStyle=K.on;x.textAlign='center';x.font='700 14px '+K.body;
-    const name=vw<190?['페어몬트','앰배서더 서울']:['페어몬트 앰배서더 서울'];
-    name.forEach((t,i)=>x.fillText(t,px,py+34+i*18));
-    x.font='400 12px '+K.body;x.fillText('B1 그랜드볼룸',px,py+34+name.length*18);x.textAlign='left';
-    // subway: line 5 and line 9, each marked at Yeouido station
-    const y5=rows[1]*h,y9=rows[3]*h,sx=cols[1]*w;
-    x.lineCap='round';x.lineWidth=6;
-    x.strokeStyle=K.l5;x.beginPath();x.moveTo(w*.04,y5);x.lineTo(w*.96,y5);x.stroke();
-    x.strokeStyle=K.l9;x.beginPath();x.moveTo(w*.04,y9);x.lineTo(w*.96,y9);x.stroke();
-    pill(sx,y5,'5호선 여의도역',K.l5,K.on,K);
-    pill(sx,y9,'9호선 여의도역',K.l9,K.ink,K);
+    // subway (참고 약도 기준): 5호선 가로 — 신길 · 여의도 · 여의나루 / 9호선 세로 — 국회의사당 · 여의도 · 샛강
+    const y5=h*.66,x9=w*.27,sw=w<520?5:6;
+    x.lineCap='round';x.lineWidth=sw;
+    x.strokeStyle=K.l9;x.beginPath();x.moveTo(x9,-10);x.lineTo(x9,h+10);x.stroke();
+    x.strokeStyle=K.l5;x.beginPath();x.moveTo(-10,y5);x.lineTo(w+10,y5);x.stroke();
+    // venue block: 위 더현대 서울 / 아래 페어몬트 앰배서더 서울
+    const vx=w*.44,vw=w*.32,vy=h*.12,vh=y5-18-h*.12,half=vh/2,gap=3;
+    x.fillStyle=K.block2;rr(vx,vy,vw,half-gap/2,6);x.fill();
+    x.strokeStyle=K.accent;x.lineWidth=1.5;x.stroke();
+    x.fillStyle=K.accent;rr(vx,vy+half+gap/2,vw,half-gap/2,6);x.fill();
+    const fs=vw<150?12:14,cx=vx+vw/2;
+    x.textAlign='center';x.textBaseline='middle';
+    x.fillStyle=K.on;x.font='600 '+fs+'px '+K.body;x.fillText('더현대 서울',cx,vy+half/2);
+    const fy=vy+half+half/2,name=vw<210?['페어몬트','앰배서더 서울']:['페어몬트 앰배서더 서울'],lh=fs+4;
+    const top=fy-((name.length)*lh+lh-2)/2+lh/2;
+    x.font='700 '+fs+'px '+K.body;name.forEach((t,i)=>x.fillText(t,cx,top+i*lh));
+    x.font='400 '+(fs-2)+'px '+K.body;x.fillText('B1 그랜드볼룸',cx,top+name.length*lh);
+    x.textBaseline='alphabetic';
+    // stations
+    function st(X,Y,label,dx,dy,align,transfer){
+      x.fillStyle='#fff';x.strokeStyle=transfer?K.ink:K.rule;x.lineWidth=transfer?3:2;
+      x.beginPath();x.arc(X,Y,transfer?9:7,0,Math.PI*2);x.fill();x.stroke();
+      if(transfer){x.strokeStyle=K.l5;x.lineWidth=2;x.beginPath();x.arc(X,Y,12,0,Math.PI*2);x.stroke();}
+      x.fillStyle=K.on;x.font=(transfer?'700 ':'500 ')+(w<520?12:13)+'px '+K.body;x.textAlign=align;x.textBaseline='middle';
+      x.fillText(label,X+dx,Y+dy);x.textAlign='left';x.textBaseline='alphabetic';
+    }
+    st(w*.08,y5,'신길',0,24,'center');
+    st(w*.9,y5,'여의나루',0,24,'center');
+    st(x9,h*.16,'국회의사당',-16,0,'right');
+    st(x9,h*.9,'샛강',16,0,'left');
+    st(x9,y5,'여의도',-18,-22,'right',true);
+    pill(w*.37,y5,'5호선',K.l5,K.on,K);
+    pill(x9,h*.79,'9호선',K.l9,K.ink,K);
     // the avenue and the caveat
     x.fillStyle=K.muted;x.font='400 12px '+K.body;
-    x.save();x.translate(cols[2]*w-3,rows[2]*h+60);x.rotate(-Math.PI/2);x.fillText('여의대로',0,0);x.restore();
+    x.save();x.translate(w*.41,h*.42);x.rotate(-Math.PI/2);x.textAlign='center';x.fillText('여의대로',0,0);x.restore();x.textAlign='left';
     x.fillText('개략 약도',16,h-16);
   }
   draw();addEventListener('resize',draw);
