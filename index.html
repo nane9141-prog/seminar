@@ -164,6 +164,7 @@ section{padding-block:140px}
 .facts div:last-child{border-bottom:0}
 .facts dt{font-size:14px;color:var(--fg-3)}
 .facts dd{margin:0;font-weight:600}
+.fact-note{display:block;margin-top:2px;font-size:13px;font-weight:400;color:var(--fg-3)}
 .steps{margin:20px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;text-align:left;counter-reset:s}
 .steps li{counter-increment:s;background:var(--card);border-radius:16px;padding:24px;display:grid;gap:6px;align-content:start}
 .steps li::before{content:"STEP " counter(s,decimal-leading-zero);font-size:12px;font-weight:700;color:var(--blue);letter-spacing:.04em}
@@ -404,6 +405,7 @@ footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;c
       <a class="btn" href="#register" id="formLink">사전등록 페이지로 이동</a>
       <p class="reg__note"><span class="tbd">외부 등록 폼(리캐치 등) URL 연결 예정</span></p>
       <dl class="facts">
+        <div><dt>대상</dt><dd>2027년 전자주총 의무화 기업<small class="fact-note">대상 기업 당 2명 제한</small></dd></div>
         <div><dt>정원</dt><dd>300명 (선착순)</dd></div>
         <div><dt>입력 항목</dt><dd>이름, 회사명, 부서·직급, 연락처, 이메일, 사전질문(선택)</dd></div>
         <div><dt>운영 방식</dt><dd>오프라인 단독 (생중계·다시보기 없음)</dd></div>
