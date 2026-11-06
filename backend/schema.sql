@@ -166,7 +166,7 @@ begin
     v_status := 'confirmed';
   else
     v_cname := trim(coalesce(p->>'company_name',''));
-    if length(v_cname) < 2 or length(trim(coalesce(p->>'biz_no',''))) < 6 then
+    if length(v_cname) < 2 then
       return jsonb_build_object('ok', false, 'code', 'invalid');
     end if;
     v_status := 'pending';
