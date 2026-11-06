@@ -271,6 +271,55 @@ footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;c
 /* 밝은 블룸 위에서도 보조 텍스트가 읽히도록 */
 
 .top:not(.is-solid) nav a,.top:not(.is-solid) .dday{text-shadow:0 1px 2px rgba(3,10,60,.4),0 0 14px rgba(3,10,60,.5)}
+
+/* ===== 타이포 스케일 업 (2026-11-06): 로고 32px, H2 52px, 본문 리드 22px, 표·카드 글자 확대 — PC/태블릿 ===== */
+@media (min-width:641px){
+  .brand svg{height:32px}
+  .top__in{height:68px}
+  .sec-h h2,.intro h2{font-size:52px;line-height:1.35}
+  .intro h2{max-width:none}
+  .sec-h p,.intro__p,.reg__p{font-size:22px}
+  .intro__p{gap:16px}
+  .info{font-size:19px}
+  .pc__h h3{font-size:32px}
+  .chip{height:28px;padding:0 10px;font-size:14px}
+  .pc__d{font-size:18px}
+  .r{grid-template-columns:150px minmax(0,1fr)}
+  .r__t{font-size:16px}
+  .r__ti{font-size:21px}
+  .r__sp{font-size:16px}
+  .r.minor .r__ti{font-size:18px}
+  .stages h3{font-size:25px}
+  .st-n{font-size:15px}
+  .stages ul{font-size:17px}
+  .tagp{font-size:19px}
+  .app p{font-size:17px}
+  .app p b{font-size:20px}
+  .app small{font-size:14px}
+  .spk h3{font-size:23px}
+  .spk .ss{font-size:14px}
+  .spk .org{font-size:16px}
+  .spk .topic{font-size:15px}
+  .reg__k{font-size:20px}
+  .facts{max-width:720px}
+  .facts div{grid-template-columns:120px minmax(0,1fr);padding:18px 0}
+  .facts dt{font-size:16px}
+  .facts dd{font-size:18px}
+  .fact-note{font-size:14px}
+  .guide-h{font-size:30px}
+  .guide-p{font-size:18px}
+  .steps h4{font-size:19px}
+  .steps p{font-size:16px}
+  .steps li::before{font-size:13px}
+  .lc h3{font-size:30px}
+  .lc .hall{font-size:18px}
+  .ways div{grid-template-columns:76px minmax(0,1fr);font-size:17px}
+  .ways dt{font-size:15px}
+  .faq summary{font-size:19px}
+  .faq details p{font-size:17px}
+  .ft dl,footer{font-size:15px}
+}
+@media (max-width:640px){ .brand svg{height:24px} }
 </style>
 </head>
 <body>
