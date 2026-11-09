@@ -67,7 +67,7 @@ a{color:inherit}
 .dday{font-size:13px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums}
 
 /* Hero: flowing blue gradient */
-.hero{position:relative;overflow:hidden;isolation:isolate;min-height:82vh;min-height:82svh;display:grid;place-items:center;text-align:center;background:#1a3fd8;padding:96px 24px}
+.hero{position:relative;overflow:hidden;isolation:isolate;min-height:82vh;min-height:82svh;display:grid;place-items:center;text-align:center;background:#4f78ea;padding:96px 24px}
 #glow{position:absolute;inset:0;width:100%;height:100%;z-index:-1;display:block}
 .hero__k{font-size:15px;font-weight:600;color:rgba(255,255,255,.78);letter-spacing:.02em}
 .hero h1{position:relative;margin-top:18px;font-weight:800;color:#fff;font-size:clamp(40px,7.2vw,92px);line-height:1.12;letter-spacing:0;text-wrap:balance}
@@ -812,7 +812,7 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
 </script>
 
 <script>
-/* ---------- Hero: Blue Bloom Gradient (아티팩트 'Blue Bloom Gradient' 기본값 그대로 · 시퀀스 35초 루프 · 효과 A: 도트 투표 기호 6–16s · 효과 B: 도트 플러스 20–30s) ---------- */
+/* ---------- Hero: Blue Bloom Light (아티팩트 'Blue Bloom Light' 기본값 그대로 · 속도 2 · 시퀀스 35초 루프 · 효과 A: 도트 투표 기호 6–16s · 효과 B: 도트 플러스 20–30s) ---------- */
 (function(){
   const LOOP=35.0,cv=document.getElementById('glow'),gl=cv.getContext('webgl',{alpha:false,antialias:false});
   if(!gl)return;
@@ -838,10 +838,11 @@ float field(vec2 p,float ph){
   return .07+WHITE-DARK*.30+.44*b1+.22*b2+.28*n2;
 }
 vec3 shade(float f){
-  vec3 c=mix(C0,C1,smoothstep(.30,.48,f));
-  c=mix(c,C2,smoothstep(.46,.58,f));
-  c=mix(c,C3,smoothstep(.55,.70,f));
-  c=mix(c,mix(C3,vec3(1.,.9,.97),.6),smoothstep(.80,.97,f)*.6);
+  // Light: 코발트 → 아쿠아 민트로 넓고 부드럽게 번지는 램프
+  vec3 c=mix(C0,C1,smoothstep(.12,.50,f));
+  c=mix(c,C2,smoothstep(.34,.70,f));
+  c=mix(c,C3,smoothstep(.52,.95,f));
+  c=mix(c,mix(C3,vec3(.93,.97,1.),.5),smoothstep(.88,1.15,f)*.35);
   return c;
 }
 void main(){
@@ -855,8 +856,8 @@ void main(){
   float band=smoothstep(.38,.50,f)*(1.-smoothstep(.56,.68,f));
   float drift=.5+.5*sin(p.x*.9-p.y*.6+ph+f*4.);
   col=mix(col,ACC*(.75+.35*f),clamp(band*(.55+.9*drift)*AMT*3.2,0.,.85));
-  col*=1.-.12*dot(p*.45,p*.45);
-  col=mix(col,C0*.18,DARK*.85*(1.-smoothstep(.50,.72,f)));
+  col*=1.-.05*dot(p*.45,p*.45);
+  col=mix(col,C0*.82,DARK*.6*(1.-smoothstep(.50,.72,f)));
   float lum=clamp(smoothstep(.02,.95,f)*(1.-DARK),0.,1.);
   gl_FragColor=vec4(clamp(col,0.,1.),lum);
 }`;
@@ -1028,8 +1029,9 @@ void main(){
   ['R','PH','C0','C1','C2','C3','ACC','AMT','WHITE','SCALE','WARP','CAM','SPEC','CREST','DARK','ZOOM'].forEach(n=>U1[n]=gl.getUniformLocation(pr,n));
   ['R','T','BG','MARK','THR','GRAIN','TEX','ATLAS','FA','FA2','FB','FB2','TX','BOX'].forEach(n=>U2[n]=gl.getUniformLocation(pr2,n));
   // settings = artifact defaults
-  const S={thr:.35,amt:.03,white:0,scale:1,warp:1,cam:1,spec:1,crest:1,grain:.016,
-    c0:'#2828cc',c1:'#1466ff',c2:'#52b8ff',c3:'#e0f2ff',acc:'#2ee6c8',
+  // = 아티팩트 'Blue Bloom Light' 기본값
+  const S={thr:.5,amt:.03,white:0,scale:.5,warp:.65,cam:1,spec:.5,crest:0,grain:.016,speed:2,
+    c0:'#2c41ea',c1:'#4f78ea',c2:'#7fb2e6',c3:'#a8dcdc',acc:'#2ee6c8',
     fx:[{type:1,mode:0,start:6/35,dur:10/35,trans:4/35,size:10,amt:.5,glyph:0,dset:1},
         {type:1,mode:0,start:20/35,dur:10/35,trans:4/35,size:10,amt:.5,glyph:0,dset:3}]};
   const hex=h=>[1,3,5].map(i=>parseInt(h.substr(i,2),16)/255);
@@ -1113,11 +1115,11 @@ void main(){
     ['C0','C1','C2','C3'].forEach((n,i)=>gl.uniform3f(U1[n],...hex(S['c'+i])));
     gl.uniform3f(U1.ACC,...hex(S.acc));gl.uniform1f(U1.AMT,S.amt*v[3]);gl.uniform1f(U1.WHITE,S.white+v[0]);
     gl.uniform1f(U1.SCALE,S.scale);gl.uniform1f(U1.WARP,S.warp*v[2]);gl.uniform1f(U1.CAM,S.cam);
-    gl.uniform1f(U1.SPEC,S.spec);gl.uniform1f(U1.CREST,crest(ph));/* 경계 광택 0–1.5 유동 변화 */gl.uniform1f(U1.DARK,Math.max(0,Math.min(1,v[4])));gl.uniform1f(U1.ZOOM,v[1]);
+    gl.uniform1f(U1.SPEC,S.spec);gl.uniform1f(U1.CREST,S.crest*crest(ph));/* Light: 경계 광택 0 */gl.uniform1f(U1.DARK,Math.max(0,Math.min(1,v[4]))*.45);gl.uniform1f(U1.ZOOM,v[1]);
     gl.drawArrays(gl.TRIANGLES,0,3);
     gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.useProgram(pr2);
     gl.uniform2f(U2.R,cv.width,cv.height);gl.uniform1f(U2.T,ph);
-    gl.uniform3f(U2.BG,...hex(S.c0).map(x=>x*.18));gl.uniform3f(U2.MARK,...hex(S.c3));gl.uniform1f(U2.THR,S.thr);gl.uniform1f(U2.GRAIN,S.grain);
+    gl.uniform3f(U2.BG,...hex(S.c0).map(x=>x*.7));gl.uniform3f(U2.MARK,...hex(S.c3));gl.uniform1f(U2.THR,S.thr);gl.uniform1f(U2.GRAIN,S.grain);
     gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,rtTex);gl.uniform1i(U2.TEX,0);
     gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,atlasTex);gl.uniform1i(U2.ATLAS,1);
     gl.activeTexture(gl.TEXTURE2);gl.bindTexture(gl.TEXTURE_2D,ttex);gl.uniform1i(U2.TX,2);
@@ -1132,7 +1134,7 @@ void main(){
   const ti=hero.querySelector('.ttl img');if(ti&&!ti.complete)ti.addEventListener('load',()=>{mask();draw();});
   if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
   if('IntersectionObserver' in window)new IntersectionObserver(e=>{visible=e[0].isIntersecting;}).observe(cv);
-  (function loop(now){const dt=Math.min(.1,(now-prev)/1000);prev=now;if(visible&&!document.hidden&&!window.__heroHold){t=(t+dt)%LOOP;draw();}requestAnimationFrame(loop);})(prev);
+  (function loop(now){const dt=Math.min(.1,(now-prev)/1000);prev=now;if(visible&&!document.hidden&&!window.__heroHold){t=(t+dt*S.speed)%LOOP;draw();}requestAnimationFrame(loop);})(prev);
 })();
 </script>
 <script>
