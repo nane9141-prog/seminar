@@ -232,7 +232,7 @@ function text_(h) {
 function testAll() {
   const me = Session.getActiveUser().getEmail();
   const links = { site: 'https://nane9141-prog.github.io/seminar/', android: 'https://play.google.com/store/apps/details?id=com.irkudos.jujupass', survey: 'https://example.com/survey' };
-  const base = { reg_no: 0, name: '테스트', title: '매니저', company: 'IR큐더스', email: me, cancel_token: 'test', links: links };
+  const base = { reg_no: 0, name: '테스트', title: '매니저', company: 'IR큐더스', email: me, cancel_token: '00000000-0000-0000-0000-000000000000', links: links };
   ['confirmed', 'cancelled', 'reminder', 'thanks'].forEach(t => send_(Object.assign({}, base, { type: t })));
   ['ineligible', 'company_full', 'capacity_full'].forEach(r => send_(Object.assign({}, base, { type: 'rejected', reason: r })));
 }

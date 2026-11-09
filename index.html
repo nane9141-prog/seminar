@@ -1332,7 +1332,15 @@ void main(){
 
   /* --- 메일의 취소 링크 (?cancel=토큰) --- */
   const tok=new URLSearchParams(location.search).get('cancel');
-  if(tok&&/^[0-9a-f-]{36}$/i.test(tok)){
+  if(tok!==null&&!/^[0-9a-f-]{36}$/i.test(tok)){
+    /* 형식이 맞지 않는 취소 링크(테스트 메일 등)도 안내를 띄운다 */
+    history.replaceState(null,'',location.pathname+location.hash);
+    dlg.showModal();document.documentElement.classList.add('rg-lock');
+    view.innerHTML=`<div class="rg__bd"><div class="rg__done"><div class="ic warn">${ICON.info}</div>
+      <h3>취소할 신청을 찾지 못했습니다</h3><p>유효하지 않은 취소 링크입니다. 등록 안내 이메일의 링크를 다시 눌러 주시거나 ${CONTACT}로 문의해 주세요.</p></div></div>
+      <div class="rg__ft"><button class="btn btn--ghost" type="button" data-close>닫기</button></div>`;
+  }
+  else if(tok&&/^[0-9a-f-]{36}$/i.test(tok)){
     history.replaceState(null,'',location.pathname+location.hash);
     dlg.showModal();document.documentElement.classList.add('rg-lock');
     view.innerHTML=`<div class="rg__bd"><div class="rg__done"><div class="ic warn">${ICON.info}</div>
