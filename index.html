@@ -56,7 +56,9 @@ a{color:inherit}
 .top.is-solid{background:rgba(255,255,255,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom-color:var(--line)}
 .top__in{display:flex;align-items:center;gap:20px;height:60px;padding-inline:max(24px,env(safe-area-inset-left,0px))}
 .brand{display:block;color:#fff;flex:none}
-.top.is-solid .brand,.ft .brand{color:var(--fg)}
+/* IR큐더스 로고 원래 컬러: 워드마크 #373837 · 심볼 #024f2b (흰 바탕일 때) — 히어로 위에서는 흰색 */
+.top.is-solid .brand,.ft .brand{color:#373837}
+.top.is-solid .brand .sym,.ft .brand .sym{fill:#024f2b}
 .brand svg{height:26px;width:auto;display:block}
 .brand svg *{fill:currentColor}
 .top nav{display:flex;gap:24px;margin-left:auto}
@@ -455,8 +457,8 @@ html.rg-lock{overflow:hidden}
     <path d="M275.66,85.22h41.75c12.24,0,21.82,1.98,29.66,7.48,7.85,5.5,13.18,14.51,13.18,26.57,0,14.66-8.16,25.8-21.97,31l30.92,45.5h-28.57l-27.94-41.99h-12.08v41.99h-24.96v-110.55h.01ZM315.99,134.54c6.28,0,10.52-.76,13.97-3.05,3.45-2.29,5.34-6.57,5.34-11.15,0-4.89-2.04-9.01-5.34-11.3-3.3-2.29-7.69-3.05-13.97-3.05h-15.38v28.55h15.38Z" class="lg-t"/>
   </g>
   <g>
-    <polygon points="100.24 114.76 193.33 0 84.43 0 0 104.5 0 141.73 0 141.73 0 178.96 23.95 208.6 100.24 114.76" class="lg-b"/>
-    <polygon points="29.97 216.05 84.43 283.46 193.33 283.46 84.36 149.13 29.97 216.05" class="lg-b"/>
+    <polygon class="sym" points="100.24 114.76 193.33 0 84.43 0 0 104.5 0 141.73 0 141.73 0 178.96 23.95 208.6 100.24 114.76" class="lg-b"/>
+    <polygon class="sym" points="29.97 216.05 84.43 283.46 193.33 283.46 84.36 149.13 29.97 216.05" class="lg-b"/>
   </g></svg></a>
     <nav aria-label="섹션">
       <a href="#about">소개</a><a href="#program">프로그램</a><a href="#demo">시연</a><a href="#speakers">연사</a><a href="#location">오시는 길</a><a href="#faq">FAQ</a>
@@ -654,8 +656,8 @@ html.rg-lock{overflow:hidden}
     <path d="M275.66,85.22h41.75c12.24,0,21.82,1.98,29.66,7.48,7.85,5.5,13.18,14.51,13.18,26.57,0,14.66-8.16,25.8-21.97,31l30.92,45.5h-28.57l-27.94-41.99h-12.08v41.99h-24.96v-110.55h.01ZM315.99,134.54c6.28,0,10.52-.76,13.97-3.05,3.45-2.29,5.34-6.57,5.34-11.15,0-4.89-2.04-9.01-5.34-11.3-3.3-2.29-7.69-3.05-13.97-3.05h-15.38v28.55h15.38Z" class="lg-t"/>
   </g>
   <g>
-    <polygon points="100.24 114.76 193.33 0 84.43 0 0 104.5 0 141.73 0 141.73 0 178.96 23.95 208.6 100.24 114.76" class="lg-b"/>
-    <polygon points="29.97 216.05 84.43 283.46 193.33 283.46 84.36 149.13 29.97 216.05" class="lg-b"/>
+    <polygon class="sym" points="100.24 114.76 193.33 0 84.43 0 0 104.5 0 141.73 0 141.73 0 178.96 23.95 208.6 100.24 114.76" class="lg-b"/>
+    <polygon class="sym" points="29.97 216.05 84.43 283.46 193.33 283.46 84.36 149.13 29.97 216.05" class="lg-b"/>
   </g></svg></span>
       <p class="ft__name">전자주주총회 플랫폼 시연 설명회</p>
     </div>
