@@ -130,3 +130,30 @@ language sql stable security definer set search_path = public as $$
     'app_url', nullif(_setting('app_android_url'), '')
   )
 $$;
+
+-- 8) 11.9 확정: 신청 마감 2026-11-27(금) 18:00 KST, 운영자 취소 시 자동 메일 없음(사유 메일은 수동), 반려 자동 메일 없음
+create or replace function public._deadline_passed() returns boolean
+language sql stable as $$ select now() >= timestamptz '2026-11-27 18:00:00+09' $$;
+
+create or replace function public.event_status() returns jsonb
+language sql stable security definer set search_path = public as $$
+  select jsonb_build_object(
+    'open', _setting('open') = 'true' and not _deadline_passed(),
+    'deadline_passed', _deadline_passed(),
+    'capacity', _setting('capacity')::int,
+    'remaining', greatest(_setting('capacity')::int - _total_count(), 0),
+    'app_url', nullif(_setting('app_android_url'), '')
+  )
+$$;
+
+create or replace function public._after_reg() returns trigger
+language plpgsql security definer set search_path = public as $$
+begin
+  if tg_op = 'INSERT' then
+    if new.status = 'confirmed' then perform _send_mail('confirmed', new); end if;
+  elsif new.status is distinct from old.status then
+    -- 신청자가 메일의 취소 링크로 취소한 경우에만 자동 메일. 운영자 취소·반려 사유는 운영자가 직접 안내
+    if new.status = 'cancelled' and new.decided_by = '신청자' then perform _send_mail('cancelled', new); end if;
+  end if;
+  return null;
+end $$;

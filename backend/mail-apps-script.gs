@@ -22,7 +22,7 @@ const EV = {
   map: 'https://map.naver.com/p/search/%ED%8E%98%EC%96%B4%EB%AA%AC%ED%8A%B8%20%EC%95%B0%EB%B0%B0%EC%84%9C%EB%8D%94%20%EC%84%9C%EC%9A%B8',
   gcal: 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=%EC%A0%84%EC%9E%90%EC%A3%BC%EC%A3%BC%EC%B4%9D%ED%9A%8C%ED%94%8C%EB%9E%AB%ED%8F%BC%20%EC%8B%9C%EC%97%B0%20%EC%84%A4%EB%AA%85%ED%9A%8C&dates=20261130T043000Z/20261130T090000Z&location=%ED%8E%98%EC%96%B4%EB%AA%AC%ED%8A%B8%20%EC%95%B0%EB%B0%B0%EC%84%9C%EB%8D%94%20%EC%84%9C%EC%9A%B8%20B1',
   start: '20261130T043000Z', end: '20261130T090000Z',
-  phone: '02-6011-2000', mail: 'seminar@irkudos.co.kr'
+  phone: '02-6011-2000', mail: 'agm@irkudos.co.kr'
 };
 const C = { ink: '#0f1524', ink2: '#3d4556', ink3: '#7a8294', line: '#e3e7ef', soft: '#f4f6fb', blue: '#2f6bff', navy: '#141a6e', page: '#eef1f6' };
 const FONT = "-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕','Noto Sans KR',sans-serif";
@@ -96,13 +96,12 @@ function compose_(p) {
       guide: ['check', 'timetable'], cancel: true, ics: true
     },
     thanks: {
-      chip: 'thanks', subject: '[IR큐더스] 시연 설명회 발표자료를 보내드립니다',
-      pre: '참석해 주셔서 감사합니다.' + (L.survey ? ' 발표자료와 2분 설문을 확인해 주세요.' : ''),
+      chip: 'thanks', subject: '[IR큐더스] 전자주주총회 플랫폼 시연 설명회에 참석해 주셔서 감사합니다',
+      pre: '참석해 주셔서 감사합니다.' + (L.survey ? ' 2분 설문에 참여해 주세요.' : ''),
       head: '참석해 주셔서 감사합니다',
-      lead: (L.slides ? '법률·실무 세션과 플랫폼 시연 발표자료를 보내드립니다. ' : '오늘 설명회에 함께해 주셔서 감사합니다. ') +
-            (L.survey ? '더 나은 설명회를 위해 2분 설문에 참여해 주시면 감사하겠습니다.' : ''),
+      lead: '오늘 설명회에 함께해 주셔서 감사합니다.' + (L.survey ? ' 더 나은 설명회를 위해 2분 설문에 참여해 주시면 감사하겠습니다.' : ''),
       note: '전자주주총회 도입 일정이나 운영 방식이 궁금하시면 이 메일에 회신해 주세요. IR큐더스 담당자가 연락드리겠습니다.',
-      card: 'none', btns: [].concat(L.slides ? [['발표자료 받기', L.slides, 1]] : []).concat(L.survey ? [['설문 참여하기', L.survey, L.slides ? 0 : 1]] : []),
+      card: 'none', btns: L.survey ? [['설문 참여하기', L.survey, 1]] : [],
       guide: []
     }
   };
@@ -179,14 +178,14 @@ function guide_(m, x) {
     : '';
   const G = {
     entry: ['입장 안내', '별도의 입장권이나 QR코드는 필요 없습니다. 행사 당일 오후 1시부터 지하 1층 등록 데스크에서 성함과 소속을 말씀해 주세요. 확인 후 명찰을 드립니다.'],
-    app: ['표결 참여 준비', '현장표결 앱 <b>주주PASS</b>를 미리 설치하시면 모의 주주총회의 표결에 직접 참여하실 수 있습니다.' + app],
-    parking: ['주차', '페어몬트 호텔 주차장을 이용해 주세요. 주차 지원은 호텔 주차장 이용 차량에 적용되며, 더현대 서울 주차장은 지원 대상에 포함되지 않습니다.'],
+    app: ['표결 참여 준비', '현장표결 앱 <b>주주PASS</b>를 미리 설치하고 본인인증을 마쳐 주세요. 행사 당일 현장 안내 데스크에서 NFC 태그로 참석자 등록을 하시면 모의 주주총회의 표결에 직접 참여하실 수 있습니다. 설치나 인증에 문제가 있으면 현장 안내 데스크에서 도와드립니다.' + app],
+    parking: ['주차', '페어몬트 호텔 주차장을 이용하시고, 현장 등록 데스크에서 주차 지원을 등록해 주세요. 더현대 서울 주차장은 지원되지 않습니다.'],
     program: ['행사 프로그램', '13:30 개회 · 13:40 법률·실무 세션 · 15:30 통합 솔루션 소개 및 운영 시연 · 17:25 질의응답 및 폐회']
   };
   let h = '';
   m.guide.forEach(k => {
     if (k === 'check') {
-      const items = [['13:00', '지하 1층 등록 데스크에서 성함·소속 확인 후 명찰 수령'], ['주주PASS', '모의 주주총회 표결용 앱을 미리 설치' + app], ['주차', '페어몬트 호텔 주차장 이용 (더현대 서울 주차장은 지원 대상 아님)']];
+      const items = [['13:00', '지하 1층 등록 데스크에서 성함·소속 확인 후 명찰 수령'], ['주주PASS', '앱 설치와 본인인증을 미리 마치고, 현장 안내 데스크에서 NFC 태그로 참석자 등록' + app], ['주차', '페어몬트 호텔 주차장 이용 후 현장 등록 데스크에서 주차 지원 등록 (더현대 서울 주차장은 지원 불가)']];
       h += '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:28px 0 0">' + items.map((it, i) =>
         '<tr><td style="width:28px;vertical-align:top;padding:8px 0"><span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:' + C.blue + ';color:#ffffff;font:700 12px/20px ' + FONT + ';text-align:center">' + (i + 1) + '</span></td>' +
         '<td style="padding:8px 0;font:400 14px/1.6 ' + FONT + ';color:' + C.ink2 + '"><b style="color:' + C.ink + '">' + it[0] + '</b> &nbsp;' + it[1] + '</td></tr>').join('') + '</table>';
@@ -231,7 +230,7 @@ function text_(h) {
 /** 설치 확인용: 실행 계정 메일함으로 4종 + 반려 사유 3종을 보냅니다 */
 function testAll() {
   const me = Session.getActiveUser().getEmail();
-  const links = { site: 'https://nane9141-prog.github.io/seminar/', android: 'https://play.google.com/store/apps/details?id=com.irkudos.jujupass', ios: '', slides: 'https://example.com/slides', survey: 'https://example.com/survey' };
+  const links = { site: 'https://nane9141-prog.github.io/seminar/', android: 'https://play.google.com/store/apps/details?id=com.irkudos.jujupass', survey: 'https://example.com/survey' };
   const base = { reg_no: 0, name: '테스트', title: '매니저', company: 'IR큐더스', email: me, cancel_token: 'test', links: links };
   ['confirmed', 'cancelled', 'reminder', 'thanks'].forEach(t => send_(Object.assign({}, base, { type: t })));
   ['ineligible', 'company_full', 'capacity_full'].forEach(r => send_(Object.assign({}, base, { type: 'rejected', reason: r })));

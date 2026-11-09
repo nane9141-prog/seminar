@@ -128,7 +128,7 @@ begin
   if coalesce(p->>'hp','') <> '' then
     return jsonb_build_object('ok', false, 'code', 'invalid');
   end if;
-  if _setting('open') <> 'true' then
+  if _setting('open') <> 'true' or now() >= timestamptz '2026-11-27 18:00:00+09' then
     return jsonb_build_object('ok', false, 'code', 'closed');
   end if;
   -- 대상 기업 목록에서 고른 신청만 받음 (직접 입력 신청 없음, 11.9 결정)

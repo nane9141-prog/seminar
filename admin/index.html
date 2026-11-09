@@ -150,7 +150,6 @@ td.nw{white-space:nowrap}
       <p>칸을 벗어나면 저장됩니다. 비워 두면 해당 버튼·링크가 메일에서 빠집니다. 주주PASS 설치 링크는 사이트의 설치 버튼에도 같이 쓰입니다.</p>
       <label for="l_site_url">사이트 주소<input id="l_site_url" data-k="site_url" type="url" placeholder="https://"></label>
       <label for="l_app_android_url">주주PASS 설치<input id="l_app_android_url" data-k="app_android_url" type="url" placeholder="기기별 자동 연결 URL (추후 등록)"></label>
-      <label for="l_slides_url">발표자료 (감사 메일)<input id="l_slides_url" data-k="slides_url" type="url" placeholder="추후 등록"></label>
       <label for="l_survey_url">설문 (감사 메일)<input id="l_survey_url" data-k="survey_url" type="url" placeholder="추후 등록"></label>
     </form>
     <div class="tw" id="tw"></div>
@@ -306,8 +305,7 @@ td.nw{white-space:nowrap}
       if(error){toast(error.message,true);tr.querySelectorAll('button,select').forEach(x=>x.disabled=false);return;}
       toast(`${r.name}님 반려 처리했습니다 (${RJ[reason]})`);load(true);return;
     }
-    const mail=a==='approved'?'등록 완료 메일':a==='rejected'?'반려 안내 메일':'취소 안내 메일';
-    if(!confirm(`${r.company_name} ${r.name}님을 ${LABEL[a]} 처리할까요?\n신청자에게 ${mail}이 발송됩니다.`))return;
+    if(!confirm(`${r.company_name} ${r.name}님의 참석을 ${LABEL[a]}할까요?\n자동 메일은 발송되지 않습니다. 사유는 신청자에게 직접 안내해 주세요.`))return;
     tr.querySelectorAll('button').forEach(x=>x.disabled=true);
     const {error}=await sb.from('registrations').update({status:a}).eq('id',r.id);
     if(error){toast(error.message,true);tr.querySelectorAll('button').forEach(x=>x.disabled=false);return;}
@@ -343,7 +341,7 @@ td.nw{white-space:nowrap}
     }
     if(e.target.id==='thanksNow'){
       const n=rows.filter(r=>r.status==='confirmed'&&r.attended&&!r.thanked_at).length;
-      const miss=[!settings.slides_url&&'발표자료',!settings.survey_url&&'설문'].filter(Boolean);
+      const miss=[!settings.survey_url&&'설문'].filter(Boolean);
       if(!confirm(`현장 참석자 ${n}명에게 참석 감사 메일을 보낼까요?`+(miss.length?`\n\n${miss.join('·')} 링크가 비어 있어 메일에서 빠집니다.`:'')+'\n한 사람에게 한 번만 발송됩니다.'))return;
       const {data,error}=await sb.rpc('admin_send_thanks');
       error?toast(error.message,true):(toast(`참석 감사 메일 ${data}건 발송을 요청했습니다`),load(true));
