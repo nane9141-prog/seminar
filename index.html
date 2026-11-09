@@ -232,7 +232,7 @@ footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;c
   .spk{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:72%;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:-24px;padding-inline:24px;scroll-padding-inline:24px;scrollbar-width:none}
   .spk::-webkit-scrollbar{display:none}
   .spk li{scroll-snap-align:start}
-  .spk{cursor:grab}
+  .spk{cursor:grab;touch-action:pan-y}
   .spk.is-drag{cursor:grabbing;scroll-snap-type:none;user-select:none}
   .spk,.spk *{-webkit-user-drag:none;user-select:none;-webkit-user-select:none}
   .loc{grid-template-columns:minmax(0,1fr)}
@@ -676,14 +676,14 @@ html.rg-lock{overflow:hidden}
   tick();setInterval(tick,1000);
 })();
 
-/* ---------- 연사 카드: 마우스 드래그로 가로 스크롤 (터치는 기본 스와이프) ---------- */
+/* ---------- 연사 카드: 마우스·터치·PC 모바일 에뮬레이션 공통 드래그 (세로 스크롤은 브라우저에 맡김) ---------- */
 (function(){
   const s=document.querySelector('.spk');if(!s)return;
   s.querySelectorAll('img').forEach(i=>i.draggable=false);
   let down=false,x0=0,l0=0,dx=0,moved=false;
   s.addEventListener('dragstart',e=>e.preventDefault());
-  s.addEventListener('pointerdown',e=>{if(e.pointerType==='touch'||e.button!==0||s.scrollWidth<=s.clientWidth+2)return;
-    e.preventDefault(); // 텍스트 선택·이미지 끌기 대신 스크롤
+  s.addEventListener('pointerdown',e=>{if(e.button!==0||s.scrollWidth<=s.clientWidth+2)return;
+    if(e.pointerType!=='touch')e.preventDefault(); // 텍스트 선택·이미지 끌기 대신 스크롤
     down=true;moved=false;dx=0;x0=e.clientX;l0=s.scrollLeft;try{s.setPointerCapture(e.pointerId);}catch(_){}s.classList.add('is-drag');});
   s.addEventListener('pointermove',e=>{if(!down)return;dx=e.clientX-x0;if(Math.abs(dx)>4)moved=true;s.scrollLeft=l0-dx;});
   function up(){if(!down)return;down=false;
