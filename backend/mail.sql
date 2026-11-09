@@ -17,7 +17,7 @@ insert into public.settings(key,value,note) values
   ('app_ios_url','','주주PASS iOS (추후 등록)'),
   ('slides_url','','발표자료 링크 (M7)'),
   ('survey_url','','설문 링크 (M7, 추후 등록)'),
-  ('reminder_at','2026-11-29 10:00 KST','D-1 리마인드 예약 시각 (안내용)')
+  ('reminder_at','2026-11-29 14:00 KST','D-1 리마인드 예약 시각 (안내용)')
 on conflict (key) do nothing;
 
 drop policy if exists admin_update on public.settings;
@@ -112,8 +112,8 @@ end $$;
 revoke all on function public.admin_send_thanks() from public, anon;
 grant execute on function public.admin_send_thanks() to authenticated;
 
--- 6) D-1 예약 발송: 2026-11-29(일) 10:00 KST = 01:00 UTC
+-- 6) D-1 예약 발송: 2026-11-29(일) 14:00 KST = 05:00 UTC
 create extension if not exists pg_cron;
 select cron.unschedule(jobid) from cron.job where jobname = 'seminar-d1-reminder';
-select cron.schedule('seminar-d1-reminder', '0 1 29 11 *',
+select cron.schedule('seminar-d1-reminder', '0 5 29 11 *',
   $$ select public.send_reminders() where now()::date = date '2026-11-29' $$);

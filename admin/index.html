@@ -232,7 +232,7 @@ td.nw{white-space:nowrap}
     const remPend=rows.filter(r=>r.status==='confirmed'&&!r.reminded_at).length,remDone=rows.filter(r=>r.reminded_at).length;
     const thPend=rows.filter(r=>r.status==='confirmed'&&r.attended&&!r.thanked_at).length,thDone=rows.filter(r=>r.thanked_at).length;
     $('#mailbar').innerHTML=
-      `<span>D-1 리마인드 <b>11/29(일) 10:00 자동 발송</b> · 발송 ${remDone}명${remPend&&remDone?` · 미발송 ${remPend}명`:''}</span>`+
+      `<span>D-1 리마인드 <b>11/29(일) 14:00 자동 발송</b> · 발송 ${remDone}명${remPend&&remDone?` · 미발송 ${remPend}명`:''}</span>`+
       (remDone&&remPend?`<button class="btn btn--ghost btn--sm" id="remindNow" type="button">미발송 ${remPend}명 지금 보내기</button>`:'')+
       `<span class="sep"></span><span>참석 감사 메일 · 현장 참석 ${att}명 중 발송 ${thDone}명</span>`+
       `<button class="btn btn--sm" id="thanksNow" type="button" ${thPend?'':'disabled'}>${thPend?`참석자 ${thPend}명에게 보내기`:'보낼 대상 없음'}</button>`;
