@@ -89,6 +89,22 @@ td.nw{white-space:nowrap}
 .toast.bad{background:#3a1d1d;border-color:#5a2a2a}
 .setting{display:flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;background:var(--card);border:1px solid var(--line);border-radius:10px;font-size:13px;color:var(--fg-2)}
 .setting b{color:#fff}
+.att{display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;font-weight:700;color:var(--fg-3);white-space:nowrap}
+.att input{width:18px;height:18px;accent-color:var(--ok)}
+.att.on{color:var(--ok)}
+.rj{display:grid;gap:6px;min-width:170px}
+.rj select{min-height:30px;border:1px solid #3a3a3a;border-radius:7px;background:#111;padding:0 8px;font-size:12px}
+.rj div{display:flex;gap:6px}
+.mailbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:12px;font-size:13px;color:var(--fg-2)}
+.mailbar b{color:#fff}
+.mailbar .sep{width:1px;height:18px;background:var(--line)}
+.links{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:12px}
+.links h2{margin:0;font-size:14px}
+.links p{margin:-6px 0 0;color:var(--fg-3);font-size:12px}
+.links label{display:grid;grid-template-columns:150px minmax(0,1fr);align-items:center;gap:12px;font-size:13px;color:var(--fg-2)}
+.links input{min-height:36px;padding:0 10px;border:1px solid #333;border-radius:8px;background:#111;font-size:13px;min-width:0}
+.links input:focus{outline:0;border-color:var(--blue)}
+@media (max-width:640px){.links label{grid-template-columns:1fr;gap:4px}}
 @media (max-width:960px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:16px}.top{padding:12px 16px}.tw{max-height:none}}
 </style>
 </head>
@@ -119,16 +135,27 @@ td.nw{white-space:nowrap}
         <button type="button" data-f="pending" aria-pressed="false">승인 대기<em></em></button>
         <button type="button" data-f="rejected" aria-pressed="false">반려<em></em></button>
         <button type="button" data-f="cancelled" aria-pressed="false">취소<em></em></button>
+        <button type="button" data-f="attended" aria-pressed="false">현장 참석<em></em></button>
         <button type="button" data-f="company" aria-pressed="false">기업별</button>
       </div>
       <input class="search" id="q" type="search" placeholder="회사·이름·이메일·휴대폰 검색">
       <div class="right">
         <div class="setting">접수 <b id="openState">-</b><button class="btn btn--ghost btn--sm" id="toggleOpen" type="button">-</button></div>
         <button class="btn btn--ghost" id="reload" type="button">새로고침</button>
-        <button class="btn btn--ghost" id="remind" type="button">리마인드 메일</button>
+        <button class="btn btn--ghost" id="linksBtn" type="button" aria-expanded="false">메일 링크</button>
         <button class="btn" id="csv" type="button">엑셀(CSV) 내려받기</button>
       </div>
     </div>
+    <div class="mailbar" id="mailbar"></div>
+    <form class="links" id="links" hidden>
+      <h2>메일에 들어가는 링크</h2>
+      <p>칸을 벗어나면 저장됩니다. 비워 두면 해당 버튼·링크가 메일에서 빠집니다.</p>
+      <label for="l_site_url">사이트 주소<input id="l_site_url" data-k="site_url" type="url" placeholder="https://"></label>
+      <label for="l_app_android_url">주주PASS Android<input id="l_app_android_url" data-k="app_android_url" type="url" placeholder="https://play.google.com/…"></label>
+      <label for="l_app_ios_url">주주PASS iPhone<input id="l_app_ios_url" data-k="app_ios_url" type="url" placeholder="추후 등록"></label>
+      <label for="l_slides_url">발표자료 (감사 메일)<input id="l_slides_url" data-k="slides_url" type="url" placeholder="추후 등록"></label>
+      <label for="l_survey_url">설문 (감사 메일)<input id="l_survey_url" data-k="survey_url" type="url" placeholder="추후 등록"></label>
+    </form>
     <div class="tw" id="tw"></div>
   </main>
 </div>
@@ -142,6 +169,7 @@ td.nw{white-space:nowrap}
   const $=s=>document.querySelector(s);
   const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const ST={confirmed:'확정',pending:'승인 대기',rejected:'반려',cancelled:'취소'};
+  const RJ={ineligible:'대상 기준 미충족',company_full:'기업당 2자리 마감',capacity_full:'전체 정원 마감'};
   let rows=[],settings={},filter='all',timer=null;
 
   function toast(msg,bad){const t=$('#toast');t.textContent=msg;t.className='toast'+(bad?' bad':'');t.hidden=false;clearTimeout(t._t);t._t=setTimeout(()=>t.hidden=true,bad?6000:2500);}
@@ -184,32 +212,45 @@ td.nw{white-space:nowrap}
 
   function render(){
     const cap=+settings.capacity||300,c=k=>rows.filter(r=>r.status===k).length,conf=c('confirmed'),pend=c('pending');
+    const att=rows.filter(r=>r.status==='confirmed'&&r.attended).length;
     const cos=new Set(rows.filter(r=>r.status==='confirmed').map(r=>r.company_id||norm(r.company_name))).size;
     $('#stats').innerHTML=
       `<div class="stat"><span>확정</span><b>${conf}<small> / ${cap}명</small></b><div class="bar"><i style="width:${Math.min(100,conf/cap*100)}%"></i></div></div>`+
       `<div class="stat"><span>잔여석</span><b>${Math.max(cap-conf,0)}<small>석</small></b></div>`+
       `<div class="stat ${pend?'is-warn':''}"><span>승인 대기</span><b>${pend}<small>건</small></b></div>`+
-      `<div class="stat"><span>참석 기업</span><b>${cos}<small>개사</small></b></div>`+
+      `<div class="stat"><span>참석 기업 · 현장 참석</span><b>${cos}<small>개사 · ${att}명</small></b></div>`+
       `<div class="stat"><span>반려 · 취소</span><b>${c('rejected')}<small> · ${c('cancelled')}</small></b></div>`;
-    const counts={all:rows.length,confirmed:conf,pending:pend,rejected:c('rejected'),cancelled:c('cancelled')};
+    const counts={all:rows.length,confirmed:conf,pending:pend,rejected:c('rejected'),cancelled:c('cancelled'),attended:att};
     document.querySelectorAll('#tabs button').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.f===filter);const em=b.querySelector('em');if(em)em.textContent=counts[b.dataset.f];});
     const open=settings.open==='true';$('#openState').textContent=open?'열림':'닫힘';$('#openState').style.color=open?'var(--ok)':'var(--bad)';
     $('#toggleOpen').textContent=open?'접수 닫기':'접수 열기';
+    renderMailbar(conf,att);
+    document.querySelectorAll('#links input').forEach(i=>{if(document.activeElement!==i)i.value=settings[i.dataset.k]||'';});
     filter==='company'?renderCompanies():renderRows();
+  }
+  function renderMailbar(conf,att){
+    const remPend=rows.filter(r=>r.status==='confirmed'&&!r.reminded_at).length,remDone=rows.filter(r=>r.reminded_at).length;
+    const thPend=rows.filter(r=>r.status==='confirmed'&&r.attended&&!r.thanked_at).length,thDone=rows.filter(r=>r.thanked_at).length;
+    $('#mailbar').innerHTML=
+      `<span>D-1 리마인드 <b>11/29(일) 10:00 자동 발송</b> · 발송 ${remDone}명${remPend&&remDone?` · 미발송 ${remPend}명`:''}</span>`+
+      (remDone&&remPend?`<button class="btn btn--ghost btn--sm" id="remindNow" type="button">미발송 ${remPend}명 지금 보내기</button>`:'')+
+      `<span class="sep"></span><span>참석 감사 메일 · 현장 참석 ${att}명 중 발송 ${thDone}명</span>`+
+      `<button class="btn btn--sm" id="thanksNow" type="button" ${thPend?'':'disabled'}>${thPend?`참석자 ${thPend}명에게 보내기`:'보낼 대상 없음'}</button>`;
   }
 
   function visible(){
     const q=norm($('#q').value);
-    return rows.filter(r=>(filter==='all'||r.status===filter)&&(!q||[r.company_name,r.name,r.email,r.phone,r.dept,r.biz_no,r.companies&&r.companies.code].some(v=>norm(v).includes(q))));
+    return rows.filter(r=>(filter==='all'||(filter==='attended'?r.status==='confirmed'&&r.attended:r.status===filter))&&(!q||[r.company_name,r.name,r.email,r.phone,r.dept,r.biz_no,r.companies&&r.companies.code].some(v=>norm(v).includes(q))));
   }
 
   function renderRows(){
     const list=visible();
     if(!list.length){$('#tw').innerHTML='<div class="empty">해당하는 신청이 없습니다</div>';return;}
-    $('#tw').innerHTML=`<table><thead><tr><th>No.</th><th>상태</th><th>회사</th><th>이름</th><th>부서 · 직급</th><th>연락처</th><th>사전질문</th><th>신청</th><th>처리</th><th>메모</th><th></th></tr></thead><tbody>${list.map(r=>`
+    $('#tw').innerHTML=`<table><thead><tr><th>No.</th><th>상태</th><th>현장</th><th>회사</th><th>이름</th><th>부서 · 직급</th><th>연락처</th><th>사전질문</th><th>신청</th><th>처리</th><th>메모</th><th></th></tr></thead><tbody>${list.map(r=>`
 <tr data-id="${r.id}">
   <td class="num">${r.reg_no}</td>
-  <td><span class="pill ${r.status}">${ST[r.status]}</span></td>
+  <td><span class="pill ${r.status}">${ST[r.status]}</span>${r.status==='rejected'&&r.reject_reason?`<span class="sub">${RJ[r.reject_reason]}</span>`:''}</td>
+  <td>${r.status==='confirmed'?`<label class="att ${r.attended?'on':''}"><input type="checkbox" class="attck" ${r.attended?'checked':''}>${r.attended?'참석':'미확인'}</label>`:''}</td>
   <td>${esc(r.company_name)}${r.is_manual?'<span class="tag">직접입력</span>':''}<span class="sub">${r.companies?esc(r.companies.market+' '+r.companies.code):esc(r.biz_no||'')}</span></td>
   <td class="nw"><b>${esc(r.name)}</b></td>
   <td>${esc(r.dept||'')}<span class="sub">${esc(r.title||'')}</span></td>
@@ -241,11 +282,33 @@ td.nw{white-space:nowrap}
   }
 
   /* --- 처리 --- */
+  function suggestReason(r){
+    const cap=+settings.capacity||300,per=+settings.per_company||2;
+    const conf=rows.filter(x=>x.status==='confirmed');
+    const same=conf.filter(x=>r.company_id?x.company_id===r.company_id:(!x.company_id&&norm(x.company_name)===norm(r.company_name))).length;
+    if(same>=per)return 'company_full';
+    if(conf.length>=cap)return 'capacity_full';
+    return 'ineligible';
+  }
+  function showReject(tr,r){
+    const s=suggestReason(r);
+    tr.querySelector('.acts').innerHTML=`<div class="rj"><select aria-label="반려 사유">${Object.entries(RJ).map(([k,v])=>`<option value="${k}" ${k===s?'selected':''}>${v}</option>`).join('')}</select><div><button class="btn btn--bad btn--sm" data-a="rj-go">반려</button><button class="btn btn--ghost btn--sm" data-a="rj-cancel">닫기</button></div></div>`;
+  }
   const LABEL={approved:'승인',rejected:'반려',cancelled:'취소'};
   $('#tw').addEventListener('click',async e=>{
     const q=e.target.closest('.q');if(q){q.classList.toggle('open');return;}
     const b=e.target.closest('[data-a]');if(!b)return;
     const tr=b.closest('tr'),r=rows.find(x=>x.id===tr.dataset.id),a=b.dataset.a;
+    if(a==='rejected'){showReject(tr,r);return;}
+    if(a==='rj-cancel'){tr.querySelector('.acts').innerHTML=actions(r);return;}
+    if(a==='rj-go'){
+      const reason=tr.querySelector('.rj select').value;
+      if(!confirm(`${r.company_name} ${r.name}님을 반려할까요?\n사유: ${RJ[reason]}\n신청자에게 반려 안내 메일이 발송됩니다.`))return;
+      tr.querySelectorAll('button,select').forEach(x=>x.disabled=true);
+      const {error}=await sb.from('registrations').update({status:'rejected',reject_reason:reason}).eq('id',r.id);
+      if(error){toast(error.message,true);tr.querySelectorAll('button,select').forEach(x=>x.disabled=false);return;}
+      toast(`${r.name}님 반려 처리했습니다 (${RJ[reason]})`);load(true);return;
+    }
     const mail=a==='approved'?'등록 완료 메일':a==='rejected'?'반려 안내 메일':'취소 안내 메일';
     if(!confirm(`${r.company_name} ${r.name}님을 ${LABEL[a]} 처리할까요?\n신청자에게 ${mail}이 발송됩니다.`))return;
     tr.querySelectorAll('button').forEach(x=>x.disabled=true);
@@ -254,6 +317,12 @@ td.nw{white-space:nowrap}
     toast(`${r.name}님 ${LABEL[a]} 처리했습니다`);load(true);
   });
   $('#tw').addEventListener('change',async e=>{
+    if(e.target.classList.contains('attck')){
+      const id=e.target.closest('tr').dataset.id,v=e.target.checked;
+      const {error}=await sb.from('registrations').update({attended:v}).eq('id',id);
+      if(error){toast('참석 체크 실패: '+error.message,true);e.target.checked=!v;return;}
+      const r=rows.find(x=>x.id===id);if(r)r.attended=v;toast(v?`${r.name}님 현장 참석 체크`:`${r.name}님 참석 체크 해제`);render();return;
+    }
     if(!e.target.classList.contains('memo'))return;
     const id=e.target.closest('tr').dataset.id,v=e.target.value.trim();
     const {error}=await sb.from('registrations').update({memo:v||null}).eq('id',id);
@@ -268,18 +337,35 @@ td.nw{white-space:nowrap}
     const {error}=await sb.from('settings').update({value:open?'false':'true'}).eq('key','open');
     if(error){toast(error.message,true);return;}load(true);toast(open?'접수를 닫았습니다':'접수를 열었습니다');
   });
-  $('#remind').addEventListener('click',async()=>{
-    const n=rows.filter(r=>r.status==='confirmed').length;
-    if(!n){toast('확정자가 없습니다',true);return;}
-    if(!confirm(`확정자 ${n}명 전원에게 행사 전날 리마인드 메일을 보낼까요?\n행사 하루 전(11/29)에 한 번만 보내주세요.`))return;
-    const {data,error}=await sb.rpc('admin_send_reminders');
-    error?toast(error.message,true):toast(`리마인드 메일 ${data}건 발송을 요청했습니다`);
+  $('#mailbar').addEventListener('click',async e=>{
+    if(e.target.id==='remindNow'){
+      const n=rows.filter(r=>r.status==='confirmed'&&!r.reminded_at).length;
+      if(!confirm(`리마인드 메일을 아직 받지 않은 확정자 ${n}명에게 지금 보낼까요?`))return;
+      const {data,error}=await sb.rpc('admin_send_reminders');
+      error?toast(error.message,true):(toast(`리마인드 메일 ${data}건 발송을 요청했습니다`),load(true));
+    }
+    if(e.target.id==='thanksNow'){
+      const n=rows.filter(r=>r.status==='confirmed'&&r.attended&&!r.thanked_at).length;
+      const miss=[!settings.slides_url&&'발표자료',!settings.survey_url&&'설문'].filter(Boolean);
+      if(!confirm(`현장 참석자 ${n}명에게 참석 감사 메일을 보낼까요?`+(miss.length?`\n\n${miss.join('·')} 링크가 비어 있어 메일에서 빠집니다.`:'')+'\n한 사람에게 한 번만 발송됩니다.'))return;
+      const {data,error}=await sb.rpc('admin_send_thanks');
+      error?toast(error.message,true):(toast(`참석 감사 메일 ${data}건 발송을 요청했습니다`),load(true));
+    }
+  });
+  $('#linksBtn').addEventListener('click',e=>{const f=$('#links');f.hidden=!f.hidden;e.currentTarget.setAttribute('aria-expanded',!f.hidden);});
+  $('#links').addEventListener('submit',e=>e.preventDefault());
+  $('#links').addEventListener('change',async e=>{
+    const i=e.target,k=i.dataset.k,v=i.value.trim();
+    if(v&&!/^https?:\/\//.test(v)){toast('https:// 로 시작하는 주소를 넣어 주세요',true);return;}
+    const {error}=await sb.from('settings').update({value:k==='site_url'&&v?v.replace(/\/?$/,'/'):v}).eq('key',k);
+    if(error){toast('저장 실패: '+error.message,true);return;}
+    toast('링크를 저장했습니다');load(true);
   });
   $('#csv').addEventListener('click',()=>{
     const list=filter==='company'?rows:visible();
-    const head=['No.','상태','회사','종목코드','직접입력','사업자번호/종목코드','이름','부서','직급','휴대폰','이메일','사전질문','신청일시','처리일시','처리자','메모'];
+    const head=['No.','상태','반려 사유','현장 참석','회사','종목코드','직접입력','사업자번호/종목코드','이름','부서','직급','휴대폰','이메일','사전질문','신청일시','처리일시','처리자','메모'];
     const cell=v=>{v=v==null?'':String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
-    const lines=[head.join(',')].concat(list.slice().sort((a,b)=>a.reg_no-b.reg_no).map(r=>[r.reg_no,ST[r.status],r.company_name,r.companies?r.companies.code:'',r.is_manual?'Y':'',r.biz_no,r.name,r.dept,r.title,fmtPhone(r.phone),r.email,r.question,
+    const lines=[head.join(',')].concat(list.slice().sort((a,b)=>a.reg_no-b.reg_no).map(r=>[r.reg_no,ST[r.status],r.reject_reason?RJ[r.reject_reason]:'',r.status==='confirmed'?(r.attended?'참석':''):'',r.company_name,r.companies?r.companies.code:'',r.is_manual?'Y':'',r.biz_no,r.name,r.dept,r.title,fmtPhone(r.phone),r.email,r.question,
       r.created_at&&new Date(r.created_at).toLocaleString('ko-KR'),r.decided_at&&new Date(r.decided_at).toLocaleString('ko-KR'),who(r.decided_by),r.memo].map(cell).join(',')));
     const a=document.createElement('a'),d=new Date(),p=n=>String(n).padStart(2,'0');
     a.href=URL.createObjectURL(new Blob(['﻿'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'}));
