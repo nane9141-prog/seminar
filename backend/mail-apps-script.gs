@@ -5,7 +5,8 @@
  * 1. script.google.com → 새 프로젝트 → 이 코드를 붙여넣기
  * 2. 프로젝트 설정 → 스크립트 속성
  *    SECRET   : Supabase settings 테이블의 mail_secret 값
- *    FROM     : (선택) '다른 주소로 보내기' 별칭 (예: seminar@irkudos.co.kr). 계정 주소 그대로 보낼 땐 비워둠
+ *    FROM     : 발신 주소 agm@irkudos.co.kr (11.9 확정). agm@ 계정에서 직접 설치하면 비워두고,
+ *               다른 계정에서 설치하면 그 계정에 agm@를 '다른 주소로 보내기'로 등록한 뒤 입력
  * 3. 함수 testAll 실행 → 권한 승인 → 실행 계정 메일함에서 7종 확인
  * 4. 배포 → 새 배포 → 웹 앱 / 실행: 나 / 액세스: 모든 사용자 → URL 복사
  * 5. Supabase settings 테이블 mail_webhook_url 에 그 URL 입력
