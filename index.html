@@ -73,7 +73,7 @@ a{color:inherit}
 .hero h1{position:relative;margin-top:18px;font-weight:800;color:#fff;font-size:clamp(40px,7.2vw,92px);line-height:1.12;letter-spacing:0;text-wrap:balance}
 .hero h1 .ln{display:block}
 /* 원티드 HIGHFIVE 방식: 같은 타이틀을 3겹으로 쌓아 배경과 합성 — overlay(흰색 90%) → difference(흰색) → color(블루) */
-/* 히어로 텍스트 색은 셰이더가 배경 밝기에 맞춰 칠함: 밝으면 짙은 남색, 어두우면 흰색, 중간은 블루 */
+/* 히어로 텍스트 색은 셰이더가 배경 밝기에 맞춰 칠함: 밝으면 짙은 남색, 어둡거나 중간이면 흰색 */
 .hero.is-gl .hero__k,.hero.is-gl h1,.hero.is-gl .hero__meta{color:transparent!important;text-shadow:none!important}
 .hero.is-gl .ttl img{opacity:0}
 /* 타이틀 락업(SVG): 왼쪽 정렬 디자인 그대로, 블록만 가운데 */
@@ -1006,14 +1006,14 @@ void main(){
   if(FB.x>.5&&dark>.001){float g=mask(FB.y,p,FB2.x,FB2.y);float m=(FB.x<1.5?smoothstep(0.,.3,g):g)*FB.w*dark;if(m>.001)col=mix(col,fx(FB.x,px,col,FB.z*u,FB2.z,g,FB2.w),m);}
   col+=(h(px+fract(T*97.)*100.)-.5)*GRAIN;
   col=clamp(col,0.,1.);
-  // hero text: coloured by the brightness right behind each pixel — dark ground → white, mid → blue, bright ground → deep navy
+  // hero text: coloured by the brightness right behind each pixel — dark/mid ground → white, bright ground → deep navy
   vec2 tp=(px-BOX.xy)/BOX.zw;
   if(tp.x>=0.&&tp.x<=1.&&tp.y>=0.&&tp.y<=1.){
     float m=texture2D(TX,vec2(tp.x,1.-tp.y)).a;
     if(m>0.){
       float L=dot(col,vec3(.299,.587,.114));
-      vec3 tc=mix(vec3(1.),vec3(.12,.36,1.),smoothstep(.36,.44,L));
-      tc=mix(tc,vec3(.043,.114,.318),smoothstep(.50,.60,L));
+      // 블루 중간색 없이 흰색/남색 두 가지만 — 글자가 배경 블루에 묻히지 않게
+      vec3 tc=mix(vec3(1.),vec3(.043,.114,.318),smoothstep(.56,.64,L));
       col=mix(col,tc,m);
     }
   }
