@@ -45,7 +45,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 .top h1 small{display:block;font-size:12px;font-weight:500;color:var(--fg-3)}
 .top .me{margin-left:auto;display:flex;align-items:center;gap:10px;color:var(--fg-3);font-size:13px}
 main{padding:24px;max-width:1600px;margin:0 auto;display:grid;gap:20px}
-.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
 .stat span{display:block;font-size:12px;color:var(--fg-3);font-weight:600}
 .stat b{display:block;margin-top:4px;font-size:26px;font-weight:800;letter-spacing:-.02em}
@@ -132,8 +132,6 @@ td.nw{white-space:nowrap}
       <div class="tabs" id="tabs" role="group" aria-label="상태">
         <button type="button" data-f="all" aria-pressed="true">전체<em></em></button>
         <button type="button" data-f="confirmed" aria-pressed="false">확정<em></em></button>
-        <button type="button" data-f="pending" aria-pressed="false">승인 대기<em></em></button>
-        <button type="button" data-f="rejected" aria-pressed="false">반려<em></em></button>
         <button type="button" data-f="cancelled" aria-pressed="false">취소<em></em></button>
         <button type="button" data-f="attended" aria-pressed="false">현장 참석<em></em></button>
         <button type="button" data-f="company" aria-pressed="false">기업별</button>
@@ -149,10 +147,9 @@ td.nw{white-space:nowrap}
     <div class="mailbar" id="mailbar"></div>
     <form class="links" id="links" hidden>
       <h2>메일에 들어가는 링크</h2>
-      <p>칸을 벗어나면 저장됩니다. 비워 두면 해당 버튼·링크가 메일에서 빠집니다.</p>
+      <p>칸을 벗어나면 저장됩니다. 비워 두면 해당 버튼·링크가 메일에서 빠집니다. 주주PASS 설치 링크는 사이트의 설치 버튼에도 같이 쓰입니다.</p>
       <label for="l_site_url">사이트 주소<input id="l_site_url" data-k="site_url" type="url" placeholder="https://"></label>
-      <label for="l_app_android_url">주주PASS Android<input id="l_app_android_url" data-k="app_android_url" type="url" placeholder="https://play.google.com/…"></label>
-      <label for="l_app_ios_url">주주PASS iPhone<input id="l_app_ios_url" data-k="app_ios_url" type="url" placeholder="추후 등록"></label>
+      <label for="l_app_android_url">주주PASS 설치<input id="l_app_android_url" data-k="app_android_url" type="url" placeholder="기기별 자동 연결 URL (추후 등록)"></label>
       <label for="l_slides_url">발표자료 (감사 메일)<input id="l_slides_url" data-k="slides_url" type="url" placeholder="추후 등록"></label>
       <label for="l_survey_url">설문 (감사 메일)<input id="l_survey_url" data-k="survey_url" type="url" placeholder="추후 등록"></label>
     </form>
@@ -217,9 +214,9 @@ td.nw{white-space:nowrap}
     $('#stats').innerHTML=
       `<div class="stat"><span>확정</span><b>${conf}<small> / ${cap}명</small></b><div class="bar"><i style="width:${Math.min(100,conf/cap*100)}%"></i></div></div>`+
       `<div class="stat"><span>잔여석</span><b>${Math.max(cap-conf,0)}<small>석</small></b></div>`+
-      `<div class="stat ${pend?'is-warn':''}"><span>승인 대기</span><b>${pend}<small>건</small></b></div>`+
+      
       `<div class="stat"><span>참석 기업 · 현장 참석</span><b>${cos}<small>개사 · ${att}명</small></b></div>`+
-      `<div class="stat"><span>반려 · 취소</span><b>${c('rejected')}<small> · ${c('cancelled')}</small></b></div>`;
+      `<div class="stat"><span>취소</span><b>${c('cancelled')}<small>건</small></b></div>`;
     const counts={all:rows.length,confirmed:conf,pending:pend,rejected:c('rejected'),cancelled:c('cancelled'),attended:att};
     document.querySelectorAll('#tabs button').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.f===filter);const em=b.querySelector('em');if(em)em.textContent=counts[b.dataset.f];});
     const open=settings.open==='true';$('#openState').textContent=open?'열림':'닫힘';$('#openState').style.color=open?'var(--ok)':'var(--bad)';
@@ -277,8 +274,8 @@ td.nw{white-space:nowrap}
     });
     const list=[...map.values()].filter(c=>!q||norm(c.name).includes(q)).sort((a,b)=>b.conf.length-a.conf.length||a.name.localeCompare(b.name,'ko'));
     if(!list.length){$('#tw').innerHTML='<div class="empty">신청한 기업이 없습니다</div>';return;}
-    $('#tw').innerHTML=`<table class="co"><thead><tr><th>회사</th><th>구분</th><th>확정</th><th>확정자</th><th>승인 대기</th></tr></thead><tbody>${list.map(c=>`
-<tr><td><b>${esc(c.name)}</b></td><td class="nw">${esc(c.code)}</td><td class="nw ${c.conf.length>=per?'full':''}">${c.conf.length} / ${per}${c.conf.length>=per?' · 마감':''}</td><td>${esc(c.conf.join(', '))}</td><td>${esc(c.pend.join(', '))}</td></tr>`).join('')}</tbody></table>`;
+    $('#tw').innerHTML=`<table class="co"><thead><tr><th>회사</th><th>구분</th><th>확정</th><th>확정자</th></tr></thead><tbody>${list.map(c=>`
+<tr><td><b>${esc(c.name)}</b></td><td class="nw">${esc(c.code)}</td><td class="nw ${c.conf.length>=per?'full':''}">${c.conf.length} / ${per}${c.conf.length>=per?' · 마감':''}</td><td>${esc(c.conf.join(', '))}</td></tr>`).join('')}</tbody></table>`;
   }
 
   /* --- 처리 --- */

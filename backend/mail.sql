@@ -117,3 +117,16 @@ create extension if not exists pg_cron;
 select cron.unschedule(jobid) from cron.job where jobname = 'seminar-d1-reminder';
 select cron.schedule('seminar-d1-reminder', '0 5 29 11 *',
   $$ select public.send_reminders() where now()::date = date '2026-11-29' $$);
+
+-- 7) 11.9 수정: 주주PASS 설치 링크를 기기별 자동 연결 URL 한 개로 통일 (app_android_url 칸 공용), 사이트에서도 사용
+update public.settings set note = '주주PASS 설치 링크 (기기별 자동 연결 URL, 사이트·메일 공용)' where key = 'app_android_url';
+update public.settings set note = '사용 안 함 (11.9 결정: 분기 URL 한 개로 통일)' where key = 'app_ios_url';
+create or replace function public.event_status() returns jsonb
+language sql stable security definer set search_path = public as $$
+  select jsonb_build_object(
+    'open', _setting('open') = 'true',
+    'capacity', _setting('capacity')::int,
+    'remaining', greatest(_setting('capacity')::int - _total_count(), 0),
+    'app_url', nullif(_setting('app_android_url'), '')
+  )
+$$;
