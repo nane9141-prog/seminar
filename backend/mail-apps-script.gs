@@ -231,7 +231,7 @@ function text_(h) {
 /** 설치 확인용: 실행 계정 메일함으로 4종 + 반려 사유 3종을 보냅니다 */
 function testAll() {
   const me = Session.getActiveUser().getEmail();
-  const links = { site: 'https://nane9141-prog.github.io/seminar/', android: 'https://play.google.com/store/apps/details?id=com.irkudos.jujupass', survey: 'https://example.com/survey' };
+  const links = { site: 'https://nane9141-prog.github.io/seminar/', android: 'https://kudos.agmlive.co.kr/appstore/juju-pass/redirect', survey: 'https://example.com/survey' };
   const base = { reg_no: 0, name: '테스트', title: '매니저', company: 'IR큐더스', email: me, cancel_token: '00000000-0000-0000-0000-000000000000', links: links };
   ['confirmed', 'cancelled', 'reminder', 'thanks'].forEach(t => send_(Object.assign({}, base, { type: t })));
   ['ineligible', 'company_full', 'capacity_full'].forEach(r => send_(Object.assign({}, base, { type: 'rejected', reason: r })));
