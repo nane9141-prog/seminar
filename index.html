@@ -1314,7 +1314,7 @@ if('IntersectionObserver' in window)new IntersectionObserver(e=>{visible=e[0].is
       let r={ok:false};try{r=await rpc('cancel_registration',{p_token:tok});}catch(_){}
       view.innerHTML=`<div class="rg__bd"><div class="rg__done"><div class="ic ${r.ok?'':'warn'}">${r.ok?ICON.ok:ICON.info}</div>
         <h3>${r.ok?'사전등록이 취소되었습니다':'취소할 신청을 찾지 못했습니다'}</h3>
-        <p>${r.ok?esc(r.company)+' '+esc(r.name)+'님의 사전등록이 취소되었습니다.':'이미 취소되었거나 유효하지 않은 링크입니다. 문의: '+CONTACT}</p></div></div>
+        <p>${r.ok?esc(r.company)+' '+esc(r.name)+'님의 사전등록이 취소되었습니다.<br>참석을 원하시면 다시 신청해 주세요. 잔여석이 있을 때 등록 가능합니다.':'이미 취소되었거나 유효하지 않은 링크입니다. 문의: '+CONTACT}</p></div></div>
         <div class="rg__ft"><button class="btn btn--ghost" type="button" data-close>닫기</button></div>`;
     };
   }
