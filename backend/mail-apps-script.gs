@@ -7,7 +7,7 @@
  *    SECRET   : Supabase settings 테이블의 mail_secret 값
  *    FROM     : 발신 주소 agm@irkudos.co.kr (11.9 확정). agm@ 계정에서 직접 설치하면 비워두고,
  *               다른 계정에서 설치하면 그 계정에 agm@를 '다른 주소로 보내기'로 등록한 뒤 입력
- * 3. 함수 testAll 실행 → 권한 승인 → 실행 계정 메일함에서 8종 확인 (초청 메일 포함)
+ * 3. 함수 testAll 실행 → 권한 승인 → 실행 계정 메일함에서 6종 확인 (초청·수동 반려 포함)
  * 4. 배포 → 새 배포 → 웹 앱 / 실행: 나 / 액세스: 모든 사용자 → URL 복사
  * 5. Supabase settings 테이블 mail_webhook_url 에 그 URL 입력
  *
@@ -37,7 +37,7 @@ const EV = {
 const C = { ink: '#0f1524', ink2: '#3d4556', ink3: '#7a8294', line: '#e3e7ef', soft: '#f4f6fb', blue: '#2f6bff', navy: '#141a6e', page: '#ffffff', box: '#e6e9ef' };
 const FONT = "-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕','Noto Sans KR',sans-serif";
 const CHIP = {
-  done: ['#e7f6ee', '#137a45', '참석 확정'], wait: ['#fff4e0', '#9a5b00', '확인 중'], no: ['#fdecec', '#b42323', '신청 결과'],
+  done: ['#e7f6ee', '#137a45', '참석 확정'], wait: ['#fff4e0', '#9a5b00', '확인 중'], no: ['#fdecec', '#b42323', '참석 신청 반려'],
   cancel: ['#eef0f4', '#4d5566', '취소 완료'], d1: ['#e8efff', '#1f4fd6', 'D-3'], thanks: ['#e8efff', '#1f4fd6', '참석 감사'],
   invite: ['#e8efff', '#1f4fd6', 'INVITATION · 초청']
 };
@@ -144,12 +144,14 @@ function compose_(p) {
       lead: '신청해 주셔서 감사합니다. 전자주주총회 준비에 필요한 법률·실무 쟁점과, 모의 전자주주총회로 확인하는 실제 운영 과정을 준비했습니다. 아래 일정과 참석 안내를 확인해 주세요.',
       card: 'full', btns: [['캘린더에 추가', EV.gcal, 1], ['오시는 길', EV.map, 0]], guide: full, cancel: true, ics: true
     },
+    // 수동 반려: 운영자가 관리자 페이지에서 쓴 타이틀·내용(custom_title·custom_body)으로 발송. 없으면 기본 문구
     rejected: {
-      chip: 'no', subject: '[IR큐더스] 시연 설명회 신청 결과를 안내드립니다',
-      pre: '신청해 주셔서 감사합니다.',
-      head: '이번에는 참석을 확정하기 어렵습니다',
-      lead: '신청해 주셔서 감사합니다. ' + (REJECT[p.reason] || REJECT.ineligible),
-      note: '전자주주총회 도입 상담이 필요하시면 이 메일에 회신해 주세요. 담당자가 연락드리겠습니다.',
+      chip: 'no', subject: '[IR큐더스] ' + (p.custom_title ? text1_(p.custom_title) : '시연 설명회 참석 신청 결과를 안내드립니다'),
+      pre: p.custom_body ? text1_(p.custom_body).slice(0, 80) : '신청해 주셔서 감사합니다.',
+      head: p.custom_title ? esc_(p.custom_title) : '이번에는 참석을 확정하기 어렵습니다',
+      salute: esc_(p.company) + ' ' + honor + '께',
+      lead: p.custom_body ? esc_(p.custom_body).replace(/\r?\n/g, '<br>') : '신청해 주셔서 감사합니다. ' + (REJECT[p.reason] || REJECT.ineligible),
+      note: '궁금하신 점은 이 메일에 회신해 주세요. 담당자가 안내해 드리겠습니다.',
       card: 'none', btns: p.reason === 'capacity_full' ? [['사이트 바로가기', site, 0]] : [], guide: []
     },
     cancelled: {
@@ -319,6 +321,7 @@ function ics_(p) {
     'DESCRIPTION:13:00부터 지하 1층 등록 데스크에서 성함과 소속 확인 후 명찰 수령.',
     'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
 }
+function text1_(s) { return String(s || '').replace(/\s+/g, ' ').trim(); }
 function esc_(s) {
   return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 }
@@ -329,11 +332,11 @@ function text_(h) {
     .replace(/&amp;/g, '&').replace(/&nbsp;/g, ' ').replace(/&#\d+;/g, '').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
 }
 
-/** 설치 확인용: 실행 계정 메일함으로 초청 + 4종 + 반려 사유 3종을 보냅니다 */
+/** 설치 확인용: 실행 계정 메일함으로 초청·참석 확정·취소·D-3·감사·반려(예시 문구) 6종을 보냅니다 */
 function testAll() {
   const me = Session.getActiveUser().getEmail();
   const links = { site: 'https://seminar.irkudos.co.kr/', android: 'https://kudos.agmlive.co.kr/appstore/juju-pass/redirect', survey: 'https://example.com/survey' };
   const base = { reg_no: 0, name: '테스트', title: '매니저', company: 'IR큐더스', email: me, cancel_token: '00000000-0000-0000-0000-000000000000', links: links };
   ['invite', 'confirmed', 'cancelled', 'reminder', 'thanks'].forEach(t => send_(Object.assign({}, base, { type: t, invite_token: '00000000-0000-0000-0000-000000000000' })));
-  ['ineligible', 'company_full', 'capacity_full'].forEach(r => send_(Object.assign({}, base, { type: 'rejected', reason: r })));
+  send_(Object.assign({}, base, { type: 'rejected', custom_title: '참석 신청이 반려되었습니다', custom_body: '전자주주총회 플랫폼 시연 설명회에 관심을 가져 주셔서 감사합니다.\n테스트용 반려 안내 문구입니다.' }));
 }

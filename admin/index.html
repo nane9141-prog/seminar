@@ -66,6 +66,27 @@ main{padding:24px;max-width:1600px;margin:0 auto;display:grid;gap:20px}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
 th{position:sticky;top:0;z-index:1;background:#202020;font-size:12px;color:var(--fg-3);font-weight:700;white-space:nowrap}
+th[data-sort]{cursor:pointer;user-select:none}
+th[data-sort]:hover{color:var(--fg)}
+th[data-sort]::after{content:"↕";margin-left:4px;opacity:.35}
+th[data-sort][aria-sort=ascending]::after{content:"↑";opacity:1;color:var(--blue)}
+th[data-sort][aria-sort=descending]::after{content:"↓";opacity:1;color:var(--blue)}
+/* 수동 반려 메일 */
+.rjd{border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--fg);padding:0;width:min(560px,calc(100vw - 32px))}
+.rjd::backdrop{background:rgba(0,0,0,.6)}
+.rjd form{display:grid;gap:14px;padding:24px}
+.rjd h2{margin:0;font-size:17px}
+.rjd .who{margin:-6px 0 0;color:var(--fg-3);font-size:13px}
+.rjd label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--fg-2)}
+.rjd input[type=text],.rjd textarea{width:100%;padding:10px 12px;border:1px solid #3a3a3a;border-radius:8px;background:#111;font:400 14px/1.6 inherit;color:var(--fg)}
+.rjd textarea{min-height:200px;resize:vertical}
+.rjd input:focus,.rjd textarea:focus{outline:0;border-color:var(--blue)}
+.rjd .tpl{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--fg-3)}
+.rjd .tpl button{border:1px solid var(--line);background:none;color:var(--fg-2);border-radius:99px;padding:4px 10px;font-size:12px;cursor:pointer}
+.rjd .tpl button:hover{border-color:var(--blue);color:var(--blue)}
+.rjd .chk{display:flex;gap:8px;align-items:center;font-weight:500}
+.rjd .ft{display:flex;justify-content:flex-end;gap:8px}
+.rjd .hint{margin:0;font-size:12px;color:var(--fg-3)}
 tbody tr:hover{background:#1f1f1f}
 td.num{color:var(--fg-3);white-space:nowrap}
 td .sub{display:block;color:var(--fg-3);font-size:12px}
@@ -183,6 +204,18 @@ td.nw{white-space:nowrap}
     </form>
     <div class="tw" id="tw"></div>
   </main>
+  <dialog class="rjd" id="rjDlg">
+    <form id="rjForm" method="dialog">
+      <h2>참석 신청 반려 메일</h2>
+      <p class="who" id="rjWho"></p>
+      <div class="tpl"><span>사유 문구 넣기</span><button type="button" data-t="ineligible">대상 기준 미충족</button><button type="button" data-t="company_full">기업당 2자리 마감</button><button type="button" data-t="capacity_full">전체 정원 마감</button></div>
+      <label>타이틀 <span class="hint">메일 제목과 본문 큰 제목으로 쓰입니다</span><input type="text" id="rjTitle" maxlength="120" required></label>
+      <label>내용<textarea id="rjBody" maxlength="3000" required></textarea></label>
+      <label class="chk"><input type="checkbox" id="rjCancel" checked> 신청도 취소 처리 (자리 반환 · 자동 취소 메일은 나가지 않음)</label>
+      <p class="hint">메일 상단 뱃지는 "참석 신청 반려"로 표시됩니다. 받는 분 회사·성함은 자동으로 들어갑니다.</p>
+      <div class="ft"><button class="btn btn--ghost" type="button" id="rjClose">닫기</button><button class="btn btn--bad" type="submit" id="rjSend">반려 메일 보내기</button></div>
+    </form>
+  </dialog>
 </div>
 <div class="toast" id="toast" role="status" hidden></div>
 
@@ -195,7 +228,7 @@ td.nw{white-space:nowrap}
   const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const ST={confirmed:'확정',pending:'승인 대기',rejected:'반려',cancelled:'취소'};
   const RJ={ineligible:'대상 기준 미충족',company_full:'기업당 2자리 마감',capacity_full:'전체 정원 마감'};
-  let rows=[],settings={},filter='all',timer=null,invitees=[],cos=[],invF='all';
+  let rows=[],settings={},filter='all',timer=null,invitees=[],cos=[],invF='all',sortK=null,sortD=1,rjRow=null;
 
   function toast(msg,bad){const t=$('#toast');t.textContent=msg;t.className='toast'+(bad?' bad':'');t.hidden=false;clearTimeout(t._t);t._t=setTimeout(()=>t.hidden=true,bad?6000:2500);}
   const fmtPhone=p=>p&&p.length===11?p.slice(0,3)+'-'+p.slice(3,7)+'-'+p.slice(7):p&&p.length===10?p.slice(0,3)+'-'+p.slice(3,6)+'-'+p.slice(6):p||'';
@@ -368,18 +401,52 @@ td.nw{white-space:nowrap}
     $('#invSave').disabled=!list.length;
   }
 
+  /* --- 수동 반려 메일 --- */
+  const RJT={
+    ineligible:'이번 설명회는 2027년 전자주주총회 의무화 대상 기업(최근 사업연도 말 자산총액 2조 원 이상 상장회사)을 대상으로 운영되어, 신청하신 기업은 참석을 확정하기 어렵습니다.',
+    company_full:'원활한 운영을 위해 기업별 참석 인원을 2명으로 제한하고 있으며, 신청하신 기업은 이미 2명의 참석이 확정되어 추가로 참석을 확정하기 어렵습니다.',
+    capacity_full:'전체 정원 300명이 모두 마감되어 참석을 확정하기 어렵습니다. 취소로 자리가 생기면 사이트에서 다시 신청하실 수 있습니다.'};
+  const RJ_BODY=reason=>'전자주주총회 플랫폼 시연 설명회에 관심을 가져 주셔서 감사합니다.\n\n'+reason+'\n\n양해 부탁드리며, 앞으로도 IR큐더스에 많은 관심 부탁드립니다.';
+  function openRj(r){
+    rjRow=r;
+    $('#rjWho').textContent=`${r.company_name} · ${r.name}${r.title?' '+r.title:''} · ${r.email}`;
+    $('#rjTitle').value=r.reject_mail_title||'참석 신청 결과를 안내드립니다';
+    $('#rjBody').value=r.reject_mail_body||RJ_BODY(RJT[suggestReason(r)]||'(반려 사유를 입력해 주세요)');
+    $('#rjCancel').checked=r.status==='confirmed';$('#rjCancel').disabled=r.status!=='confirmed';
+    $('#rjSend').disabled=false;$('#rjDlg').showModal();$('#rjTitle').focus();
+  }
+  $('#rjDlg').querySelector('.tpl').addEventListener('click',e=>{const b=e.target.closest('[data-t]');if(!b)return;$('#rjBody').value=RJ_BODY(RJT[b.dataset.t]);});
+  $('#rjClose').addEventListener('click',()=>$('#rjDlg').close());
+  $('#rjForm').addEventListener('submit',async e=>{
+    e.preventDefault();if(!rjRow)return;
+    const t=$('#rjTitle').value.trim(),body=$('#rjBody').value.trim(),cancel=$('#rjCancel').checked&&!$('#rjCancel').disabled;
+    if(t.length<2||body.length<5){toast('타이틀과 내용을 입력해 주세요',true);return;}
+    if(!confirm(`${rjRow.company_name} ${rjRow.name}님(${rjRow.email})에게 반려 메일을 보낼까요?`+(cancel?'\n신청도 취소 처리되어 자리가 반환됩니다.':'')))return;
+    $('#rjSend').disabled=true;
+    const {error}=await sb.rpc('admin_send_reject',{p_id:rjRow.id,p_title:t,p_body:body,p_cancel:cancel});
+    if(error){toast('발송 실패: '+error.message,true);$('#rjSend').disabled=false;return;}
+    $('#rjDlg').close();toast(`${rjRow.name}님께 반려 메일을 보냈습니다`+(cancel?' · 신청 취소 처리':''));load(true);
+  });
+
   function visible(){
     const q=norm($('#q').value);
     return rows.filter(r=>(filter==='all'||(filter==='attended'?r.status==='confirmed'&&r.attended:r.status===filter))&&(!q||[r.company_name,r.name,r.email,r.phone,r.dept,r.biz_no,r.companies&&r.companies.code].some(v=>norm(v).includes(q))));
   }
 
+  // 정렬: No. · 현장(참석 → 미확인 → 해당 없음) · 회사 · 이름. 같은 값이면 신청 순서
+  const SORT={no:r=>r.reg_no,att:r=>r.status==='confirmed'?(r.attended?0:1):2,co:r=>r.company_name||'',name:r=>r.name||''};
+  function sorted(list){
+    if(!sortK)return list;
+    const f=SORT[sortK];
+    return [...list].sort((a,b)=>{const x=f(a),y=f(b);const c=typeof x==='string'?x.localeCompare(y,'ko'):x-y;return (c||a.reg_no-b.reg_no)*sortD;});
+  }
   function renderRows(){
-    const list=visible(),invEm=invByEmail();
+    const list=sorted(visible()),invEm=invByEmail();
     if(!list.length){$('#tw').innerHTML='<div class="empty">해당하는 신청이 없습니다</div>';return;}
-    $('#tw').innerHTML=`<table><thead><tr><th>No.</th><th>상태</th><th>현장</th><th>회사</th><th>이름</th><th>부서 · 직급</th><th>연락처</th><th>사전질문</th><th>신청</th><th>처리</th><th>메모</th><th></th></tr></thead><tbody>${list.map(r=>`
+    $('#tw').innerHTML=`<table><thead><tr><th data-sort="no" aria-sort="${sortK==='no'?(sortD>0?'ascending':'descending'):'none'}">No.</th><th>상태</th><th data-sort="att" aria-sort="${sortK==='att'?(sortD>0?'ascending':'descending'):'none'}">현장</th><th data-sort="co" aria-sort="${sortK==='co'?(sortD>0?'ascending':'descending'):'none'}">회사</th><th data-sort="name" aria-sort="${sortK==='name'?(sortD>0?'ascending':'descending'):'none'}">이름</th><th>부서 · 직급</th><th>연락처</th><th>사전질문</th><th>신청</th><th>처리</th><th>메모</th><th></th></tr></thead><tbody>${list.map(r=>`
 <tr data-id="${r.id}">
   <td class="num">${r.reg_no}</td>
-  <td><span class="pill ${r.status}">${ST[r.status]}</span>${r.status==='rejected'&&r.reject_reason?`<span class="sub">${RJ[r.reject_reason]}</span>`:''}</td>
+  <td><span class="pill ${r.status}">${ST[r.status]}</span>${r.status==='rejected'&&r.reject_reason?`<span class="sub">${RJ[r.reject_reason]}</span>`:''}${r.reject_mail_at?`<span class="sub" title="${esc(r.reject_mail_title||'')}">반려 메일 ${fmtDate(r.reject_mail_at)}</span>`:''}</td>
   <td>${r.status==='confirmed'?`<label class="att ${r.attended?'on':''}"><input type="checkbox" class="attck" ${r.attended?'checked':''}>${r.attended?'참석':'미확인'}</label>`:''}</td>
   <td>${esc(r.company_name)}${r.is_manual?'<span class="tag">직접입력</span>':''}<span class="sub">${r.companies?esc(r.companies.market+' '+r.companies.code):esc(r.biz_no||'')}</span></td>
   <td class="nw"><b>${esc(r.name)}</b>${invEm.has(lc(r.email))?'<span class="tag inv">초청</span>':''}</td>
@@ -394,7 +461,9 @@ td.nw{white-space:nowrap}
   }
   function actions(r){
     if(r.status==='pending')return '<button class="btn btn--ok btn--sm" data-a="approved">승인</button><button class="btn btn--bad btn--sm" data-a="rejected">반려</button>';
-    if(r.status==='confirmed')return '<button class="btn btn--ghost btn--sm" data-a="cancelled">취소</button>';
+    const rjb='<button class="btn btn--bad btn--sm" data-a="rjmail">반려 메일</button>';
+    if(r.status==='confirmed')return '<button class="btn btn--ghost btn--sm" data-a="cancelled">취소</button>'+rjb;
+    if(r.status==='cancelled'&&r.decided_by!=='신청자')return rjb;
     return '';
   }
 
@@ -427,9 +496,12 @@ td.nw{white-space:nowrap}
   const LABEL={approved:'승인',rejected:'반려',cancelled:'취소'};
   $('#tw').addEventListener('click',async e=>{
     const q=e.target.closest('.q');if(q){q.classList.toggle('open');return;}
+    const th=e.target.closest('th[data-sort]');
+    if(th){const k=th.dataset.sort;if(sortK===k){if(sortD===1)sortD=-1;else{sortK=null;sortD=1;}}else{sortK=k;sortD=1;}renderRows();return;}
     const b=e.target.closest('[data-a]');if(!b)return;
     const tr=b.closest('tr'),r=rows.find(x=>x.id===tr.dataset.id),a=b.dataset.a;
     if(a==='rejected'){showReject(tr,r);return;}
+    if(a==='rjmail'){openRj(r);return;}
     if(a==='rj-cancel'){tr.querySelector('.acts').innerHTML=actions(r);return;}
     if(a==='rj-go'){
       const reason=tr.querySelector('.rj select').value;
