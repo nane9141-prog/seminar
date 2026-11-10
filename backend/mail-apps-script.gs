@@ -291,7 +291,7 @@ function guide_(m, x) {
         ['13:40', '전자주주총회 제도 도입 및 진행 관련 주요 실무 쟁점', '김승준 변호사 · 김앤장 법률사무소'],
         ['14:35', '상법 개정과 전자주총이 몰고 올 기업 경영의 지각변동', '권재열 연구소장 · 한국주주총회연구소'],
         ['15:30', '전자주주총회 도입·운영 방안 및 통합 솔루션 소개', '박성용 본부장 · IR큐더스'],
-        ['16:10', '전자주주총회 운영 시연 및 표결 참여', '현장 출석이나 전자출석으로 모의 전자주주총회 투표 참여'], ['17:25', '사전 질문 및 현장 질의응답, 경품 추첨 및 폐회', '']];
+        ['16:10', '전자주주총회 운영 시연 및 표결 참여', '박성용 본부장 · IR큐더스'], ['17:25', '사전 질문 및 현장 질의응답, 경품 추첨 및 폐회', '']];
       h += '<p style="margin:32px 0 10px;font:700 15px/1.4 ' + FONT + ';color:' + C.ink + '">타임테이블</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0">' + tt.map(t =>
         '<tr><td style="width:56px;vertical-align:top;padding:9px 0;border-top:1px solid ' + C.line + ';font:600 13px/1.5 ' + FONT + ';color:' + C.blue + '">' + t[0] + '</td>' +
         '<td style="padding:9px 0;border-top:1px solid ' + C.line + ';font:600 14px/1.5 ' + FONT + ';color:' + C.ink + '">' + t[1] +
