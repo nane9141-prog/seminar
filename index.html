@@ -69,7 +69,7 @@ a{color:inherit}
 .dday{font-size:13px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums}
 
 /* Hero: flowing blue gradient */
-.hero{position:relative;overflow:hidden;isolation:isolate;min-height:82vh;min-height:82svh;display:grid;place-items:center;text-align:center;background:#4f78ea;padding:96px 24px}
+.hero{position:relative;overflow:hidden;isolation:isolate;min-height:82vh;min-height:82svh;display:grid;place-items:center;text-align:center;background:#000003;padding:96px 24px}
 #glow{position:absolute;inset:0;width:100%;height:100%;z-index:-1;display:block}
 .hero__k{font-size:15px;font-weight:600;color:rgba(255,255,255,.78);letter-spacing:.02em}
 .hero h1{position:relative;margin-top:18px;font-weight:800;color:#fff;font-size:clamp(40px,7.2vw,92px);line-height:1.12;letter-spacing:0;text-wrap:balance}
@@ -813,329 +813,180 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
 </script>
 
 <script>
-/* ---------- Hero: Blue Bloom Light (아티팩트 'Blue Bloom Light' 기본값 그대로 · 속도 2 · 시퀀스 35초 루프 · 효과 A: 도트 투표 기호 6–16s · 효과 B: 도트 플러스 20–30s) ---------- */
+/* ---------- Hero: Four States (아티팩트 'Four States' 기본값 · 1개 크게 · 오브젝트 크기 0.8 · 구체 → 수렴 → 소용돌이 → 방사 4단계 루프) ---------- */
 (function(){
-  const LOOP=35.0,cv=document.getElementById('glow'),gl=cv.getContext('webgl',{alpha:false,antialias:false});
-  if(!gl)return;
-  const vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
-  const fs1=`
-precision highp float;
-uniform vec2 R; uniform float PH;
-uniform vec3 C0,C1,C2,C3,ACC;
-uniform float AMT, WHITE, SCALE, WARP, CAM, SPEC, CREST, DARK, ZOOM;
-#define TAU 6.2831853
-float hash(vec2 p){vec3 p3=fract(vec3(p.xyx)*.1031);p3+=dot(p3,p3.yzx+33.33);return fract((p3.x+p3.y)*p3.z);}
-float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*f*(f*(f*6.-15.)+10.);
-  return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}
-float fbm2(vec2 p){return .62*vn(p)+.38*vn(p*1.9+vec2(3.7,1.1));}
-float field(vec2 p,float ph){
-  vec2 cyc=vec2(cos(ph),sin(ph));
-  vec2 q=p*.45/SCALE;
-  float n1=fbm2(q+cyc*.55);
-  float n2=fbm2(q*1.25+vec2(n1*1.3,-n1)*WARP+cyc.yx*.45+vec2(4.1,2.3));
-  vec2 pp=p/SCALE;
-  float b1=.5+.5*sin((pp.x*.62+pp.y*.95)*1.25+n2*4.2*WARP+ph);
-  float b2=.5+.5*sin((pp.x*-.9+pp.y*.4)*.9+n1*3.4*WARP-ph+1.3);
-  return .07+WHITE-DARK*.30+.44*b1+.22*b2+.28*n2;
-}
-vec3 shade(float f){
-  // Light: 코발트 → 아쿠아 민트로 넓고 부드럽게 번지는 램프
-  vec3 c=mix(C0,C1,smoothstep(.12,.50,f));
-  c=mix(c,C2,smoothstep(.34,.70,f));
-  c=mix(c,C3,smoothstep(.52,.95,f));
-  c=mix(c,mix(C3,vec3(.93,.97,1.),.5),smoothstep(.88,1.15,f)*.35);
-  return c;
-}
-void main(){
-  vec2 p=(gl_FragCoord.xy-.5*R)/R.y*2.;
-  float ph=PH*TAU;
-  p=p/(ZOOM*(1.+.10*CAM*sin(ph)))+CAM*vec2(.15*sin(ph),.08*sin(2.*ph));
-  float f=field(p,ph);
-  vec2 e=vec2(.018,.010)*SPEC;
-  vec3 col=vec3(shade(field(p+e,ph)).r,shade(f).g,shade(field(p-e,ph)).b);
-  col+=mix(C3,vec3(1.),.4)*exp(-pow((f-.60)/.018,2.))*.28*CREST;
-  float band=smoothstep(.38,.50,f)*(1.-smoothstep(.56,.68,f));
-  float drift=.5+.5*sin(p.x*.9-p.y*.6+ph+f*4.);
-  col=mix(col,ACC*(.75+.35*f),clamp(band*(.55+.9*drift)*AMT*3.2,0.,.85));
-  col*=1.-.05*dot(p*.45,p*.45);
-  col=mix(col,C0*.82,DARK*.6*(1.-smoothstep(.50,.72,f)));
-  float lum=clamp(smoothstep(.02,.95,f)*(1.-DARK),0.,1.);
-  gl_FragColor=vec4(clamp(col,0.,1.),lum);
-}`;
-  const fs2=`
-precision highp float;
-uniform vec2 R; uniform float T;
-uniform vec3 BG, MARK; uniform float GRAIN, THR;
-uniform sampler2D TEX, ATLAS;
-uniform vec4 FA, FA2, FB, FB2;
-uniform sampler2D TX; uniform vec4 BOX;
-float h(vec2 p){vec3 p3=fract(vec3(p.xyx)*.1031);p3+=dot(p3,p3.yzx+33.33);return fract((p3.x+p3.y)*p3.z);}
-vec4 S(vec2 px){return texture2D(TEX,px/R);}
-// marks are drawn in a light tint over the untouched gradient
-vec3 markOf(vec3 c){return mix(c,MARK,.6);}
-float sdBox(vec2 p,vec2 b){vec2 d=abs(p)-b;return length(max(d,0.))+min(max(d.x,d.y),0.);}
-float sdSeg(vec2 p,vec2 a,vec2 b){vec2 pa=p-a,ba=b-a;float t=clamp(dot(pa,ba)/dot(ba,ba),0.,1.);return length(pa-ba*t);}
-// mark shapes for the dot sets (distance in px; <0 inside)
-float shapeD(vec2 q,float rr,float set,float k){
-  float sw=max(1.2,rr*.24);
-  if(set<.5) return length(q)-rr;                                   // 원 도트
-  if(set<1.5){                                                      // 투표 기호 O 60% · X 20% · △ 20%
-    if(k<.6) return abs(length(q)-rr*.80)-sw*.5;
-    if(k<.8){float a=rr*.68;return min(sdSeg(q,vec2(-a),vec2(a)),sdSeg(q,vec2(-a,a),vec2(a,-a)))-sw*.5;}
-    vec2 A=vec2(0.,rr*.86),B=vec2(-rr*.86,-rr*.62),C=vec2(rr*.86,-rr*.62);
-    return min(min(sdSeg(q,A,B),sdSeg(q,B,C)),sdSeg(q,C,A))-sw*.5;
-  }
-  if(set<2.5) return abs(length(q)-rr*.80)-sw*.45;                  // 링
-  if(set<3.5){float a=rr*.86;return min(sdBox(q,vec2(a,sw*.5)),sdBox(q,vec2(sw*.5,a)));} // 플러스
-  if(set<4.5){                                                      // 투표 용지 ☐ · ☑
-    float a=rr*.74;float box=abs(sdBox(q,vec2(a)))-sw*.42;
-    if(k<.45){float ck=min(sdSeg(q,vec2(-a*.55,0.),vec2(-a*.12,-a*.45)),sdSeg(q,vec2(-a*.12,-a*.45),vec2(a*.62,a*.52)))-sw*.5;return min(box,ck);}
-    return box;
-  }
-  if(set<5.5){                                                      // 막대 그래프 (득표율)
-    float hgt=rr*mix(.35,1.,k);return sdBox(q-vec2(0.,hgt-rr),vec2(rr*.32,hgt));
-  }
-  return (abs(q.x)+abs(q.y))*.7071-rr*.72;                          // 마름모
-}
-vec3 fxDots(vec2 px,vec3 o,float sc,float g,float set){
-  float sp=sc*1.9;                                                  // wider spacing than the mark itself
-  float row=floor(px.y/sp); float off=mod(row,2.)*.5*sp;
-  float cx=floor((px.x-off)/sp);
-  vec2 ctr=vec2((cx+.5)*sp+off,(row+.5)*sp);
-  vec4 s=S(ctr);
-  float k=h(vec2(cx,row)+11.3);
-  float rr=.5*sc*mix(.6,1.,1.-s.a)*mix(1.6,1.,smoothstep(0.,1.,g));
-  float d=shapeD(px-ctr,rr,set,k);
-  float m=1.-smoothstep(-.6,.8,d);
-  return mix(o,markOf(s.rgb),m);
-}
-vec3 fxCode(vec2 px,vec3 o,float sc,float set){
-  vec2 cs=vec2(sc*.62,sc);
-  vec2 cell=floor(px/cs), lp=fract(px/cs);
-  vec4 s=S((cell+.5)*cs);
-  float k=floor(T*48.+h(cell)*6.);
-  float gi=floor(h(cell+k*.731)*16.);
-  float gly=texture2D(ATLAS,vec2((gi+lp.x)/16.,(3.-set+lp.y)/4.)).r;
-  float a=step(.12,h(cell*1.37+k));
-  return mix(o,markOf(s.rgb),gly*a);
-}
-vec3 fxPixel(vec2 px,vec3 o,float sc,float set){
-  vec2 cell=floor(px/sc), lp=fract(px/sc);
-  vec4 s=S((cell+.5)*sc);
-  vec3 c=mix(s.rgb,MARK,.25);
-  if(set<.5) return mix(o*.55,c,step(.12,lp.x)*step(.12,lp.y));                 // 사각 LED
-  if(set<1.5) return mix(o*.55,c,1.-smoothstep(.36,.44,length(lp-.5)));          // 원형 LED
-  if(set<2.5) return s.rgb;                                                      // 모자이크
-  if(set<3.5){vec3 r=S(vec2(px.x,(cell.y+.5)*sc)).rgb;return mix(o*.6,mix(r,MARK,.2),step(lp.y,.6));} // 스캔라인
-  float lv=1.-s.a;                                                               // 이퀄라이저
-  float seg=step(.18,fract(lp.y*4.));
-  return mix(o*.6,c,step(lp.y,lv)*step(.14,lp.x)*step(lp.x,.86)*seg);
-}
-vec3 fxContour(vec2 px,vec3 o,float sc,float set){
-  float N=clamp(640./sc,6.,80.);
-  vec4 s=S(px);
-  vec2 e=vec2(1.,0.);
-  vec2 gr=vec2(S(px+e.xy).a-S(px-e.xy).a,S(px+e.yx).a-S(px-e.yx).a)*.5;
-  float gl=length(gr);
-  float d=abs(fract(s.a*N+.5)-.5)/(gl*N+1e-4);
-  float on=smoothstep(.00003,.0003,gl);
-  vec3 mk=mix(s.rgb,MARK,.85);
-  if(set<.5){float lw=max(1.,sc/14.);return mix(o,mk,(1.-smoothstep(lw,lw+1.,d))*on);}           // 등고선
-  if(set<1.5){float lw=max(1.,sc/14.);vec2 tg=vec2(-gr.y,gr.x)/(gl+1e-6);                       // 점선
-    float dash=step(.45,fract(dot(px,tg)/(sc*.7)));return mix(o,mk,(1.-smoothstep(lw,lw+1.,d))*on*dash);}
-  if(set<2.5){float lw=max(.8,sc/14.)*mix(.6,2.6,1.-s.a);return mix(o,mk,(1.-smoothstep(lw,lw+1.,d))*on);} // 굵기 변화
-  if(set<3.5){float bnd=floor(s.a*N*.5);float alt=mod(bnd,2.);                                  // 지형 단계
-    float lw=max(.8,sc/18.);vec3 c=mix(o,mix(o,MARK,.35),alt*.6);return mix(c,mk,(1.-smoothstep(lw,lw+1.,d))*on*.7);}
-  float sp=sc*.5;float hv=abs(fract((px.x-px.y)/sp)-.5)*sp;                                     // 해칭
-  return mix(o,mk,1.-smoothstep((1.-s.a)*sp*.22,(1.-s.a)*sp*.22+1.,hv));
-}
-vec3 fxGlitch(vec2 px,float sc,float set){
-  float k=floor(T*36.);
-  if(set<.5){                                                                    // RGB 분리
-    float row=floor(px.y/sc);
-    float sh=step(.72,h(vec2(row,k)))*(h(vec2(row*3.1,k+1.))-.5)*sc*8.;
-    vec2 q=px+vec2(sh,0.);float sp=sc*.3*(.5+h(vec2(k,2.)));
-    vec3 c=vec3(S(q+vec2(sp,0.)).r,S(q).g,S(q-vec2(sp,0.)).b);
-    return mix(c,c*.86,step(.5,fract(px.y/3.)));
-  }
-  if(set<1.5){                                                                   // 블록
-    vec2 bs=vec2(sc*4.,sc*2.);vec2 bc=floor(px/bs);float r=h(bc+k*.37);
-    vec2 off=step(.72,r)*(vec2(h(bc+k),h(bc-k))-.5)*bs*2.;
-    vec3 c=S(px+off).rgb;
-    return mix(c,mix(c,MARK,.55),step(.90,r));
-  }
-  if(set<2.5){                                                                   // 스캔 노이즈
-    float row=floor(px.y/2.);float r=h(vec2(row,k));
-    vec3 c=S(px+vec2(step(.8,r)*(h(vec2(row,k+3.))-.5)*sc*3.,0.)).rgb;
-    return c+(h(vec2(px.x*.1,row+k))-.5)*.22*step(.55,r);
-  }
-  if(set<3.5){                                                                   // 픽셀 정렬 (세로 번짐)
-    float col=floor(px.x/max(2.,sc*.25));float r=h(vec2(col,floor(T*12.)));
-    float len=step(.6,r)*sc*8.*h(vec2(col,3.));
-    return S(vec2(px.x,px.y+len*fract(px.y/(len+1.)))).rgb;
-  }
-  float w=sin(px.y*.045+T*40.)*sc*.25+step(.97,h(vec2(floor(px.y/40.),k)))*sc*2.;  // VHS
-  vec2 q=px+vec2(w,0.);float sp=sc*.22;
-  vec3 c=vec3(S(q+vec2(sp,0.)).r,S(q).g,S(q-vec2(sp*1.5,0.)).b);
-  float l=dot(c,vec3(.3,.59,.11));
-  return mix(c,vec3(l)*vec3(.9,.95,1.1),.25)*(.92+.08*sin(px.y*1.6));
-}
-vec3 fx(float ty,vec2 px,vec3 o,float sc,float set,float g,float dset){
-  if(ty<1.5) return fxDots(px,o,sc,g,dset);
-  if(ty<2.5) return fxCode(px,o,sc,set);
-  if(ty<3.5) return fxPixel(px,o,sc,dset);
-  if(ty<4.5) return fxContour(px,o,sc,dset);
-  return fxGlitch(px,sc,dset);
-}
-float mask(float mode,vec2 p,float ip,float op){
-  if(ip<=0.) return 0.;
-  if(mode<.5) return ip*(1.-op);
-  float soft=.08,c;
-  if(mode<1.5) c=p.x;
-  else{vec2 a=vec2(R.x/R.y,1.);c=length((p-.5)*a)/(.5*length(a));}
-  float im=smoothstep(c-soft,c+soft,ip*(1.+2.*soft)-soft);
-  float om=smoothstep(c-soft,c+soft,op*(1.+2.*soft)-soft);
-  return im*(1.-om);
-}
-void main(){
-  vec2 px=gl_FragCoord.xy,p=px/R;
-  vec4 s0=S(px);
-  vec3 col=s0.rgb;
-  // effects live only in the darker parts of the gradient; light areas stay as they are
-  float dark=1.-smoothstep(THR-.12,THR+.12,s0.a);
-  float u=R.y/1080.;
-  if(FA.x>.5&&dark>.001){float g=mask(FA.y,p,FA2.x,FA2.y);float m=(FA.x<1.5?smoothstep(0.,.3,g):g)*FA.w*dark;if(m>.001)col=mix(col,fx(FA.x,px,s0.rgb,FA.z*u,FA2.z,g,FA2.w),m);}
-  if(FB.x>.5&&dark>.001){float g=mask(FB.y,p,FB2.x,FB2.y);float m=(FB.x<1.5?smoothstep(0.,.3,g):g)*FB.w*dark;if(m>.001)col=mix(col,fx(FB.x,px,col,FB.z*u,FB2.z,g,FB2.w),m);}
-  col+=(h(px+fract(T*97.)*100.)-.5)*GRAIN;
-  col=clamp(col,0.,1.);
-  // hero text: coloured by the brightness right behind each pixel — dark/mid ground → white, bright ground → deep navy
-  vec2 tp=(px-BOX.xy)/BOX.zw;
-  if(tp.x>=0.&&tp.x<=1.&&tp.y>=0.&&tp.y<=1.){
-    float m=texture2D(TX,vec2(tp.x,1.-tp.y)).a;
-    if(m>0.){
-      float L=dot(col,vec3(.299,.587,.114));
-      // 블루 중간색 없이 흰색/남색 두 가지만 — 글자가 배경 블루에 묻히지 않게
-      vec3 tc=mix(vec3(1.),vec3(.043,.114,.318),smoothstep(.56,.64,L));
-      col=mix(col,tc,m);
+const cv=document.getElementById('glow'),gl=cv.getContext('webgl',{alpha:false,antialias:true});
+if(!gl)return;
+const S={mode:1,osz:.8,stage:4.5,morph:.55,spin:1,wob:1,lines:170,lbr:1,parts:300,psz:1};
+let dirty=true;
+/* ---------- geometry: 4 states, each a set of lines (K points) and particles ---------- */
+const K=40,MAXL=260,MAXP=600;
+function rng(seed){let s=seed>>>0;return()=>{s=(s+0x6D2B79F5)>>>0;let t=s;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296;};}
+const hex=h=>[1,3,5].map(i=>parseInt(h.substr(i,2),16)/255);
+const rotZ=(p,a)=>{const c=Math.cos(a),s=Math.sin(a);return[p[0]*c-p[1]*s,p[0]*s+p[1]*c,p[2]];};
+const rotY=(p,a)=>{const c=Math.cos(a),s=Math.sin(a);return[p[0]*c+p[2]*s,p[1],-p[0]*s+p[2]*c];};
+const rotX=(p,a)=>{const c=Math.cos(a),s=Math.sin(a);return[p[0],p[1]*c-p[2]*s,p[1]*s+p[2]*c];};
+const sphereDir=r=>{const u=r()*2-1,a=r()*Math.PI*2,q=Math.sqrt(1-u*u);return[q*Math.cos(a),u,q*Math.sin(a)];};
+
+// state 0 구체: meridian great circles, mint → blue across the face, bright rim
+// state 1 수렴: half-circles that all gather into one point on the right edge
+// state 2 소용돌이: spiralling orbits collapsing into the centre, galaxy of particles with a trailing arm
+// state 3 방사: rays bursting out of the centre
+const STATES=[
+  {name:'구체',ca:hex('#c7ffd9'),cb:hex('#2f52ff'),axis:'x',a0:.07,rim:.55,pc:hex('#d6ffe3'),pa:.95,ps:[1.6,3.6]},
+  {name:'수렴',ca:hex('#1b3a52'),cb:hex('#5d6bff'),axis:'x',a0:.06,rim:.65,pc:hex('#7f8cff'),pa:.55,ps:[.8,1.7]},
+  {name:'소용돌이',ca:hex('#9fb4ff'),cb:hex('#e9f0ff'),axis:'r',a0:.075,rim:0,pc:hex('#ffffff'),pa:.95,ps:[1.3,2.8]},
+  {name:'방사',ca:hex('#e2f2ff'),cb:hex('#4d73d8'),axis:'s',a0:.11,rim:0,pc:hex('#b8d8ff'),pa:.6,ps:[.7,1.5]},
+];
+function buildLines(st,n){
+  const r=rng(101+st*977),out=new Float32Array(n*K*3);
+  for(let i=0;i<n;i++){
+    const a=r(),b=r(),c=r(),d=sphereDir(r);
+    for(let j=0;j<K;j++){
+      const s=j/(K-1);let p;
+      if(st===0){const ph=i/n*Math.PI+a*.04,th=s*Math.PI;p=[Math.sin(th)*Math.cos(ph),Math.cos(th),Math.sin(th)*Math.sin(ph)];p=rotZ(p,-.42);}
+      else if(st===1){const ph=Math.PI*(.05+1.05*(i/n))+a*.05,th=s*Math.PI;p=[Math.cos(th),Math.sin(th)*Math.cos(ph),Math.sin(th)*Math.sin(ph)];p=rotZ(p,-.5);p=[p[0]*.98,p[1],p[2]];}
+      else if(st===2){const r0=.28+.9*Math.pow(a,.7),ang=b*6.283+s*Math.PI*2.4,rr=r0*(1-.94*Math.pow(s,.85));p=[rr*Math.cos(ang),rr*Math.sin(ang)*.74,rr*Math.sin(ang)*.3];p=rotZ(p,.45);}
+      else{const L=.5+.55*c;p=[d[0]*s*L,d[1]*s*L,d[2]*s*L];}
+      out.set(p,(i*K+j)*3);
     }
   }
-  gl_FragColor=vec4(col,1.);
-}`;
-  function sh(t,s){const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return o;}
-  function link(fs){const p=gl.createProgram();gl.attachShader(p,sh(gl.VERTEX_SHADER,vs));gl.attachShader(p,sh(gl.FRAGMENT_SHADER,fs));gl.bindAttribLocation(p,0,'p');gl.linkProgram(p);return gl.getProgramParameter(p,gl.LINK_STATUS)?p:null;}
-  const pr=link(fs1),pr2=link(fs2);if(!pr||!pr2)return;
-  gl.bindBuffer(gl.ARRAY_BUFFER,gl.createBuffer());gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
-  gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
-  const U1={},U2={};
-  ['R','PH','C0','C1','C2','C3','ACC','AMT','WHITE','SCALE','WARP','CAM','SPEC','CREST','DARK','ZOOM'].forEach(n=>U1[n]=gl.getUniformLocation(pr,n));
-  ['R','T','BG','MARK','THR','GRAIN','TEX','ATLAS','FA','FA2','FB','FB2','TX','BOX'].forEach(n=>U2[n]=gl.getUniformLocation(pr2,n));
-  // settings = artifact defaults
-  // = 아티팩트 'Blue Bloom Light' 기본값
-  const S={thr:.5,amt:.03,white:0,scale:.5,warp:.65,cam:1,spec:.5,crest:0,grain:.016,speed:2,
-    c0:'#2c41ea',c1:'#4f78ea',c2:'#7fb2e6',c3:'#a8dcdc',acc:'#2ee6c8',
-    fx:[{type:1,mode:0,start:6/35,dur:10/35,trans:4/35,size:10,amt:.5,glyph:0,dset:1},
-        {type:1,mode:0,start:20/35,dur:10/35,trans:4/35,size:10,amt:.5,glyph:0,dset:3}]};
-  const hex=h=>[1,3,5].map(i=>parseInt(h.substr(i,2),16)/255);
-  const KEYS=[
-    {t:0,v:[-0.24,1.00,0.8,0.0,0.55]},{t:3,v:[-0.10,0.95,1.0,0.3,0.18]},{t:6,v:[0.14,0.72,1.1,0.6,0.00]},
-    {t:9,v:[0.00,0.90,1.2,2.2,0.00]},{t:12,v:[0.06,1.15,1.5,1.0,0.00]},{t:15,v:[-0.04,1.05,0.9,0.5,0.05]},{t:18,v:[-0.20,1.00,0.8,0.1,0.42]}];
-  function hermite(t){
-    const B=20,n=KEYS.length;t=((t%B)+B)%B;
-    const at=j=>{const w=Math.floor(j/n),k=KEYS[((j%n)+n)%n];return {t:k.t+w*B,v:k.v};};
-    let i=0;for(let j=0;j<n;j++)if(KEYS[j].t<=t)i=j;
-    const p0=at(i-1),p1=at(i),p2=at(i+1),p3=at(i+2),dt=p2.t-p1.t,u=(t-p1.t)/dt,u2=u*u,u3=u2*u;
-    const h00=2*u3-3*u2+1,h10=u3-2*u2+u,h01=-2*u3+3*u2,h11=u3-u2;
-    return p1.v.map((_,k)=>{const m1=(p2.v[k]-p0.v[k])/(p2.t-p0.t)*dt,m2=(p3.v[k]-p1.v[k])/(p3.t-p1.t)*dt;return h00*p1.v[k]+h10*m1+h01*p2.v[k]+h11*m2;});
+  return out;
+}
+function buildParts(st,n){
+  const r=rng(503+st*331),pos=new Float32Array(n*3),sz=new Float32Array(n);
+  const [s0,s1]=STATES[st].ps;
+  for(let i=0;i<n;i++){
+    let p;
+    if(st===0){do{p=sphereDir(r);}while(p[0]>-.05&&r()>.22);const k=1+(r()-.5)*.06;p=[p[0]*k,p[1]*k,p[2]*k];p=rotZ(p,-.42);}
+    else if(st===1){p=sphereDir(r);const k=1.02+r()*.06;p=[p[0]*k,p[1]*k,p[2]*k];}
+    else if(st===2){
+      if(r()<.22){const t=r();p=[.5+t*1.25+(r()-.5)*.22,.32+t*1.05+(r()-.5)*.22,(r()-.5)*.2];}
+      else{const rr=Math.pow(r(),.55)*1.45,arm=(r()<.5?0:Math.PI),ang=rr*2.9+arm+(r()-.5)*.9;p=[rr*Math.cos(ang),rr*Math.sin(ang)*.74,(r()-.5)*.15];p=rotZ(p,.45);}
+    }
+    else{const d=sphereDir(r),L=(.55+.55*r())*(1+r()*.12);p=[d[0]*L,d[1]*L,d[2]*L];}
+    pos.set(p,i*3);sz[i]=s0+(s1-s0)*Math.pow(r(),2);
   }
-  // 경계 광택: 주기가 다른 물결 3개를 섞어 0–1.5 사이를 불규칙하게 오르내림 (루프 끝과 처음이 이어지도록 정수 주기)
-  const crestRaw=ph=>.5*Math.sin(ph*Math.PI*2*2)+.32*Math.sin(ph*Math.PI*2*3+1.7)+.18*Math.sin(ph*Math.PI*2*5+.6);
-  let cMin=1e9,cMax=-1e9;for(let i=0;i<=700;i++){const v=crestRaw(i/700);cMin=Math.min(cMin,v);cMax=Math.max(cMax,v);}
-  const crest=ph=>{const u=(crestRaw(ph)-cMin)/(cMax-cMin);return 1.5*u*u*(3-2*u);};
-  function env(f,ph){const u=((ph-f.start)%1+1)%1,d=f.dur,t=Math.min(f.trans,d/2);if(u>d)return[0,0];
-    return[t>0?Math.min(u/t,1):1,t>0?Math.max(0,Math.min((u-(d-t))/t,1)):0];}
-  // offscreen field buffer
-  const hf=gl.getExtension('OES_texture_half_float');gl.getExtension('EXT_color_buffer_half_float');
-  let rtType=gl.UNSIGNED_BYTE; // 8-bit buffer: works on every GPU
-  const rtTex=gl.createTexture(),fbo=gl.createFramebuffer();
-  function tp(){gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);}
-  function allocRT(){
-    gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,rtTex);
-    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.NEAREST);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.NEAREST);tp();
-    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,cv.width,cv.height,0,gl.RGBA,rtType,null);
-    gl.bindFramebuffer(gl.FRAMEBUFFER,fbo);gl.framebufferTexture2D(gl.FRAMEBUFFER,gl.COLOR_ATTACHMENT0,gl.TEXTURE_2D,rtTex,0);
-    const ok=gl.checkFramebufferStatus(gl.FRAMEBUFFER)===gl.FRAMEBUFFER_COMPLETE;gl.bindFramebuffer(gl.FRAMEBUFFER,null);
-    if(!ok&&rtType!==gl.UNSIGNED_BYTE){rtType=gl.UNSIGNED_BYTE;allocRT();}
+  return{pos,sz};
+}
+let GL=[],GP=[];
+function build(){GL=[0,1,2,3].map(st=>buildLines(st,S.lines|0));GP=[0,1,2,3].map(st=>buildParts(st,S.parts|0));dirty=false;}
+
+/* ---------- WebGL ---------- */
+function prog(vs,fs){const p=gl.createProgram();[[gl.VERTEX_SHADER,vs],[gl.FRAGMENT_SHADER,fs]].forEach(([t,s])=>{const o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))console.error(gl.getShaderInfoLog(o));gl.attachShader(p,o);});gl.linkProgram(p);return p;}
+const pL=prog('attribute vec2 a;attribute vec4 c;varying vec4 v;void main(){v=c;gl_Position=vec4(a,0.,1.);}',
+  'precision mediump float;varying vec4 v;void main(){gl_FragColor=vec4(v.rgb*v.a,v.a);}');
+const pP=prog('attribute vec2 a;attribute vec4 c;attribute float s;varying vec4 v;void main(){v=c;gl_PointSize=s;gl_Position=vec4(a,0.,1.);}',
+  'precision mediump float;varying vec4 v;void main(){vec2 q=gl_PointCoord-.5;float d=length(q);float m=smoothstep(.5,.18,d);gl_FragColor=vec4(v.rgb*v.a*m,v.a*m);}');
+const bA=gl.createBuffer(),bC=gl.createBuffer(),bS=gl.createBuffer(),bI=gl.createBuffer();
+const lineA=new Float32Array(4*MAXL*K*2),lineC=new Float32Array(4*MAXL*K*4);
+const partA=new Float32Array(4*MAXP*2),partC=new Float32Array(4*MAXP*4),partS=new Float32Array(4*MAXP);
+// segment indices (one object worth; reused with an offset per object via drawElements on a shared buffer)
+const IDX=new Uint16Array(MAXL*(K-1)*2);
+gl.getExtension('OES_element_index_uint');
+const IDX32=new Uint32Array(4*MAXL*(K-1)*2);
+
+function size(){const d=Math.min(devicePixelRatio||1,1.5);cv.width=Math.round(cv.clientWidth*d);cv.height=Math.round(cv.clientHeight*d);gl.viewport(0,0,cv.width,cv.height);}
+addEventListener('resize',()=>{size();draw();});size();
+
+/* ---------- motion ---------- */
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const clamp01=x=>x<0?0:x>1?1:x;
+const mix3=(a,b,t)=>[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t];
+// layout as in the source artwork: [cx, cy, radius] in units of canvas height, x measured from the centre
+function layout(){
+  const asp=cv.width/cv.height;
+  const z=S.osz;
+  if(S.mode===1)return[[0,0,.34*z,0]];
+  return [[-asp*.34,-.24,.20*z,0],[asp*.01,.0,.24*z,2],[asp*.33,.29,.16*z,1],[asp*.335,-.255,.18*z,3]];
+}
+// colour of a point for a given state, from its view-space position
+function colorOf(st,v,s,rad){
+  const S0=STATES[st];let t;
+  if(S0.axis==='x')t=clamp01((v[0]/rad+1)/2);else if(S0.axis==='r')t=clamp01(Math.hypot(v[0],v[1])/rad);else t=s;
+  return mix3(S0.ca,S0.cb,t);
+}
+
+const TOTAL=()=>S.stage*4;
+function draw(){
+  if(dirty)build();
+  const ph=((phase%1)+1)%1,T=ph*4;             // T: 0..4 stages
+  const nL=S.lines|0,nP=S.parts|0,asp=cv.width/cv.height;
+  const objs=layout();
+  const ang=ph*Math.PI*2*S.spin, tw=ph*Math.PI*2;
+  let vL=0,vP=0;
+  objs.forEach(([cx,cy,R,start],oi)=>{
+    const g=T+start,st=Math.floor(g)%4,nx=(st+1)%4,f=g-Math.floor(g);
+    const hold=1-S.morph,m=clamp01((f-hold)/S.morph);  // 0 during hold, 0→1 while morphing
+    const A=GL[st],B=GL[nx],Pa=GP[st],Pb=GP[nx];
+    const rim0=STATES[st].rim,rim1=STATES[nx].rim;
+    const project=(p)=>{let q=rotY(p,.75*Math.sin(ang+oi*1.7));q=rotZ(q,.12*Math.sin(ang*1+oi));q=rotX(q,.22);const k=3.2/(3.2-q[2]);return[q,k];};
+    const toClip=(x,y)=>[(cx+x)/asp*2/1, (cy+y)*2];
+    for(let i=0;i<nL;i++){
+      const d=(i/nL)*.45,e=ease(clamp01((m-d)/.55)),w=Math.sin(Math.PI*e)*.16*S.wob;
+      const a0=STATES[st].a0,a1=STATES[nx].a0;
+      for(let j=0;j<K;j++){
+        const o=(i*K+j)*3,s=j/(K-1);
+        let p=[A[o]+(B[o]-A[o])*e,A[o+1]+(B[o+1]-A[o+1])*e,A[o+2]+(B[o+2]-A[o+2])*e];
+        if(w>0){p[0]+=Math.sin(s*5.1+i*.37+tw)*w;p[1]+=Math.cos(s*4.3+i*.21-tw)*w;p[2]+=Math.sin(s*3.7+i*.53+tw)*w;}
+        const [q,k]=project(p),x=q[0]*k*R,y=q[1]*k*R;
+        const c=toClip(x,y);lineA[vL*2]=c[0];lineA[vL*2+1]=c[1];
+        const v=[q[0],q[1],q[2]];
+        const col=mix3(colorOf(st,v,s,1),colorOf(nx,v,s,1),e);
+        const rimF=1-Math.min(1,Math.abs(q[2])/Math.max(.25,Math.hypot(q[0],q[1],q[2])));
+        let al=(a0+(a1-a0)*e)*(1+((rim0+(rim1-rim0)*e)*6)*rimF*rimF);
+        if(st===3||nx===3){const wb=st===3?1-e:e;al*=1-wb*(.55*s+.6*(1-Math.min(1,s/.18)));}
+        al*=S.lbr*(.75+.5*((i*7919)%13)/13);
+        lineC.set([col[0],col[1],col[2],Math.min(1,al)],vL*4);
+        vL++;
+      }
+    }
+    for(let i=0;i<nP;i++){
+      const d=((i*2654435761)%1000)/1000*.5,e=ease(clamp01((m-d)/.5)),w=Math.sin(Math.PI*e)*.22*S.wob;
+      let p=[Pa.pos[i*3]+(Pb.pos[i*3]-Pa.pos[i*3])*e,Pa.pos[i*3+1]+(Pb.pos[i*3+1]-Pa.pos[i*3+1])*e,Pa.pos[i*3+2]+(Pb.pos[i*3+2]-Pa.pos[i*3+2])*e];
+      if(w>0){p[0]+=Math.sin(i*.71+tw)*w;p[1]+=Math.cos(i*.53-tw)*w;}
+      const [q,k]=project(p),c=toClip(q[0]*k*R,q[1]*k*R);
+      partA[vP*2]=c[0];partA[vP*2+1]=c[1];
+      const col=mix3(STATES[st].pc,STATES[nx].pc,e),al=STATES[st].pa+(STATES[nx].pa-STATES[st].pa)*e;
+      const tw2=.75+.25*Math.sin(tw*3+i*1.7);
+      partC.set([col[0],col[1],col[2],al*tw2*(.6+.4*k)],vP*4);
+      partS[vP]=(Pa.sz[i]+(Pb.sz[i]-Pa.sz[i])*e)*S.psz*(cv.height/1080)*2.0*(R/.15)*.55*k;
+      vP++;
+    }
+  });
+  gl.clearColor(0,0,.012,1);gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE);
+  // lines
+  gl.useProgram(pL);
+  let n=0;const per=K-1;
+  const objsN=vL/(nL*K)|0;
+  for(let o=0;o<objsN;o++)for(let i=0;i<nL;i++){const base=(o*nL+i)*K;for(let j=0;j<per;j++){IDX32[n++]=base+j;IDX32[n++]=base+j+1;}}
+  gl.bindBuffer(gl.ARRAY_BUFFER,bA);gl.bufferData(gl.ARRAY_BUFFER,lineA.subarray(0,vL*2),gl.DYNAMIC_DRAW);
+  let la=gl.getAttribLocation(pL,'a');gl.enableVertexAttribArray(la);gl.vertexAttribPointer(la,2,gl.FLOAT,false,0,0);
+  gl.bindBuffer(gl.ARRAY_BUFFER,bC);gl.bufferData(gl.ARRAY_BUFFER,lineC.subarray(0,vL*4),gl.DYNAMIC_DRAW);
+  let lc=gl.getAttribLocation(pL,'c');gl.enableVertexAttribArray(lc);gl.vertexAttribPointer(lc,4,gl.FLOAT,false,0,0);
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,bI);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,IDX32.subarray(0,n),gl.DYNAMIC_DRAW);
+  gl.drawElements(gl.LINES,n,gl.UNSIGNED_INT,0);
+  // particles
+  if(vP){
+    gl.useProgram(pP);
+    gl.bindBuffer(gl.ARRAY_BUFFER,bA);gl.bufferData(gl.ARRAY_BUFFER,partA.subarray(0,vP*2),gl.DYNAMIC_DRAW);
+    la=gl.getAttribLocation(pP,'a');gl.enableVertexAttribArray(la);gl.vertexAttribPointer(la,2,gl.FLOAT,false,0,0);
+    gl.bindBuffer(gl.ARRAY_BUFFER,bC);gl.bufferData(gl.ARRAY_BUFFER,partC.subarray(0,vP*4),gl.DYNAMIC_DRAW);
+    lc=gl.getAttribLocation(pP,'c');gl.enableVertexAttribArray(lc);gl.vertexAttribPointer(lc,4,gl.FLOAT,false,0,0);
+    gl.bindBuffer(gl.ARRAY_BUFFER,bS);gl.bufferData(gl.ARRAY_BUFFER,partS.subarray(0,vP),gl.DYNAMIC_DRAW);
+    const ls=gl.getAttribLocation(pP,'s');gl.enableVertexAttribArray(ls);gl.vertexAttribPointer(ls,1,gl.FLOAT,false,0,0);
+    gl.drawArrays(gl.POINTS,0,vP);
+    gl.disableVertexAttribArray(ls);
   }
-  // glyph atlas (only the vote-mark row is used by the defaults; kept for parity)
-  const GLYPHS=['{}<>/=;()[]#*+:_','0110100101011010','0123456789%+-.▲▼','OOOOOOOOOOXXX△△△'];
-  const atlasTex=gl.createTexture();
-  (function(){const G=64,ac=document.createElement('canvas');ac.width=G*16;ac.height=G*4;const x=ac.getContext('2d');
-    x.fillStyle='#000';x.fillRect(0,0,ac.width,ac.height);x.fillStyle='#fff';x.font=(G*.78)+'px ui-monospace,Menlo,Consolas,monospace';x.textAlign='center';x.textBaseline='middle';
-    GLYPHS.forEach((s,r)=>[...s].forEach((ch,i)=>x.fillText(ch,i*G+G/2,r*G+G*.54)));
-    gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,atlasTex);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);
-    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,ac);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,false);
-    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);tp();})();
-  // hero text mask: kicker, title lines and meta are redrawn white-on-transparent at their exact DOM positions
-  const hero=document.querySelector('.hero'),tt=document.createElement('canvas'),tx=tt.getContext('2d'),ttex=gl.createTexture();
-  let box=[0,0,0,0];
-  function mask(){try{mask0();}catch(e){hero.classList.remove('is-gl');box=[0,0,0,0];}}
-  function mask0(){
-    const d=cv.width/Math.max(1,cv.clientWidth),cr=cv.getBoundingClientRect();
-    const els=[...hero.querySelectorAll('.hero__k,.hero h1 .ln,.ttl img,.hero__meta span,.hero__meta i')].filter(e=>e.getClientRects().length&&(e.tagName!=='IMG'||e.complete&&e.naturalWidth));
-    if(!els.length)return;
-    let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
-    const rr=e=>{if(e.tagName==='IMG')return e.getBoundingClientRect();const g=document.createRange();g.selectNodeContents(e);return g.getBoundingClientRect();};
-    els.forEach(e=>{const r=rr(e);x0=Math.min(x0,r.left);y0=Math.min(y0,r.top);x1=Math.max(x1,r.right);y1=Math.max(y1,r.bottom);});
-    x0-=4;y0-=4;x1+=4;y1+=4;
-    tt.width=Math.ceil((x1-x0)*d);tt.height=Math.ceil((y1-y0)*d);
-    tx.clearRect(0,0,tt.width,tt.height);tx.fillStyle='#fff';tx.textBaseline='alphabetic';
-    els.forEach(e=>{
-      const r=rr(e);
-      if(e.tagName==='IMG'){tx.globalAlpha=1;tx.drawImage(e,(r.left-x0)*d,(r.top-y0)*d,r.width*d,r.height*d);return;}
-      const st=getComputedStyle(e),fs=parseFloat(st.fontSize)*d;
-      tx.font=st.fontWeight+' '+fs+'px '+st.fontFamily;
-      if('letterSpacing' in tx)tx.letterSpacing=st.letterSpacing==='normal'?'0px':(parseFloat(st.letterSpacing)*d)+'px';
-      tx.globalAlpha=e.tagName==='I'?.5:parseFloat(st.opacity)||1;
-      const t=e.textContent.trim(),m=tx.measureText(t),a=m.fontBoundingBoxAscent,dd=m.fontBoundingBoxDescent;
-      tx.fillText(t,(r.left-x0)*d,(r.top-y0)*d+(r.height*d-(a+dd))/2+a);
-    });
-    tx.globalAlpha=1;
-    gl.activeTexture(gl.TEXTURE2);gl.bindTexture(gl.TEXTURE_2D,ttex);
-    gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,false);
-    gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,tt);
-    gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);tp();
-    box=[(x0-cr.left)*d,(cr.bottom-y1)*d,tt.width,tt.height];
-    hero.classList.add('is-gl');
-  }
-  function size(){const d=Math.min(devicePixelRatio||1,1.5);cv.width=Math.round(cv.clientWidth*d);cv.height=Math.round(cv.clientHeight*d);allocRT();}
-  let t=0,prev=performance.now(),visible=true;
-  function draw(){
-    const ph=t/LOOP,v=hermite(ph*20);
-    gl.bindFramebuffer(gl.FRAMEBUFFER,fbo);gl.useProgram(pr);gl.viewport(0,0,cv.width,cv.height);
-    gl.uniform2f(U1.R,cv.width,cv.height);gl.uniform1f(U1.PH,ph);
-    ['C0','C1','C2','C3'].forEach((n,i)=>gl.uniform3f(U1[n],...hex(S['c'+i])));
-    gl.uniform3f(U1.ACC,...hex(S.acc));gl.uniform1f(U1.AMT,S.amt*v[3]);gl.uniform1f(U1.WHITE,S.white+v[0]);
-    gl.uniform1f(U1.SCALE,S.scale);gl.uniform1f(U1.WARP,S.warp*v[2]);gl.uniform1f(U1.CAM,S.cam);
-    gl.uniform1f(U1.SPEC,S.spec);gl.uniform1f(U1.CREST,S.crest*crest(ph));/* Light: 경계 광택 0 */gl.uniform1f(U1.DARK,Math.max(0,Math.min(1,v[4]))*.45);gl.uniform1f(U1.ZOOM,v[1]);
-    gl.drawArrays(gl.TRIANGLES,0,3);
-    gl.bindFramebuffer(gl.FRAMEBUFFER,null);gl.useProgram(pr2);
-    gl.uniform2f(U2.R,cv.width,cv.height);gl.uniform1f(U2.T,ph);
-    gl.uniform3f(U2.BG,...hex(S.c0).map(x=>x*.7));gl.uniform3f(U2.MARK,...hex(S.c3));gl.uniform1f(U2.THR,S.thr);gl.uniform1f(U2.GRAIN,S.grain);
-    gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,rtTex);gl.uniform1i(U2.TEX,0);
-    gl.activeTexture(gl.TEXTURE1);gl.bindTexture(gl.TEXTURE_2D,atlasTex);gl.uniform1i(U2.ATLAS,1);
-    gl.activeTexture(gl.TEXTURE2);gl.bindTexture(gl.TEXTURE_2D,ttex);gl.uniform1i(U2.TX,2);
-    gl.uniform4f(U2.BOX,box[0],box[1],box[2],box[3]);
-    [['FA','FA2'],['FB','FB2']].forEach(([a,b],i)=>{const f=S.fx[i],[ip,op]=env(f,ph);
-      gl.uniform4f(U2[a],f.type,f.mode,f.size,f.amt);gl.uniform4f(U2[b],ip,op,f.glyph,f.dset);});
-    gl.drawArrays(gl.TRIANGLES,0,3);
-  }
-  window.__heroAt=s=>{t=((s%LOOP)+LOOP)%LOOP;draw();};
-  size();mask();draw();addEventListener('resize',()=>{size();mask();draw();});
-  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{mask();draw();});
-  const ti=hero.querySelector('.ttl img');if(ti&&!ti.complete)ti.addEventListener('load',()=>{mask();draw();});
-  if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
-  if('IntersectionObserver' in window)new IntersectionObserver(e=>{visible=e[0].isIntersecting;}).observe(cv);
-  (function loop(now){const dt=Math.min(.1,(now-prev)/1000);prev=now;if(visible&&!document.hidden&&!window.__heroHold){t=(t+dt*S.speed)%LOOP;draw();}requestAnimationFrame(loop);})(prev);
+}
+
+let phase=0,prev=performance.now(),visible=true;
+window.__heroAt=s=>{phase=((s/TOTAL())%1+1)%1;draw();};
+draw();
+if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+if('IntersectionObserver' in window)new IntersectionObserver(e=>{visible=e[0].isIntersecting;}).observe(cv);
+(function loop(now){const dt=Math.min(.1,(now-prev)/1000);prev=now;if(visible&&!document.hidden&&!window.__heroHold){phase=(phase+dt/TOTAL())%1;draw();}requestAnimationFrame(loop);})(prev);
 })();
 </script>
 <script>
