@@ -12,7 +12,7 @@ alter table public.registrations add column if not exists thanked_at timestamptz
 
 -- 2) 메일에 들어가는 링크 (관리자 페이지에서 수정)
 insert into public.settings(key,value,note) values
-  ('site_url','https://nane9141-prog.github.io/seminar/','사이트 주소 — 메일의 취소·재신청 링크에 사용. 도메인 연결 후 교체'),
+  ('site_url','https://seminar.irkudos.co.kr/','사이트 주소 — 메일의 취소·재신청 링크에 사용. 도메인 연결 후 교체'),
   ('app_android_url','https://kudos.agmlive.co.kr/appstore/juju-pass/redirect','주주PASS 안드로이드'),
   ('app_ios_url','','주주PASS iOS (추후 등록)'),
   ('slides_url','','발표자료 링크 (M7)'),
