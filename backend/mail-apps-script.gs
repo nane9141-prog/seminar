@@ -11,11 +11,20 @@
  * 4. 배포 → 새 배포 → 웹 앱 / 실행: 나 / 액세스: 모든 사용자 → URL 복사
  * 5. Supabase settings 테이블 mail_webhook_url 에 그 URL 입력
  *
+ * 6. (초청 메일 반송 확인) 함수 installBounceCheck 를 한 번 실행 → 권한 승인. 10분마다 반송 메일을 읽어 관리자 페이지에 표시
+ *    코드를 고친 뒤에는 배포 → 배포 관리 → 수정 → 버전 '새 버전'으로 저장 (웹훅 URL 유지)
+ *
+ * 초청 메일 추적: 발송 성공/실패·반송은 아래 SB_URL로 보고, 열람은 메일 속 1px 이미지가 이 웹 앱(doGet)을 부를 때 기록
  * 링크(사이트 주소, 주주PASS, 발표자료, 설문)는 관리자 페이지 > 메일 링크에서 바꾸면 바로 반영됩니다.
  * 발송 계정을 바꿀 때: 새 계정에서 1~4를 다시 하고 mail_webhook_url만 교체
  */
 
 const SENDER_NAME = 'IR큐더스';
+// 초청 메일 결과 보고용 (공개 키 — 브라우저에도 노출되는 값, 권한은 mail_secret으로 확인)
+const SB_URL = 'https://zrhtqpzgubaqzsdaxhvt.supabase.co';
+const SB_KEY = 'sb_publishable_JwET6KLGmdYBkOIIttgOOQ_HEpCKLar';
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const ZERO = '00000000-0000-0000-0000-000000000000';
 const EV = {
   title: '전자주주총회 플랫폼 시연 설명회',
   date: '2026년 11월 30일(월)', time: '13:00 등록 · 13:30 ~ 18:00',
@@ -44,15 +53,75 @@ function doPost(e) {
   if (!p.secret || p.secret !== PropertiesService.getScriptProperties().getProperty('SECRET')) {
     return ContentService.createTextOutput('forbidden');
   }
-  send_(p);
+  const inv = p.type === 'invite' && UUID_RE.test(p.invite_token || '') && p.invite_token !== ZERO;
+  try {
+    send_(p);
+  } catch (err) {
+    if (inv) report_({ p_status: 'failed', p_token: p.invite_token, p_error: String(err && err.message || err) });
+    return ContentService.createTextOutput('error: ' + (err && err.message || err));
+  }
+  if (inv) report_({ p_status: 'sent', p_token: p.invite_token });
   return ContentService.createTextOutput('ok');
+}
+
+/* ---------- 열람 기록: 메일 속 1px 이미지가 ?o=토큰 으로 부름 ---------- */
+function doGet(e) {
+  const t = e && e.parameter && e.parameter.o;
+  if (t && UUID_RE.test(t) && t !== ZERO) rpc_('track_open', { p_token: t });
+  return ContentService.createTextOutput('');
+}
+
+function report_(body) {
+  body.p_secret = PropertiesService.getScriptProperties().getProperty('SECRET');
+  rpc_('mail_report', body);
+}
+function rpc_(fn, body) {
+  try {
+    UrlFetchApp.fetch(SB_URL + '/rest/v1/rpc/' + fn, {
+      method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+      headers: { apikey: SB_KEY }, payload: JSON.stringify(body)
+    });
+  } catch (err) { console.warn('rpc ' + fn + ' 실패: ' + err); }
+}
+
+/* ---------- 반송 확인: 10분마다 받은편지함의 반송 메일을 읽어 보고 ---------- */
+const BOUNCE_LABEL = '설명회-반송확인';
+function checkBounces() {
+  const label = GmailApp.getUserLabelByName(BOUNCE_LABEL) || GmailApp.createLabel(BOUNCE_LABEL);
+  const threads = GmailApp.search('from:(mailer-daemon OR postmaster) newer_than:7d -label:' + BOUNCE_LABEL, 0, 50);
+  threads.forEach(th => {
+    th.getMessages().forEach(msg => {
+      const body = msg.getPlainBody() || '';
+      let to = (msg.getHeader('X-Failed-Recipients') || '').split(',').map(x => x.trim()).filter(Boolean);
+      if (!to.length) {
+        const m = body.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g) || [];
+        to = m.filter(a => !/mailer-daemon|postmaster|googlemail|irkudos\.co\.kr/i.test(a));
+      }
+      const reason = (body.match(/(5\d\d[ -][^\n]{0,160})/) || body.match(/([^\n]*(?:not found|does not exist|찾을 수 없|존재하지 않)[^\n]*)/i) || [, '반송'])[1].trim();
+      [...new Set(to.map(a => a.toLowerCase()))].forEach(a => report_({ p_status: 'bounced', p_email: a, p_error: reason }));
+    });
+    th.addLabel(label);
+  });
+}
+/** 한 번만 실행: checkBounces 를 10분마다 자동 실행 */
+function installBounceCheck() {
+  ScriptApp.getProjectTriggers().filter(t => t.getHandlerFunction() === 'checkBounces').forEach(t => ScriptApp.deleteTrigger(t));
+  ScriptApp.newTrigger('checkBounces').timeBased().everyMinutes(10).create();
+  checkBounces();
 }
 
 function send_(p) {
   const m = compose_(p);
   if (!m) return;
   const props = PropertiesService.getScriptProperties();
-  const opts = { htmlBody: m.html, name: SENDER_NAME, replyTo: EV.mail };
+  let html = m.html;
+  // 초청 메일 열람 확인용 1px 이미지 (이 웹 앱 주소 + ?o=토큰)
+  if (p.type === 'invite' && UUID_RE.test(p.invite_token || '') && p.invite_token !== ZERO) {
+    let url = '';
+    try { url = ScriptApp.getService().getUrl(); } catch (_) {}
+    if (url) html = html.replace('</body>', '<img src="' + url + '?o=' + p.invite_token + '" width="1" height="1" alt="" style="display:block;width:1px;height:1px;border:0;opacity:0"></body>');
+  }
+  const opts = { htmlBody: html, name: SENDER_NAME, replyTo: EV.mail };
   if (props.getProperty('FROM')) opts.from = props.getProperty('FROM');
   if (m.ics) opts.attachments = [Utilities.newBlob(ics_(p), 'text/calendar', 'seminar.ics')];
   GmailApp.sendEmail(p.email, m.subject, m.text, opts);
@@ -114,7 +183,7 @@ function compose_(p) {
       sign: 'IR큐더스 드림',
       card: 'invite', btns: [['사전등록하기', inviteUrl, 1], ['설명회 자세히 보기', site, 0]],
       note: '사전등록은 <b>기업별 최대 2명</b>, 선착순 <b>300명</b>까지 받으며 <b>11월 27일(금) 18:00</b>에 마감합니다. 정원이 차면 일찍 마감될 수 있습니다. 위 버튼으로 신청하시면 회사와 성함이 미리 입력되어 있습니다.',
-      guide: ['timetable'], foot: '본 메일은 전자주주총회 의무화 대상 상장회사 담당자께 보내드리는 초청 메일입니다. 수신을 원치 않으시면 이 메일에 회신해 주세요.'
+      guide: ['timetable'], foot: '본 메일은 전자주주총회 의무화 대상 상장회사 담당자께 보내드리는 초청 메일입니다. 수신을 원치 않으시면 이 메일에 회신해 주세요. 메일 열람과 링크 클릭 여부는 설명회 안내 목적으로만 확인합니다.'
     },
     thanks: {
       chip: 'thanks', subject: '[IR큐더스] 전자주주총회 플랫폼 시연 설명회에 참석해 주셔서 감사합니다',

@@ -107,6 +107,12 @@ td.nw{white-space:nowrap}
 /* 초청 대상 */
 .tag.inv{background:rgba(94,162,255,.14);color:var(--blue)}
 .tag.out{background:#3a1d1d;color:var(--bad)}
+.trk{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}
+.trk i{font-style:normal;font-size:11px;font-weight:700;padding:1px 6px;border-radius:4px;background:#262626;color:var(--fg-3)}
+.trk i.on{background:rgba(94,162,255,.16);color:var(--blue)}
+.pill.fail{background:#3a1d1d;color:var(--bad)}
+.pill.wait{background:#3a2f12;color:#ffcf70}
+.err{display:block;color:var(--bad);font-size:12px;margin-top:3px;max-width:240px;white-space:normal}
 .inv-add{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:10px}
 .inv-add h2{margin:0;font-size:14px}
 .inv-add p{margin:0;color:var(--fg-3);font-size:12px}
@@ -270,13 +276,24 @@ td.nw{white-space:nowrap}
     const m=rows.filter(r=>lc(r.email)===i.email||(i.company_id&&r.company_id===i.company_id&&norm(r.name)===norm(i.name))).sort((a,b)=>rank(a)-rank(b));
     return m[0]||null;
   }
+  // 발송 상태: 대기(요청만 됨) / 발송 / 실패 / 반송. 대기가 5분 넘으면 확인 필요
+  function sendSt(i){
+    if(!i.invited_at)return ['cancelled','미발송'];
+    const s=i.send_status;
+    if(s==='bounced')return ['fail','반송'];
+    if(s==='failed')return ['fail','실패'];
+    if(s==='sent')return ['confirmed','발송 완료'];
+    return Date.now()-new Date(i.invited_at)>5*60e3?['fail','확인 필요']:['wait','발송 중'];
+  }
+  const isBad=i=>i.invited_at&&['fail'].includes(sendSt(i)[0]);
   function invState(i){const r=regOf(i);return r&&r.status==='confirmed'?'reg':i.invited_at?'sent':'todo';}
   const invByEmail=()=>new Set(invitees.map(i=>i.email));
   function renderInviteBar(){
-    const n=invitees.length,sent=invitees.filter(i=>i.invited_at).length,reg=invitees.filter(i=>invState(i)==='reg').length;
-    const todo=invitees.filter(i=>invState(i)==='todo').length,out=invitees.filter(i=>!i.company_id).length;
+    const n=invitees.length,sent=invitees.filter(i=>i.send_status==='sent').length,reg=invitees.filter(i=>invState(i)==='reg').length;
+    const todo=invitees.filter(i=>invState(i)==='todo').length,out=invitees.filter(i=>!i.company_id).length,bad=invitees.filter(isBad).length;
+    const op=invitees.filter(i=>i.opened_at).length,ck=invitees.filter(i=>i.clicked_at).length,pc=x=>sent?` (${Math.round(x/sent*100)}%)`:'';
     $('#mailbar').innerHTML=
-      `<span>초청 대상 <b>${n}명</b> · 발송 <b>${sent}명</b> · 사전등록 확정 <b>${reg}명</b>${n?` (${Math.round(reg/n*100)}%)`:''}${out?` · <span style="color:var(--bad)">대상 기업 목록에 없는 회사 ${out}명</span>`:''}</span>`+
+      `<span>초청 대상 <b>${n}명</b> · 발송 완료 <b>${sent}</b>${bad?` · <span style="color:var(--bad)">실패·반송 <b>${bad}</b></span>`:''} · 열람 <b>${op}</b>${pc(op)} · 사이트 방문 <b>${ck}</b>${pc(ck)} · 사전등록 확정 <b>${reg}</b>${out?` · <span style="color:var(--bad)">대상 기업 외 ${out}명</span>`:''}</span>`+
       `<span class="sep"></span><button class="btn btn--ghost btn--sm" id="invAddBtn" type="button">명단 추가</button>`+
       `<button class="btn btn--ghost btn--sm" id="invTest" type="button">테스트 메일</button>`+
       `<button class="btn btn--sm" id="invSend" type="button" ${todo?'':'disabled'}>${todo?`미발송 ${todo}명에게 초청 메일 보내기`:'보낼 대상 없음'}</button>`;
@@ -290,12 +307,15 @@ td.nw{white-space:nowrap}
       if(invF==='reg'&&st!=='reg')return false;
       if(invF==='noreg'&&!(i.invited_at&&st!=='reg'))return false;
       if(invF==='out'&&i.company_id)return false;
+      if(invF==='bad'&&!isBad(i))return false;
+      if(invF==='opened'&&!i.opened_at)return false;
+      if(invF==='clicked'&&!(i.clicked_at&&st!=='reg'))return false;
       return !q||[i.company_name,i.name,i.email,i.phone,i.dept,i.title].some(v=>norm(v).includes(q));
     });
   }
   function renderInvites(){
     const list=visibleInv(),c=f=>{const o=invF;invF=f;const n=visibleInv().length;invF=o;return n;};
-    const F=[['all','전체'],['todo','미발송'],['sent','발송 완료'],['noreg','발송 후 미등록'],['reg','등록 확정'],['out','대상 기업 외']];
+    const F=[['all','전체'],['todo','미발송'],['sent','발송'],['bad','실패·반송'],['opened','열람'],['clicked','방문 후 미등록'],['noreg','발송 후 미등록'],['reg','등록 확정'],['out','대상 기업 외']];
     const chips=`<div class="subf" style="padding:12px 12px 0">${F.map(([k,v])=>`<button type="button" data-invf="${k}" aria-pressed="${invF===k}">${v} ${c(k)}</button>`).join('')}</div>`;
     if(!invitees.length){$('#tw').innerHTML='<div class="empty">초청 대상이 없습니다. 위의 <b>명단 추가</b>로 엑셀 명단을 붙여넣어 주세요.</div>';return;}
     $('#tw').innerHTML=chips+(list.length?`<table><thead><tr><th>회사</th><th>이름</th><th>부서 · 직급</th><th>연락처</th><th>초청 메일</th><th>사전등록</th><th>메모</th><th></th></tr></thead><tbody>${list.map(i=>{
@@ -305,7 +325,10 @@ td.nw{white-space:nowrap}
   <td class="nw"><b>${esc(i.name)}</b></td>
   <td>${esc(i.dept||'')}<span class="sub">${esc(i.title||'')}</span></td>
   <td class="nw">${esc(i.email)}<span class="sub">${esc(fmtPhone(String(i.phone||'').replace(/\D/g,'')))}</span></td>
-  <td class="nw">${i.invited_at?`<span class="pill confirmed">발송</span><span class="sub">${fmtDate(i.invited_at)}${i.invite_count>1?` · ${i.invite_count}회`:''}</span>`:'<span class="pill cancelled">미발송</span>'}</td>
+  <td class="nw">${(()=>{const [c,l]=sendSt(i);if(!i.invited_at)return `<span class="pill ${c}">${l}</span>`;
+    return `<span class="pill ${c}">${l}</span><span class="sub">${fmtDate(i.sent_at||i.invited_at)}${i.invite_count>1?` · ${i.invite_count}회`:''}</span>`+
+      (i.send_error&&c==='fail'?`<span class="err" title="${esc(i.send_error)}">${esc(i.send_error.slice(0,80))}</span>`:'')+
+      (i.send_status==='sent'?`<span class="trk"><i class="${i.opened_at?'on':''}" title="${i.opened_at?'처음 열람 '+fmtDate(i.opened_at)+' · '+i.open_count+'회':'열람 기록 없음 (Outlook 등은 기록되지 않을 수 있음)'}">열람${i.open_count>1?' '+i.open_count:''}</i><i class="${i.clicked_at?'on':''}" title="${i.clicked_at?'처음 방문 '+fmtDate(i.clicked_at)+' · '+i.click_count+'회':'사이트 방문 기록 없음'}">방문${i.click_count>1?' '+i.click_count:''}</i></span>`:'');})()}</td>
   <td class="nw">${r?`<span class="pill ${r.status}">${ST[r.status]}</span><span class="sub">No. ${r.reg_no}${lc(r.email)!==i.email?' · 다른 이메일':''}</span>`:'<span class="sub">미등록</span>'}</td>
   <td><input class="note-in" value="${esc(i.note||'')}" placeholder="메모"></td>
   <td><div class="acts">${r&&r.status==='confirmed'?'':`<button class="btn btn--ghost btn--sm" data-ia="send">${i.invited_at?'재발송':'발송'}</button>`}<button class="btn btn--ghost btn--sm" data-ia="del">삭제</button></div></td>
@@ -519,8 +542,8 @@ td.nw{white-space:nowrap}
   $('#csv').addEventListener('click',()=>{
     if(filter==='invite'){
       const cell=v=>{v=v==null?'':String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;};
-      const head=['회사','대상 기업','이름','직급','부서','이메일','휴대폰','초청 발송','발송 횟수','사전등록','신청번호','메모'];
-      const lines=[head.join(',')].concat(visibleInv().map(i=>{const r=regOf(i);return [i.company_name,i.company_id?'Y':'N',i.name,i.title,i.dept,i.email,fmtPhone(i.phone||''),i.invited_at&&new Date(i.invited_at).toLocaleString('ko-KR'),i.invite_count,r?ST[r.status]:'미등록',r?r.reg_no:'',i.note].map(cell).join(',');}));
+      const head=['회사','대상 기업','이름','직급','부서','이메일','휴대폰','발송 상태','발송 시각','발송 횟수','오류·반송 사유','처음 열람','열람 횟수','처음 방문','방문 횟수','사전등록','신청번호','메모'];
+      const lines=[head.join(',')].concat(visibleInv().map(i=>{const r=regOf(i);return [i.company_name,i.company_id?'Y':'N',i.name,i.title,i.dept,i.email,fmtPhone(i.phone||''),sendSt(i)[1],(i.sent_at||i.invited_at)&&new Date(i.sent_at||i.invited_at).toLocaleString('ko-KR'),i.invite_count,i.send_error,i.opened_at&&new Date(i.opened_at).toLocaleString('ko-KR'),i.open_count,i.clicked_at&&new Date(i.clicked_at).toLocaleString('ko-KR'),i.click_count,r?ST[r.status]:'미등록',r?r.reg_no:'',i.note].map(cell).join(',');}));
       const a=document.createElement('a'),d=new Date(),p=n=>String(n).padStart(2,'0');
       a.href=URL.createObjectURL(new Blob(['\uFEFF'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'}));
       a.download=`초청대상_${d.getMonth()+1}${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}.csv`;a.click();URL.revokeObjectURL(a.href);return;
