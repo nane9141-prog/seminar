@@ -7,7 +7,7 @@
  *    SECRET   : Supabase settings 테이블의 mail_secret 값
  *    FROM     : 발신 주소 agm@irkudos.co.kr (11.9 확정). agm@ 계정에서 직접 설치하면 비워두고,
  *               다른 계정에서 설치하면 그 계정에 agm@를 '다른 주소로 보내기'로 등록한 뒤 입력
- * 3. 함수 testAll 실행 → 권한 승인 → 실행 계정 메일함에서 7종 확인
+ * 3. 함수 testAll 실행 → 권한 승인 → 실행 계정 메일함에서 8종 확인 (초청 메일 포함)
  * 4. 배포 → 새 배포 → 웹 앱 / 실행: 나 / 액세스: 모든 사용자 → URL 복사
  * 5. Supabase settings 테이블 mail_webhook_url 에 그 URL 입력
  *
@@ -29,7 +29,8 @@ const C = { ink: '#0f1524', ink2: '#3d4556', ink3: '#7a8294', line: '#e3e7ef', s
 const FONT = "-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕','Noto Sans KR',sans-serif";
 const CHIP = {
   done: ['#e7f6ee', '#137a45', '참석 확정'], wait: ['#fff4e0', '#9a5b00', '확인 중'], no: ['#fdecec', '#b42323', '신청 결과'],
-  cancel: ['#eef0f4', '#4d5566', '취소 완료'], d1: ['#e8efff', '#1f4fd6', 'D-1'], thanks: ['#e8efff', '#1f4fd6', '참석 감사']
+  cancel: ['#eef0f4', '#4d5566', '취소 완료'], d1: ['#e8efff', '#1f4fd6', 'D-1'], thanks: ['#e8efff', '#1f4fd6', '참석 감사'],
+  invite: ['#e8efff', '#1f4fd6', 'INVITATION · 초청']
 };
 const REJECT = {
   ineligible: '이번 설명회는 2027년 전자주주총회 의무화 대상 기업(최근 사업연도 말 자산총액 2조원 이상 상장회사)을 대상으로 운영되어, 신청하신 기업은 참석을 확정하기 어렵습니다.',
@@ -63,6 +64,8 @@ function compose_(p) {
   const site = (L.site || '').replace(/\/?$/, '/');
   const cancelUrl = site + '?cancel=' + p.cancel_token;
   const appLinks = appLinks_(L);
+  const inviteUrl = site + '?invite=' + (p.invite_token || '') + '#register';
+  const honor = esc_(p.name) + (p.title ? ' ' + esc_(p.title) : '') + '님';
   const full = ['entry', 'app', 'parking', 'program'];
   const D = {
     confirmed: {
@@ -95,6 +98,23 @@ function compose_(p) {
       lead: '설명회가 내일입니다. 장소와 참석 준비사항을 다시 안내해 드립니다.',
       card: 'full', btns: [['오시는 길', EV.map, 1]].concat(appLinks.length ? [['주주PASS 설치', appLinks[0][1], 0]] : []),
       guide: ['check', 'timetable'], cancel: true, ics: true
+    },
+    invite: {
+      chip: 'invite', subject: '[IR큐더스] 전자주주총회 플랫폼 시연 설명회에 초대합니다 (11.30 월, 페어몬트 앰배서더 서울)',
+      pre: '2027년 전자주주총회 의무화 대비, 법률·실무 쟁점과 실제 운영 시연을 한자리에서 확인하세요. 기업별 최대 2명, 선착순 300명.',
+      head: '전자주주총회 플랫폼<br>시연 설명회에 초대합니다',
+      salute: esc_(p.company) + ' ' + honor + '께',
+      lead: '안녕하십니까, IR큐더스입니다.<br><br>' +
+        '2027년 1월 1일부터 최근 사업연도 말 자산총액 2조 원 이상 상장회사는 전자주주총회를 개최해야 합니다. ' +
+        '이에 전자주주총회 도입을 준비하시는 기업 담당자분들을 위해 시연 설명회를 마련했습니다.<br><br>' +
+        '전문가와 함께 개정 상법의 주요 내용과 전자주주총회 준비에 필요한 법률·실무 쟁점을 살펴보고, ' +
+        '주주명부와 의안 설정부터 출석 확인, 표결, 결과 집계까지 통합시스템의 운영 과정을 시연합니다. ' +
+        '참석자께서는 현장표결 앱 <b>주주PASS</b>로 모의 주주총회 표결에 직접 참여하실 수 있습니다.<br><br>' +
+        '바쁘시더라도 참석하시어 자리를 빛내 주시기 바랍니다.',
+      sign: 'IR큐더스 드림',
+      card: 'invite', btns: [['사전등록하기', inviteUrl, 1], ['설명회 자세히 보기', site, 0]],
+      note: '사전등록은 <b>기업별 최대 2명</b>, 선착순 <b>300명</b>까지 받으며 <b>11월 27일(금) 18:00</b>에 마감합니다. 정원이 차면 일찍 마감될 수 있습니다. 위 버튼으로 신청하시면 회사와 성함이 미리 입력되어 있습니다.',
+      guide: ['timetable'], foot: '본 메일은 전자주주총회 의무화 대상 상장회사 담당자께 보내드리는 초청 메일입니다. 수신을 원치 않으시면 이 메일에 회신해 주세요.'
     },
     thanks: {
       chip: 'thanks', subject: '[IR큐더스] 전자주주총회 플랫폼 시연 설명회에 참석해 주셔서 감사합니다',
@@ -137,13 +157,15 @@ function build_(m, p, x) {
     header +
     '<tr><td class="px" style="padding:40px 40px 44px">' + chip +
     '<h1 class="h1" style="margin:14px 0 0;font:800 25px/1.35 ' + FONT + ';letter-spacing:-.02em;color:' + C.ink + '">' + m.head + '</h1>' +
+    (m.salute ? '<p style="margin:28px 0 0;font:700 16px/1.6 ' + FONT + ';color:' + C.ink + '">' + m.salute + '</p>' : '') +
     '<p style="margin:12px 0 0;font:400 15px/1.75 ' + FONT + ';color:' + C.ink2 + '">' + m.lead + '</p>' +
-    note + card_(m, p) + btns + guide_(m, x) + cancel +
+    (m.sign ? '<p style="margin:20px 0 0;font:700 15px/1.6 ' + FONT + ';color:' + C.ink + '">' + m.sign + '</p>' : '') +
+    (m.card === 'invite' ? card_(m, p) + btns + note : note + card_(m, p) + btns) + guide_(m, x) + cancel +
     '</td></tr>' +
     '<tr><td class="px" style="padding:24px 40px 28px;border-top:1px solid ' + C.line + ';background:#fafbfd;border-radius:0 0 16px 16px">' +
     '<p style="margin:0;font:800 12px/1 ' + FONT + ';letter-spacing:.08em;color:' + C.ink + '">IR KUDOS</p>' +
     '<p style="margin:10px 0 0;font:400 12px/1.7 ' + FONT + ';color:' + C.ink3 + '">문의 <a href="mailto:' + EV.mail + '" style="color:' + C.ink3 + '">' + EV.mail + '</a> · 대표번호 ' + EV.phone +
-    '<br>본 메일은 ' + EV.title + ' 사전등록 신청자에게 발송되는 안내 메일입니다.</p>' +
+    '<br>' + (m.foot || '본 메일은 ' + EV.title + ' 사전등록 신청자에게 발송되는 안내 메일입니다.') + '</p>' +
     '</td></tr></table></td></tr></table></body></html>';
 }
 
@@ -162,7 +184,12 @@ function row_(k, v) {
 function card_(m, p) {
   if (m.card === 'none') return '';
   const sub = s => '<br><span style="font-weight:400;color:' + C.ink2 + '">' + s + '</span>';
-  const rows = [
+  const rows = m.card === 'invite' ? [
+    row_('일시', EV.date + sub(EV.time)),
+    row_('장소', EV.place + sub(EV.addr)),
+    row_('대상', '전자주주총회 의무화 대상 상장회사' + sub('최근 사업연도 말 자산총액 2조 원 이상')),
+    row_('신청', '11월 27일(금) 18:00 마감' + sub('기업별 최대 2명 · 선착순 300명'))
+  ] : [
     row_('신청번호', 'No. ' + p.reg_no),
     row_('신청자', esc_(p.company) + ' · ' + esc_(p.name) + (p.title ? ' ' + esc_(p.title) : '')),
     row_('일시', EV.date + sub(EV.time)),
@@ -228,11 +255,11 @@ function text_(h) {
     .replace(/&amp;/g, '&').replace(/&nbsp;/g, ' ').replace(/&#\d+;/g, '').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
 }
 
-/** 설치 확인용: 실행 계정 메일함으로 4종 + 반려 사유 3종을 보냅니다 */
+/** 설치 확인용: 실행 계정 메일함으로 초청 + 4종 + 반려 사유 3종을 보냅니다 */
 function testAll() {
   const me = Session.getActiveUser().getEmail();
   const links = { site: 'https://nane9141-prog.github.io/seminar/', android: 'https://kudos.agmlive.co.kr/appstore/juju-pass/redirect', survey: 'https://example.com/survey' };
   const base = { reg_no: 0, name: '테스트', title: '매니저', company: 'IR큐더스', email: me, cancel_token: '00000000-0000-0000-0000-000000000000', links: links };
-  ['confirmed', 'cancelled', 'reminder', 'thanks'].forEach(t => send_(Object.assign({}, base, { type: t })));
+  ['invite', 'confirmed', 'cancelled', 'reminder', 'thanks'].forEach(t => send_(Object.assign({}, base, { type: t, invite_token: '00000000-0000-0000-0000-000000000000' })));
   ['ineligible', 'company_full', 'capacity_full'].forEach(r => send_(Object.assign({}, base, { type: 'rejected', reason: r })));
 }

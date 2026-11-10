@@ -1341,6 +1341,23 @@ void main(){
   /* 주주PASS 설치 링크: 관리자에서 등록한 기기별 자동 연결 URL */
   rpc('event_status').then(st=>{if(st&&st.app_url){const a=document.getElementById('appLink');if(a)a.href=st.app_url;}}).catch(()=>{});
 
+  /* --- 초청 메일 링크 (?invite=토큰): 폼을 열고 회사·성함·연락처를 미리 채움 --- */
+  const inv=new URLSearchParams(location.search).get('invite');
+  if(inv&&/^[0-9a-f-]{36}$/i.test(inv)&&!new URLSearchParams(location.search).has('cancel')){
+    history.replaceState(null,'',location.pathname+'#register');
+    open();
+    rpc('invite_info',{p_token:inv}).then(async d=>{
+      if(!d)return;
+      for(let i=0;i<50&&!companies;i++)await new Promise(r=>setTimeout(r,100));
+      if(!formEl||!formEl.isConnected)return;
+      const f=formEl,set=(k,v)=>{const el=f.querySelector(`[name=${k}]`);if(el&&v&&!el.value)el.value=v;};
+      const c=companies&&companies.find(x=>x.id===d.company_id);
+      if(c&&c.remaining>0){picked=c;showPicked();}
+      set('name',d.name);set('title',d.title);set('dept',d.dept);set('email',d.email);
+      if(d.phone)set('phone',String(d.phone).replace(/\D/g,'').replace(/^(\d{3})(\d{3,4})(\d{4})$/,'$1-$2-$3'));
+    }).catch(()=>{});
+  }
+
   /* --- 메일의 취소 링크 (?cancel=토큰) --- */
   const tok=new URLSearchParams(location.search).get('cancel');
   if(tok!==null&&!/^[0-9a-f-]{36}$/i.test(tok)){
