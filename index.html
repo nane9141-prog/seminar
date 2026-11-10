@@ -69,7 +69,7 @@ a{color:inherit}
 .dday{font-size:13px;font-weight:700;color:#fff;font-variant-numeric:tabular-nums}
 
 /* Hero: flowing blue gradient */
-.hero{position:relative;overflow:hidden;isolation:isolate;min-height:82vh;min-height:82svh;display:grid;place-items:center;text-align:center;background:#000003;padding:96px 24px}
+.hero{position:relative;overflow:hidden;isolation:isolate;min-height:82vh;min-height:82svh;display:grid;place-items:center;text-align:center;background:#011a22;padding:96px 24px}
 #glow{position:absolute;inset:0;width:100%;height:100%;z-index:-1;display:block}
 .hero__k{font-size:15px;font-weight:600;color:rgba(255,255,255,.78);letter-spacing:.02em}
 .hero h1{position:relative;margin-top:18px;font-weight:800;color:#fff;font-size:clamp(40px,7.2vw,92px);line-height:1.12;letter-spacing:0;text-wrap:balance}
@@ -813,11 +813,11 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
 </script>
 
 <script>
-/* ---------- Hero: Four States (아티팩트 'Four States' 기본값 · 1개 크게 · 오브젝트 크기 0.8 · 구체 → 수렴 → 소용돌이 → 방사 4단계 루프) ---------- */
+/* ---------- Hero: Four States + Blue Bloom 배경 (아티팩트 'Four States' 기본값 · 1개 크게 · 크기 0.8 · 배경 밝기 0.18 · 시안 0.30 · 흰색 -0.20) ---------- */
 (function(){
 const cv=document.getElementById('glow'),gl=cv.getContext('webgl',{alpha:false,antialias:true});
 if(!gl)return;
-const S={mode:1,osz:.8,stage:4.5,morph:.55,spin:1,wob:1,lines:170,lbr:1,parts:300,psz:1};
+const S={mode:1,osz:.8,bgb:.18,bgg:.30,bgw:-.20,stage:4.5,morph:.55,spin:1,wob:1,lines:170,lbr:1,parts:300,psz:1};
 let dirty=true;
 /* ---------- geometry: 4 states, each a set of lines (K points) and particles ---------- */
 const K=40,MAXL=260,MAXP=600;
@@ -878,6 +878,71 @@ const pL=prog('attribute vec2 a;attribute vec4 c;varying vec4 v;void main(){v=c;
   'precision mediump float;varying vec4 v;void main(){gl_FragColor=vec4(v.rgb*v.a,v.a);}');
 const pP=prog('attribute vec2 a;attribute vec4 c;attribute float s;varying vec4 v;void main(){v=c;gl_PointSize=s;gl_Position=vec4(a,0.,1.);}',
   'precision mediump float;varying vec4 v;void main(){vec2 q=gl_PointCoord-.5;float d=length(q);float m=smoothstep(.5,.18,d);gl_FragColor=vec4(v.rgb*v.a*m,v.a*m);}');
+const BGFS=`
+precision highp float;
+uniform vec2 R; uniform float PH;
+uniform vec3 C0,C1,C2,C3,ACC;
+uniform float AMT, WHITE, SCALE, WARP, CAM, SPEC, CREST, DARK, ZOOM, BRT;
+#define TAU 6.2831853
+float hash(vec2 p){vec3 p3=fract(vec3(p.xyx)*.1031);p3+=dot(p3,p3.yzx+33.33);return fract((p3.x+p3.y)*p3.z);}
+float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*f*(f*(f*6.-15.)+10.);
+  return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}
+float fbm2(vec2 p){return .62*vn(p)+.38*vn(p*1.9+vec2(3.7,1.1));}
+float field(vec2 p,float ph){
+  vec2 cyc=vec2(cos(ph),sin(ph));
+  vec2 q=p*.45/SCALE;
+  float n1=fbm2(q+cyc*.55);
+  float n2=fbm2(q*1.25+vec2(n1*1.3,-n1)*WARP+cyc.yx*.45+vec2(4.1,2.3));
+  vec2 pp=p/SCALE;
+  float b1=.5+.5*sin((pp.x*.62+pp.y*.95)*1.25+n2*4.2*WARP+ph);
+  float b2=.5+.5*sin((pp.x*-.9+pp.y*.4)*.9+n1*3.4*WARP-ph+1.3);
+  return .07+WHITE-DARK*.30+.44*b1+.22*b2+.28*n2;
+}
+vec3 shade(float f){
+  vec3 c=mix(C0,C1,smoothstep(.30,.48,f));
+  c=mix(c,C2,smoothstep(.46,.58,f));
+  c=mix(c,C3,smoothstep(.55,.70,f));
+  c=mix(c,mix(C3,vec3(.55,.75,1.),.5),smoothstep(.80,.97,f)*.5);
+  return c;
+}
+void main(){
+  vec2 p=(gl_FragCoord.xy-.5*R)/R.y*2.;
+  float ph=PH*TAU;
+  p=p/(ZOOM*(1.+.10*CAM*sin(ph)))+CAM*vec2(.15*sin(ph),.08*sin(2.*ph));
+  float f=field(p,ph);
+  vec2 e=vec2(.018,.010)*SPEC;
+  vec3 col=vec3(shade(field(p+e,ph)).r,shade(f).g,shade(field(p-e,ph)).b);
+  col+=mix(C3,vec3(1.),.4)*exp(-pow((f-.60)/.018,2.))*.28*CREST;
+  float band=smoothstep(.30,.55,f);
+  float drift=.5+.5*sin(p.x*.9-p.y*.6+ph+f*4.);
+  // 그린은 흐르는 패치로만: 코발트 면과 섞여 탁해지지 않고 영역이 나뉘어 보이도록
+  // 시안 블루: 밝은 면 중 아래쪽(흐르며 경계가 바뀜)에서 그린을 대신함
+  float gp=smoothstep(.25,-.55,p.y*.8+(drift-.5)*.9);
+  col=mix(col,ACC*(.8+.45*f),clamp(band*gp*AMT*4.,0.,.95));
+  col*=1.-.12*dot(p*.45,p*.45);
+  col=mix(col,C0*.18,DARK*.85*(1.-smoothstep(.50,.72,f)));
+  float lum=clamp(smoothstep(.02,.95,f)*(1.-DARK),0.,1.);
+  // Four States 배경용: 밝기를 낮춰 라인·파티클이 위에서 빛나도록
+  col=clamp(col,0.,1.)*BRT;
+  gl_FragColor=vec4(col,1.);
+}`;
+const pB=prog('attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}',BGFS);
+const UB={};['R','PH','C0','C1','C2','C3','ACC','AMT','WHITE','SCALE','WARP','CAM','SPEC','CREST','DARK','ZOOM','BRT'].forEach(n=>UB[n]=gl.getUniformLocation(pB,n));
+const bT=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,bT);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+// Blue Bloom을 Four States 배경 톤으로: 흰 영역 대신 밝은 코발트까지만 올라가는 딥 블루 팔레트 (회색으로 탁해지지 않게)
+// 참고 이미지 톤: 딥 틸 중심 → 에메랄드 그린 빛, 아래쪽은 시안 블루로 번짐
+const BLOOM={c0:hex('#011a22'),c1:hex('#02383d'),c2:hex('#05975a'),c3:hex('#06d27a'),acc:hex('#1eaffe')};
+function drawBG(ph){
+  gl.disable(gl.BLEND);
+  if(S.bgb<=0){gl.clearColor(0,0,.012,1);gl.clear(gl.COLOR_BUFFER_BIT);return;}
+  gl.useProgram(pB);
+  gl.bindBuffer(gl.ARRAY_BUFFER,bT);const lp=gl.getAttribLocation(pB,'p');gl.enableVertexAttribArray(lp);gl.vertexAttribPointer(lp,2,gl.FLOAT,false,0,0);
+  gl.uniform2f(UB.R,cv.width,cv.height);gl.uniform1f(UB.PH,ph);
+  gl.uniform3f(UB.C0,...BLOOM.c0);gl.uniform3f(UB.C1,...BLOOM.c1);gl.uniform3f(UB.C2,...BLOOM.c2);gl.uniform3f(UB.C3,...BLOOM.c3);gl.uniform3f(UB.ACC,...BLOOM.acc);
+  gl.uniform1f(UB.AMT,S.bgg);gl.uniform1f(UB.WHITE,S.bgw);gl.uniform1f(UB.SCALE,1);gl.uniform1f(UB.WARP,1);gl.uniform1f(UB.CAM,1);
+  gl.uniform1f(UB.SPEC,1);gl.uniform1f(UB.CREST,0);gl.uniform1f(UB.DARK,0);gl.uniform1f(UB.ZOOM,1);gl.uniform1f(UB.BRT,S.bgb);
+  gl.drawArrays(gl.TRIANGLES,0,3);
+}
 const bA=gl.createBuffer(),bC=gl.createBuffer(),bS=gl.createBuffer(),bI=gl.createBuffer();
 const lineA=new Float32Array(4*MAXL*K*2),lineC=new Float32Array(4*MAXL*K*4);
 const partA=new Float32Array(4*MAXP*2),partC=new Float32Array(4*MAXP*4),partS=new Float32Array(4*MAXP);
@@ -954,7 +1019,7 @@ function draw(){
       vP++;
     }
   });
-  gl.clearColor(0,0,.012,1);gl.clear(gl.COLOR_BUFFER_BIT);
+  drawBG(ph);
   gl.enable(gl.BLEND);gl.blendFunc(gl.ONE,gl.ONE);
   // lines
   gl.useProgram(pL);
