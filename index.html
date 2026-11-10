@@ -151,9 +151,15 @@ section{padding-block:140px}
 .tagrow ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px}
 .tagrow li{padding:6px 12px;border-radius:999px;background:var(--card-2);font-size:14px;color:var(--fg-2)}
 .app{margin-top:12px;background:var(--card);border-radius:16px;padding:28px 32px;display:flex;flex-wrap:wrap;gap:16px 24px;align-items:center;justify-content:space-between}
-.app p{font-size:15px;color:var(--fg-2);max-width:36em}
-.app p b{display:block;color:var(--fg);font-size:18px;margin-bottom:4px}
+.app__t{max-width:40em;font-size:15px;color:var(--fg-2)}
+.app__t>b{display:block;color:var(--fg);font-size:18px;margin-bottom:4px}
+.app__ways{margin:14px 0 0;display:grid;gap:8px}
+.app__ways>div{display:grid;grid-template-columns:84px minmax(0,1fr);gap:12px}
+.app__ways dt{font-weight:700;color:var(--fg)}
+.app__ways dd{margin:0}
+.app__n{margin-top:12px;font-weight:600;color:var(--fg)}
 .app small{display:block;margin-top:4px;color:var(--fg-3);font-size:13px}
+@media (max-width:640px){.app__ways>div{grid-template-columns:1fr;gap:2px}}
 
 /* Speakers */
 .spk{margin:64px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
@@ -218,6 +224,9 @@ section{padding-block:140px}
 .faq summary::after{content:"";flex:none;width:10px;height:10px;border-right:2px solid #000;border-bottom:2px solid #000;transform:rotate(45deg) translateY(-3px);transition:transform .2s}
 .faq details[open] summary::after{transform:rotate(-135deg) translateY(-3px)}
 .faq details p{padding:0 24px 22px;color:var(--fg-2);font-size:15px}
+.faq details p:not(:last-child){padding-bottom:8px}
+.faq details ul{margin:0;padding:0 24px 8px 42px;color:var(--fg-2);font-size:15px;display:grid;gap:4px}
+.faq details ul b{margin-right:6px;color:var(--fg)}
 
 /* Footer */
 footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;color:var(--fg-3)}
@@ -285,6 +294,8 @@ footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;c
   .lc{padding:24px 20px}
   .faq summary{padding:18px 20px;font-size:16px}
   .faq details p{padding:0 20px 18px}
+  .faq details p:not(:last-child){padding-bottom:8px}
+  .faq details ul{padding:0 20px 8px 36px}
   .legal{justify-items:start;text-align:left}
   footer{padding-bottom:120px}
   .mbar{display:flex;position:fixed;inset:auto 0 0;z-index:60;align-items:center;gap:12px;padding:12px 20px calc(12px + env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);transition:transform .35s}
@@ -346,6 +357,7 @@ footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;c
   .ways dt{font-size:15px}
   .faq summary{font-size:19px}
   .faq details p{font-size:17px}
+  .faq details ul{font-size:17px}
   .ft dl,footer{font-size:15px}
 }
 @media (max-width:640px){ .brand svg{height:24px} .ft .brand svg{height:34px} }
@@ -483,7 +495,7 @@ html.rg-lock{overflow:hidden}
         <p>2027년 1월 1일부터 최근 사업연도 말 자산총액이 2조 원 이상인 상장회사는 전자주주총회를 개최해야 합니다.</p>
         <p>전자주주총회 도입을 준비하는 기업 담당자 여러분을 모십니다.</p>
         <p>IR큐더스가 전문가와 함께 개정 상법의 주요 내용과 전자주주총회 준비에 필요한 법률·실무 쟁점을 살펴봅니다.</p>
-        <p>이어 주주명부와 의안 설정부터 출석 확인, 표결, 결과 집계까지 통합시스템의 운영 과정을 시연합니다.<br>참석자께서는 현장표결 앱 ‘주주PASS’를 활용해 모의 주주총회의 표결에 직접 참여하실 수 있습니다.</p>
+        <p>이어 주주명부와 의안 설정부터 출석 확인, 표결, 결과 집계까지 통합시스템의 운영 과정을 시연합니다.<br>참석자께서는 현장 출석이나 전자출석으로 모의 전자주주총회에 참여해 직접 투표하실 수 있습니다.</p>
       </div>
       <p class="info"><span><b>일정</b>2026.11.30 (월) 13:30~18:00 (등록 13:00부터)</span><span><b>장소</b>페어몬트 앰배서더 서울 지하 1층(B1) 그랜드볼룸</span><span><b>신청 마감</b>11.27 (금) 18:00 · 참가비 무료</span></p>
       <div class="count" role="timer" aria-label="행사까지 남은 시간"><div><b id="cd-d">25</b><span>일</span></div><div><b id="cd-h">00</b><span>시간</span></div><div><b id="cd-m">00</b><span>분</span></div></div>
@@ -495,7 +507,7 @@ html.rg-lock{overflow:hidden}
     <div class="wrap">
       <div class="sec-h">
         <h2>행사 프로그램</h2>
-        <p>법률·실무 쟁점을 살펴본 뒤, 모의 주주총회를 통해 출석·표결·집계 과정을 확인하실 수 있습니다.</p>
+        <p>법률·실무 쟁점을 살펴본 뒤, 모의 전자주주총회를 통해 출석·표결·집계 과정을 확인하실 수 있습니다.</p>
       </div>
       <div class="prog">
         <article class="pc">
@@ -517,10 +529,10 @@ html.rg-lock{overflow:hidden}
         </article>
         <article class="pc">
           <div class="pc__h"><h3>전자주주총회 플랫폼 시연</h3><span class="chip">15:30~17:25</span></div>
-          <p class="pc__d">IR큐더스의 통합 솔루션을 소개하고, 참석자와 함께 모의 주주총회를 진행합니다.</p>
+          <p class="pc__d">IR큐더스의 통합 솔루션을 소개하고, 참석자와 함께 모의 전자주주총회를 진행합니다.</p>
           <div class="rows">
             <div class="r"><span class="r__t">15:30~16:10</span><div><p class="r__ti">전자주주총회 도입·운영 방안 및 통합 솔루션 소개</p><p class="r__sp"><b>박성용</b>IR큐더스, 본부장</p></div></div>
-            <div class="r"><span class="r__t">16:10~17:25</span><div><p class="r__ti">전자주주총회 운영 시연 및 표결 참여</p><p class="r__sp"><b>박성용</b>IR큐더스, 본부장 · 참석자가 주주PASS로 모의 주주총회 표결에 직접 참여합니다</p></div></div>
+            <div class="r"><span class="r__t">16:10~17:25</span><div><p class="r__ti">전자주주총회 운영 시연 및 표결 참여</p><p class="r__sp"><b>박성용</b>IR큐더스, 본부장 · 참석자가 현장 출석이나 전자출석으로 모의 전자주주총회에 참여해 직접 투표합니다</p></div></div>
           </div>
         </article>
         <article class="pc">
@@ -541,23 +553,32 @@ html.rg-lock{overflow:hidden}
         <p>모의 회사·주주·의안으로 주주총회 전 과정을 진행합니다.</p>
       </div>
       <ol class="stages">
-        <li><span class="st-n">01 사전 준비</span><h3>주주명부와 의안을 설정합니다</h3><ul><li>주주명부 등록, 주주별 의결권 확인</li><li>의안 설정</li><li>의결권 제한(3% 등) 자동 계산</li></ul></li>
-        <li><span class="st-n">02 사전 의결권 관리</span><h3>사전 투표와 의결권 행사 현황을 관리합니다</h3><ul><li>의결권 대리행사 권유, 전자·서면투표 현황</li><li>중복 의결권 행사 점검</li><li>의결권 불통일행사 처리</li><li>개인·법인·해외 주주의 참여</li></ul></li>
-        <li><span class="st-n">03 총회 당일 운영</span><h3>현장과 온라인의 출석·표결·집계를 진행합니다</h3><ul><li>주주 본인·대리인 출석 확인</li><li>의안 상정과 표결 진행</li><li>질의·발언·동의 처리</li><li>결과 집계</li></ul></li>
+        <li><span class="st-n">01 설정</span><h3>주주명부와 의안, 의결권 제한을 설정합니다</h3><ul><li>주주명부 확정과 주주별 의결권 확인</li><li>결의요건, 양립불가·집중투표 의안 설정</li><li>합산 3%, 특별이해관계자 등 의결권 제한 설정</li></ul></li>
+        <li><span class="st-n">02 사전</span><h3>사전 투표와 의결권 행사 현황을 관리합니다</h3><ul><li>전자·서면 투표와 위임장 내역 수집·확정</li><li>채널 간 중복 행사 확인과 처리</li><li>전자주총 참석 사전신청, 불통일행사 승인</li></ul></li>
+        <li><span class="st-n">03 당일</span><h3>현장과 전자출석을 함께 표결·집계합니다</h3><ul><li>주주·대리인 출석 확인, 이중출석 방지</li><li>의안 상정부터 표결 마감까지 실시간 통합 집계</li><li>질의·발언 접수와 처리 이력 관리</li></ul></li>
       </ol>
       <div class="tagbox">
         <p class="tagh">시연에서 살펴볼 주요 실무 사례</p>
         <ul class="cases">
-          <li>특별결의 요건과 표결 결과 확인</li>
-          <li>배당 관련 수정동의</li>
-          <li>감사위원 선임 시 최대주주 등의 합산 3% 의결권 제한</li>
+          <li>결의요건 충족 여부와 가결 판정</li>
+          <li>최대주주 등 합산 3% 의결권 제한</li>
           <li>특별이해관계자의 의결권 제한</li>
-          <li>양립할 수 없는 의안의 처리</li>
+          <li>수정동의 접수와 표결</li>
+          <li>양립불가 의안의 표결 처리</li>
           <li>집중투표의 의결권 배분과 집계</li>
         </ul>
       </div>
       <div class="app">
-        <p><b>시연에 표결로 참여하세요</b>현장표결 앱 ‘주주PASS’를 미리 설치하고 본인인증을 마쳐 주세요. 행사 당일 현장 안내 데스크에서 NFC 태그로 참석자 등록을 하시면 모의 주주총회의 표결에 직접 참여하실 수 있습니다.<small>설치나 인증에 문제가 있으면 현장 안내 데스크에서 도와드립니다.</small></p>
+        <div class="app__t">
+          <b>시연에 투표로 참여하세요</b>
+          <p>현장 출석이나 전자출석으로 모의 전자주주총회에 참여해 직접 투표하실 수 있습니다.</p>
+          <dl class="app__ways">
+            <div><dt>현장 출석</dt><dd>‘주주PASS’ 앱을 설치하고 본인인증을 마친 뒤, 등록 데스크에서 NFC 태그로 출석을 등록해 주세요. 투표는 행사장 안에서만 할 수 있습니다.</dd></div>
+            <div><dt>전자출석</dt><dd>등록 데스크에서 알려드리는 경로로 접속해 주세요.</dd></div>
+          </dl>
+          <p class="app__n">두 방식 중 하나로만 참여하실 수 있습니다.</p>
+          <small>설치·인증·접속 문의는 등록 데스크에서 도와드립니다.</small>
+        </div>
         <a class="btn btn--ghost" id="appLink" href="https://kudos.agmlive.co.kr/appstore/juju-pass/redirect" target="_blank" rel="noopener">주주PASS 설치하기<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
       </div>
     </div>
@@ -612,7 +633,7 @@ html.rg-lock{overflow:hidden}
           <dl class="ways">
             <div><dt>주소</dt><dd><span id="addr">서울특별시 영등포구 여의대로 108</span><button class="copy" id="copyAddr" type="button">주소 복사</button></dd></div>
             <div><dt>지하철</dt><dd>5·9호선 여의도역 인근</dd></div>
-            <div><dt>주차</dt><dd>페어몬트 호텔 주차장 이용 시 주차 지원<small class="fact-note">현장 등록 데스크에서 주차 지원을 등록해 주세요. 연결된 더현대 서울 주차장은 지원되지 않습니다</small></dd></div>
+            <div><dt>주차</dt><dd>페어몬트 호텔 주차장 이용 시 주차 지원<small class="fact-note">등록 데스크에서 주차 지원을 등록해 주세요. 연결된 더현대 서울 주차장은 지원되지 않습니다</small></dd></div>
           </dl>
           <div class="maplinks">
             <a class="btn btn--ghost" href="https://map.naver.com/p/search/%ED%8E%98%EC%96%B4%EB%AA%AC%ED%8A%B8%20%EC%95%B0%EB%B0%B0%EC%84%9C%EB%8D%94%20%EC%84%9C%EC%9A%B8" target="_blank" rel="noopener">네이버 지도</a>
@@ -627,16 +648,13 @@ html.rg-lock{overflow:hidden}
     <div class="wrap">
       <div class="sec-h"><h2>자주 묻는 질문</h2></div>
       <div class="faq">
-        <details open><summary>입장권이나 QR코드를 준비해야 하나요?</summary><p>별도의 입장권이나 QR코드는 준비하지 않으셔도 됩니다. 현장 등록 데스크에서 사전등록하신 성함과 소속을 확인한 뒤 명찰을 드립니다.</p></details>
-        <details><summary>참가 정원과 신청 마감은 어떻게 되나요?</summary><p>총 300명까지 신청을 받으며, 11월 27일(금) 18:00에 신청이 마감됩니다. 그 전에 정원에 도달하면 접수가 마감되며, 신청을 완료한 순서대로 참석이 확정됩니다. 참가비는 무료입니다.</p></details>
-        <details><summary>기업별로 몇 명까지 신청할 수 있나요?</summary><p>기업별로 최대 2명까지 신청하실 수 있습니다. 신청 가능한 인원은 회사 검색 결과에서 확인하실 수 있으며, 신청과 관련해 도움이 필요하시면 agm@irkudos.co.kr로 문의해 주세요.</p></details>
+        <details open><summary>신청 조건은 어떻게 되나요?</summary><p>총 300명, 기업별 최대 2명까지 신청하실 수 있으며 참가비는 무료입니다. 신청은 11월 27일(금) 18:00에 마감되며, 그 전에 정원이 차면 조기 마감됩니다. 신청 가능 인원은 회사 검색 결과에서 확인하실 수 있습니다.</p></details>
         <details><summary>소속 회사가 검색되지 않으면 어떻게 하나요?</summary><p>이번 설명회는 전자주주총회 의무화 대상 상장회사(최근 사업연도 말 자산총액 2조 원 이상)를 대상으로 하며, 대상 기업만 검색됩니다. 대상 기업인데 검색되지 않으면 agm@irkudos.co.kr로 문의해 주세요.</p></details>
-        <details><summary>신청 취소나 참석자 변경은 어떻게 하나요?</summary><p>신청 취소는 등록 안내 이메일의 취소 링크에서 진행하실 수 있습니다. 참석자 변경이 필요하시면 agm@irkudos.co.kr로 문의해 주세요.</p></details>
-        <details><summary>사전 질문이나 현장 질문은 어떻게 하나요?</summary><p>신청서에 궁금하신 내용을 남겨주세요. 사전 질문은 질의응답 시간에 우선적으로 다루며, 현장에서도 질문하실 수 있습니다.</p></details>
-        <details><summary>온라인 생중계나 다시보기를 볼 수 있나요?</summary><p>이번 설명회는 행사장에서 직접 참석하시는 방식으로 진행됩니다. 온라인 생중계와 다시보기, 발표자료는 제공되지 않습니다.</p></details>
-        <details><summary>표결 시연에 참여하려면 무엇을 준비해야 하나요?</summary><p>현장표결 앱 ‘주주PASS’를 미리 설치하고 본인인증을 마쳐 주세요. 행사 당일 현장 안내 데스크에서 NFC 태그로 참석자 등록을 하시면 모의 주주총회의 표결에 참여하실 수 있습니다. 설치나 인증에 문제가 있으면 현장 안내 데스크에서 도와드립니다.</p></details>
-        <details><summary>전자주주총회 도입 상담을 받을 수 있나요?</summary><p>전자주주총회 도입 상담을 원하시면 agm@irkudos.co.kr로 문의해 주세요. 담당자가 연락드려 상담 일정과 방법을 안내해 드립니다.</p></details>
-        <details><summary>주차 지원은 어떻게 받을 수 있나요?</summary><p>행사 참석 시 페어몬트 호텔 주차장을 이용하시고, 현장 등록 데스크에서 주차 지원을 등록해 주세요. 주차 지원은 페어몬트 호텔 주차장 이용 차량에만 적용되며, 더현대 서울 주차장은 지원되지 않습니다.</p></details>
+        <details><summary>신청 취소나 참석자 변경은 어떻게 하나요?</summary><p>신청 취소는 신청 완료 이메일의 취소 링크에서 하실 수 있습니다. 참석자 변경은 agm@irkudos.co.kr로 문의해 주세요.</p></details>
+        <details><summary>입장권이 필요한가요? 온라인으로도 볼 수 있나요?</summary><p>입장권이나 QR코드는 필요하지 않습니다. 등록 데스크에서 성함과 소속을 확인한 뒤 명찰을 드립니다. 설명회는 행사장 참석으로만 진행되며, 온라인 생중계·다시보기와 발표자료는 제공되지 않습니다.</p></details>
+        <details><summary>시연에서 투표하려면 무엇을 준비해야 하나요?</summary><p>현장 출석이나 전자출석 중 한 가지 방식으로 참여하실 수 있습니다.</p><ul><li><b>현장 출석</b> ‘주주PASS’ 앱을 미리 설치하고 본인인증을 마쳐 주세요. 당일 등록 데스크에서 NFC 태그로 출석을 등록하시면 됩니다.</li><li><b>전자출석</b> 당일 등록 데스크에서 알려드리는 경로로 출석하실 수 있습니다.</li></ul><p>설치·인증에 문제가 있으면 등록 데스크에서 도와드립니다.</p></details>
+        <details><summary>질문이나 도입 상담은 어떻게 하나요?</summary><p>신청서에 사전 질문을 남겨주시면 질의응답 시간에 우선적으로 다루며, 현장에서도 질문하실 수 있습니다. 전자주주총회 도입 상담은 agm@irkudos.co.kr로 요청해 주시면 담당자가 일정을 안내해 드립니다.</p></details>
+        <details><summary>주차 지원은 어떻게 받나요?</summary><p>페어몬트 호텔 주차장을 이용하신 뒤 등록 데스크에서 주차 지원을 등록해 주세요. 연결된 더현대 서울 주차장은 지원되지 않습니다.</p></details>
       </div>
     </div>
   </section>
