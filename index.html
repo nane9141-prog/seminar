@@ -1256,7 +1256,7 @@ if('IntersectionObserver' in window)new IntersectionObserver(e=>{visible=e[0].is
   function showPickedReset(){if(!formEl)return;picked=null;formEl.querySelector('#csSel').hidden=true;formEl.querySelector('#cs').hidden=false;}
 
   /* --- 결과 화면 --- */
-  function summary(r){return `<dl class="rg__sum"><div><dt>신청번호</dt><dd>No. ${esc(r.reg_no)}</dd></div><div><dt>회사</dt><dd>${esc(r.company)}</dd></div><div><dt>이름</dt><dd>${esc(r.name)}</dd></div><div><dt>이메일</dt><dd>${esc(r.email)}</dd></div></dl>`;}
+  function summary(r){return `<dl class="rg__sum"><div><dt>회사</dt><dd>${esc(r.company)}</dd></div><div><dt>이름</dt><dd>${esc(r.name)}</dd></div><div><dt>이메일</dt><dd>${esc(r.email)}</dd></div></dl>`;}
   function renderDone(r){
     view.innerHTML=`<div class="rg__bd"><div class="rg__done">
       <div class="ic">${ICON.ok}</div>

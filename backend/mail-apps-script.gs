@@ -259,7 +259,6 @@ function card_(m, p) {
     row_('대상', '전자주주총회 의무화 대상 상장회사' + sub('최근 사업연도 말 자산총액 2조 원 이상')),
     row_('신청', '11월 27일(금) 18:00 마감' + sub('기업별 최대 2명 · 선착순 300명'))
   ] : [
-    row_('신청번호', 'No. ' + p.reg_no),
     row_('신청자', esc_(p.company) + ' · ' + esc_(p.name) + (p.title ? ' ' + esc_(p.title) : '')),
     row_('일시', EV.date + sub(EV.time)),
     row_('장소', m.card === 'full' ? EV.place + sub(EV.addr) : EV.place)
