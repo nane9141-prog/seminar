@@ -157,3 +157,13 @@ begin
   end if;
   return null;
 end $$;
+
+-- 9) 11.10 변경: D-1(11/29 일요일) → D-3 리마인드 11/27(금) 14:00 KST
+--    신청 마감(18:00) 이후 늦게 신청한 분도 받도록 18:10 KST에 한 번 더 (이미 받은 분은 reminded_at으로 제외)
+update public.settings set value = '2026-11-27 14:00 KST (18:10 추가)', note = 'D-3 리마인드 예약 시각 (안내용)' where key = 'reminder_at';
+select cron.unschedule(jobid) from cron.job where jobname in ('seminar-d1-reminder','seminar-d3-reminder','seminar-d3-reminder-late');
+select cron.schedule('seminar-d3-reminder', '0 5 27 11 *',
+  $$ select public.send_reminders() where now()::date = date '2026-11-27' $$);
+select cron.schedule('seminar-d3-reminder-late', '10 9 27 11 *',
+  $$ select public.send_reminders() where now()::date = date '2026-11-27' $$);
+select jobname, schedule from cron.job where jobname like 'seminar-%';

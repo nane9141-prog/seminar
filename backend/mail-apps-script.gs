@@ -38,7 +38,7 @@ const C = { ink: '#0f1524', ink2: '#3d4556', ink3: '#7a8294', line: '#e3e7ef', s
 const FONT = "-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕','Noto Sans KR',sans-serif";
 const CHIP = {
   done: ['#e7f6ee', '#137a45', '참석 확정'], wait: ['#fff4e0', '#9a5b00', '확인 중'], no: ['#fdecec', '#b42323', '신청 결과'],
-  cancel: ['#eef0f4', '#4d5566', '취소 완료'], d1: ['#e8efff', '#1f4fd6', 'D-1'], thanks: ['#e8efff', '#1f4fd6', '참석 감사'],
+  cancel: ['#eef0f4', '#4d5566', '취소 완료'], d1: ['#e8efff', '#1f4fd6', 'D-3'], thanks: ['#e8efff', '#1f4fd6', '참석 감사'],
   invite: ['#e8efff', '#1f4fd6', 'INVITATION · 초청']
 };
 const REJECT = {
@@ -161,10 +161,13 @@ function compose_(p) {
       card: 'short', btns: [['다시 신청하기', site, 0]], guide: []
     },
     reminder: {
-      chip: 'd1', subject: '[IR큐더스] 내일 13:00부터 등록 — 전자주주총회 플랫폼 시연 설명회',
-      pre: '주주PASS 설치와 주차 안내를 확인해 주세요.',
-      head: '내일 뵙겠습니다',
-      lead: '설명회가 내일입니다. 장소와 참석 준비사항을 다시 안내해 드립니다.',
+      chip: 'd1', subject: '[IR큐더스] 11월 30일(월) 전자주주총회 플랫폼 시연 설명회 참석 안내',
+      pre: '11월 30일(월) 13:00부터 등록합니다. 주주PASS 설치와 주차 안내를 확인해 주세요.',
+      head: '다음 주 월요일,<br>설명회에서 뵙겠습니다',
+      salute: esc_(p.company) + ' ' + honor + '께',
+      lead: '전자주주총회 플랫폼 시연 설명회가 <b>11월 30일(월) 오후 1시 30분</b>에 열립니다. 등록은 오후 1시부터입니다.<br>' +
+        '장소와 참석 준비사항을 다시 안내해 드리니, 행사 전에 확인해 주시기 바랍니다.',
+      sign: 'IR큐더스 드림', letter: true, hero: 'header-remind.jpg',
       card: 'full', btns: [['오시는 길', EV.map, 1]].concat(appLinks.length ? [['주주PASS 설치', appLinks[0][1], 0]] : []),
       guide: ['check', 'timetable'], cancel: true, ics: true
     },
@@ -180,7 +183,7 @@ function compose_(p) {
         '주주명부와 의안 설정부터 출석 확인, 표결, 결과 집계까지 통합시스템의 운영 과정을 시연합니다. ' +
         '참석자께서는 현장 출석이나 전자 출석으로 모의 전자주주총회에 참여해 직접 투표하실 수 있습니다.<br><br>' +
         '바쁘시더라도 참석하시어 자리를 빛내 주시기 바랍니다.',
-      sign: 'IR큐더스 드림',
+      sign: 'IR큐더스 드림', letter: true, hero: 'header.jpg',
       card: 'invite', btns: [['사전등록하기', inviteUrl, 1], ['설명회 자세히 보기', site, 0]],
       note: '사전등록은 <b>기업별 최대 2명</b>, 선착순 <b>300명</b>까지 받으며 <b>11월 27일(금) 18:00</b>에 마감합니다. 정원이 차면 일찍 마감될 수 있습니다. 위 버튼으로 신청하시면 회사와 성함이 미리 입력되어 있습니다.',
       guide: ['timetable'], foot: '본 메일은 전자주주총회 의무화 대상 상장회사 담당자께 보내드리는 초청 메일입니다. 수신을 원치 않으시면 이 메일에 회신해 주세요. 메일 열람과 링크 클릭 여부는 설명회 안내 목적으로만 확인합니다.'
@@ -208,14 +211,14 @@ function appLinks_(L) {
 
 /* ---------- 레이아웃 ---------- */
 function build_(m, p, x) {
-  const inv = m.card === 'invite'; // 초청 메일: 큰 헤더 + 가운데 정렬 초청장 / 나머지: 얇은 띠 헤더 + 왼쪽 정렬 안내
+  const inv = !!m.letter; // 초청·D-3: 큰 헤더 + 가운데 정렬 초청장 형식 / 나머지: 얇은 띠 헤더 + 왼쪽 정렬 안내
   const ch = CHIP[m.chip];
   const chip = '<span style="display:inline-block;padding:5px 10px;border-radius:6px;background:' + ch[0] + ';color:' + ch[1] + ';font:700 12px/1 ' + FONT + '">' + ch[2] + '</span>';
   const note = m.note ? '<p style="margin:20px 0 0;padding:14px 16px;border-radius:10px;' + (inv ? 'text-align:center;' : '') + 'background:' + (m.chip === 'wait' ? '#fff8ec' : C.soft) + ';font:400 14px/1.6 ' + FONT + ';color:' + C.ink2 + '">' + m.note + '</p>' : '';
   const btns = m.btns.length ? '<table role="presentation" cellpadding="0" cellspacing="0"' + (inv ? ' align="center" style="margin:28px auto 0"' : ' style="margin:28px 0 0"') + '><tr>' + m.btns.map(btn_).join('') + '</tr></table>' : '';
   const cancel = m.cancel ? '<p style="margin:32px 0 0;font:400 13px/1.6 ' + FONT + ';color:' + C.ink3 + '">참석이 어려우시면 <a href="' + x.cancelUrl + '" style="color:' + C.ink3 + ';text-decoration:underline">사전등록 취소</a>를 눌러 주세요. 다른 분께 자리가 돌아갑니다. 참석자 변경은 이 메일에 회신해 주세요.</p>' : '';
   const header = '<tr><td bgcolor="#060a10" style="background:#060a10;border-radius:15px 15px 0 0">' +
-    '<img src="' + x.site + 'assets/mail/' + (inv ? 'header.jpg' : 'header-bar.jpg?v=3') + '" width="600" alt="전자주주총회 플랫폼 시연 설명회 · 2026.11.30 13:30 · 페어몬트 앰배서더 서울 지하 1층(B1) 그랜드볼룸 · IR KUDOS" ' +
+    '<img src="' + x.site + 'assets/mail/' + (m.hero || 'header-bar.jpg?v=3') + '" width="600" alt="전자주주총회 플랫폼 시연 설명회 · 2026.11.30 13:30 · 페어몬트 앰배서더 서울 지하 1층(B1) 그랜드볼룸 · IR KUDOS" ' +
     'style="display:block;width:100%;max-width:600px;height:auto;border:0;border-radius:15px 15px 0 0;color:#ffffff;font:700 15px/1.6 ' + FONT + '"></td></tr>';
   return '<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
     '<meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light"><title>' + esc_(m.subject) + '</title>' +
@@ -232,7 +235,7 @@ function build_(m, p, x) {
     '<p style="margin:12px 0 0;font:400 15px/1.75 ' + FONT + ';color:' + C.ink2 + '">' + m.lead + '</p>' +
     (m.sign ? '<p style="margin:20px 0 0;font:700 15px/1.6 ' + FONT + ';color:' + C.ink + '">' + m.sign + '</p>' : '') +
     (inv ? '</div>' : '') +
-    (m.card === 'invite' ? card_(m, p) + btns + note : note + card_(m, p) + btns) + guide_(m, x) + cancel +
+    (inv ? card_(m, p) + btns + note : note + card_(m, p) + btns) + guide_(m, x) + cancel +
     '</td></tr>' +
     '<tr><td class="px" style="padding:24px 40px 28px;border-top:1px solid ' + C.line + ';background:#fafbfd;border-radius:0 0 15px 15px">' +
     '<p style="margin:0;font:800 12px/1 ' + FONT + ';letter-spacing:.08em;color:' + C.ink + '">IR KUDOS</p>' +
