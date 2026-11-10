@@ -208,13 +208,14 @@ function appLinks_(L) {
 
 /* ---------- 레이아웃 ---------- */
 function build_(m, p, x) {
+  const inv = m.card === 'invite'; // 초청 메일: 큰 헤더 + 가운데 정렬 초청장 / 나머지: 얇은 띠 헤더 + 왼쪽 정렬 안내
   const ch = CHIP[m.chip];
   const chip = '<span style="display:inline-block;padding:5px 10px;border-radius:6px;background:' + ch[0] + ';color:' + ch[1] + ';font:700 12px/1 ' + FONT + '">' + ch[2] + '</span>';
-  const note = m.note ? '<p style="margin:20px 0 0;padding:14px 16px;border-radius:10px;background:' + (m.chip === 'wait' ? '#fff8ec' : C.soft) + ';font:400 14px/1.6 ' + FONT + ';color:' + C.ink2 + '">' + m.note + '</p>' : '';
-  const btns = m.btns.length ? '<table role="presentation" cellpadding="0" cellspacing="0" style="margin:28px 0 0"><tr>' + m.btns.map(btn_).join('') + '</tr></table>' : '';
+  const note = m.note ? '<p style="margin:20px 0 0;padding:14px 16px;border-radius:10px;' + (inv ? 'text-align:center;' : '') + 'background:' + (m.chip === 'wait' ? '#fff8ec' : C.soft) + ';font:400 14px/1.6 ' + FONT + ';color:' + C.ink2 + '">' + m.note + '</p>' : '';
+  const btns = m.btns.length ? '<table role="presentation" cellpadding="0" cellspacing="0"' + (inv ? ' align="center" style="margin:28px auto 0"' : ' style="margin:28px 0 0"') + '><tr>' + m.btns.map(btn_).join('') + '</tr></table>' : '';
   const cancel = m.cancel ? '<p style="margin:32px 0 0;font:400 13px/1.6 ' + FONT + ';color:' + C.ink3 + '">참석이 어려우시면 <a href="' + x.cancelUrl + '" style="color:' + C.ink3 + ';text-decoration:underline">사전등록 취소</a>를 눌러 주세요. 다른 분께 자리가 돌아갑니다. 참석자 변경은 이 메일에 회신해 주세요.</p>' : '';
   const header = '<tr><td bgcolor="#060a10" style="background:#060a10;border-radius:15px 15px 0 0">' +
-    '<img src="' + x.site + 'assets/mail/header.jpg" width="600" alt="전자주주총회 플랫폼 시연 설명회 · 2026.11.30 13:30 · 페어몬트 앰배서더 서울 지하 1층(B1) 그랜드볼룸 · IR KUDOS" ' +
+    '<img src="' + x.site + 'assets/mail/' + (inv ? 'header.jpg' : 'header-bar.jpg') + '" width="600" alt="전자주주총회 플랫폼 시연 설명회 · 2026.11.30 13:30 · 페어몬트 앰배서더 서울 지하 1층(B1) 그랜드볼룸 · IR KUDOS" ' +
     'style="display:block;width:100%;max-width:600px;height:auto;border:0;border-radius:15px 15px 0 0;color:#ffffff;font:700 15px/1.6 ' + FONT + '"></td></tr>';
   return '<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
     '<meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light"><title>' + esc_(m.subject) + '</title>' +
@@ -224,11 +225,13 @@ function build_(m, p, x) {
     '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="' + C.page + '" style="background:' + C.page + '"><tr><td align="center" style="padding:32px 12px">' +
     '<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#ffffff;border:1px solid ' + C.box + ';border-radius:16px;border-collapse:separate;overflow:hidden">' +
     header +
-    '<tr><td class="px" style="padding:40px 40px 44px">' + chip +
-    '<h1 class="h1" style="margin:14px 0 0;font:800 25px/1.35 ' + FONT + ';letter-spacing:-.02em;color:' + C.ink + '">' + m.head + '</h1>' +
+    '<tr><td class="px" style="padding:' + (inv ? '44px 40px 44px' : '36px 40px 44px') + '">' +
+    (inv ? '<div style="text-align:center">' : '') + chip +
+    '<h1 class="h1" style="margin:' + (inv ? '18px' : '14px') + ' 0 0;font:800 ' + (inv ? '28px' : '25px') + '/1.35 ' + FONT + ';letter-spacing:-.02em;color:' + C.ink + '">' + m.head + '</h1>' +
     (m.salute ? '<p style="margin:28px 0 0;font:700 16px/1.6 ' + FONT + ';color:' + C.ink + '">' + m.salute + '</p>' : '') +
     '<p style="margin:12px 0 0;font:400 15px/1.75 ' + FONT + ';color:' + C.ink2 + '">' + m.lead + '</p>' +
     (m.sign ? '<p style="margin:20px 0 0;font:700 15px/1.6 ' + FONT + ';color:' + C.ink + '">' + m.sign + '</p>' : '') +
+    (inv ? '</div>' : '') +
     (m.card === 'invite' ? card_(m, p) + btns + note : note + card_(m, p) + btns) + guide_(m, x) + cancel +
     '</td></tr>' +
     '<tr><td class="px" style="padding:24px 40px 28px;border-top:1px solid ' + C.line + ';background:#fafbfd;border-radius:0 0 15px 15px">' +
