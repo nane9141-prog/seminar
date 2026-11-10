@@ -295,6 +295,8 @@ td.nw{white-space:nowrap}
     $('#mailbar').innerHTML=
       `<span>D-3 리마인드 <b>11/27(금) 14:00 자동 발송</b> (18:10 마감 직후 늦은 신청자 추가 발송) · 발송 ${remDone}명${remPend&&remDone?` · 미발송 ${remPend}명`:''}</span>`+
       (remDone&&remPend?`<button class="btn btn--ghost btn--sm" id="remindNow" type="button">미발송 ${remPend}명 지금 보내기</button>`:'')+
+      `<span class="sep"></span><span>현장 참석 <b>${att}</b> / 확정 ${conf}명</span>`+
+      `<button class="btn btn--ghost btn--sm" id="attAll" type="button" ${conf>att?'':'disabled'}>확정자 전체 참석 처리</button>`+
       `<span class="sep"></span><span>참석 감사 메일 · 현장 참석 ${att}명 중 발송 ${thDone}명</span>`+
       `<button class="btn btn--sm" id="thanksNow" type="button" ${thPend?'':'disabled'}>${thPend?`참석자 ${thPend}명에게 보내기`:'보낼 대상 없음'}</button>`;
   }
@@ -555,6 +557,16 @@ td.nw{white-space:nowrap}
       if(!confirm(`리마인드 메일을 아직 받지 않은 확정자 ${n}명에게 지금 보낼까요?`))return;
       const {data,error}=await sb.rpc('admin_send_reminders');
       error?toast(error.message,true):(toast(`리마인드 메일 ${data}건 발송을 요청했습니다`),load(true));
+    }
+    if(e.target.id==='attAll'){
+      // 행사 후: 확정자를 모두 참석으로 체크한 뒤, 오지 않은 분만 표에서 체크 해제
+      const n=rows.filter(r=>r.status==='confirmed'&&!r.attended).length;
+      if(!n)return;
+      if(!confirm(`확정자 중 아직 참석 체크가 안 된 ${n}명을 모두 '참석'으로 표시할까요?\n\n그다음 '확정' 탭에서 오지 않은 분만 체크를 해제해 주세요.\n참석 감사 메일은 참석으로 표시된 분께만 나갑니다.`))return;
+      e.target.disabled=true;
+      const {error}=await sb.from('registrations').update({attended:true}).eq('status','confirmed').eq('attended',false);
+      if(error){toast('일괄 처리 실패: '+error.message,true);e.target.disabled=false;return;}
+      toast(`${n}명을 참석으로 표시했습니다. 미참석자만 체크 해제해 주세요`);await load(true);return;
     }
     if(e.target.id==='thanksNow'){
       const n=rows.filter(r=>r.status==='confirmed'&&r.attended&&!r.thanked_at).length;
