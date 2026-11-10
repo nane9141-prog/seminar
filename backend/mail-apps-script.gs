@@ -34,7 +34,7 @@ const EV = {
   start: '20261130T043000Z', end: '20261130T090000Z',
   phone: '02-6011-2000', mail: 'agm@irkudos.co.kr'
 };
-const C = { ink: '#0f1524', ink2: '#3d4556', ink3: '#7a8294', line: '#e3e7ef', soft: '#f4f6fb', blue: '#2f6bff', navy: '#141a6e', page: '#eef1f6' };
+const C = { ink: '#0f1524', ink2: '#3d4556', ink3: '#7a8294', line: '#e3e7ef', soft: '#f4f6fb', blue: '#2f6bff', navy: '#141a6e', page: '#ffffff', box: '#e6e9ef' };
 const FONT = "-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕','Noto Sans KR',sans-serif";
 const CHIP = {
   done: ['#e7f6ee', '#137a45', '참석 확정'], wait: ['#fff4e0', '#9a5b00', '확인 중'], no: ['#fdecec', '#b42323', '신청 결과'],
@@ -213,16 +213,16 @@ function build_(m, p, x) {
   const note = m.note ? '<p style="margin:20px 0 0;padding:14px 16px;border-radius:10px;background:' + (m.chip === 'wait' ? '#fff8ec' : C.soft) + ';font:400 14px/1.6 ' + FONT + ';color:' + C.ink2 + '">' + m.note + '</p>' : '';
   const btns = m.btns.length ? '<table role="presentation" cellpadding="0" cellspacing="0" style="margin:28px 0 0"><tr>' + m.btns.map(btn_).join('') + '</tr></table>' : '';
   const cancel = m.cancel ? '<p style="margin:32px 0 0;font:400 13px/1.6 ' + FONT + ';color:' + C.ink3 + '">참석이 어려우시면 <a href="' + x.cancelUrl + '" style="color:' + C.ink3 + ';text-decoration:underline">사전등록 취소</a>를 눌러 주세요. 다른 분께 자리가 돌아갑니다. 참석자 변경은 이 메일에 회신해 주세요.</p>' : '';
-  const header = '<tr><td bgcolor="#060a10" style="background:#060a10;border-radius:16px 16px 0 0">' +
+  const header = '<tr><td bgcolor="#060a10" style="background:#060a10;border-radius:15px 15px 0 0">' +
     '<img src="' + x.site + 'assets/mail/header.jpg" width="600" alt="전자주주총회 플랫폼 시연 설명회 · 2026.11.30 13:30 · 페어몬트 앰배서더 서울 지하 1층(B1) 그랜드볼룸 · IR KUDOS" ' +
-    'style="display:block;width:100%;max-width:600px;height:auto;border:0;border-radius:16px 16px 0 0;color:#ffffff;font:700 15px/1.6 ' + FONT + '"></td></tr>';
+    'style="display:block;width:100%;max-width:600px;height:auto;border:0;border-radius:15px 15px 0 0;color:#ffffff;font:700 15px/1.6 ' + FONT + '"></td></tr>';
   return '<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
     '<meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light"><title>' + esc_(m.subject) + '</title>' +
     '<style>@media (max-width:620px){.px{padding-left:24px!important;padding-right:24px!important}.h1{font-size:22px!important}}</style></head>' +
     '<body style="margin:0;padding:0;background:' + C.page + ';-webkit-text-size-adjust:100%;word-break:keep-all">' +
     '<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent">' + m.pre + '&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;</div>' +
     '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="' + C.page + '" style="background:' + C.page + '"><tr><td align="center" style="padding:32px 12px">' +
-    '<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#ffffff;border-radius:16px">' +
+    '<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#ffffff;border:1px solid ' + C.box + ';border-radius:16px;border-collapse:separate;overflow:hidden">' +
     header +
     '<tr><td class="px" style="padding:40px 40px 44px">' + chip +
     '<h1 class="h1" style="margin:14px 0 0;font:800 25px/1.35 ' + FONT + ';letter-spacing:-.02em;color:' + C.ink + '">' + m.head + '</h1>' +
@@ -231,7 +231,7 @@ function build_(m, p, x) {
     (m.sign ? '<p style="margin:20px 0 0;font:700 15px/1.6 ' + FONT + ';color:' + C.ink + '">' + m.sign + '</p>' : '') +
     (m.card === 'invite' ? card_(m, p) + btns + note : note + card_(m, p) + btns) + guide_(m, x) + cancel +
     '</td></tr>' +
-    '<tr><td class="px" style="padding:24px 40px 28px;border-top:1px solid ' + C.line + ';background:#fafbfd;border-radius:0 0 16px 16px">' +
+    '<tr><td class="px" style="padding:24px 40px 28px;border-top:1px solid ' + C.line + ';background:#fafbfd;border-radius:0 0 15px 15px">' +
     '<p style="margin:0;font:800 12px/1 ' + FONT + ';letter-spacing:.08em;color:' + C.ink + '">IR KUDOS</p>' +
     '<p style="margin:10px 0 0;font:400 12px/1.7 ' + FONT + ';color:' + C.ink3 + '">문의 <a href="mailto:' + EV.mail + '" style="color:' + C.ink3 + '">' + EV.mail + '</a> · 대표번호 ' + EV.phone +
     '<br>' + (m.foot || '본 메일은 ' + EV.title + ' 사전등록 신청자에게 발송되는 안내 메일입니다.') + '</p>' +
