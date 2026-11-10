@@ -219,9 +219,11 @@ function build_(m, p, x) {
   const note = m.note ? '<p style="margin:20px 0 0;padding:14px 16px;border-radius:10px;' + (inv ? 'text-align:center;' : '') + 'background:' + (m.chip === 'wait' ? '#fff8ec' : C.soft) + ';font:400 14px/1.6 ' + FONT + ';color:' + C.ink2 + '">' + m.note + '</p>' : '';
   const btns = m.btns.length ? '<table role="presentation" cellpadding="0" cellspacing="0"' + (inv ? ' align="center" style="margin:28px auto 0"' : ' style="margin:28px 0 0"') + '><tr>' + m.btns.map(btn_).join('') + '</tr></table>' : '';
   const cancel = m.cancel ? '<p style="margin:32px 0 0;font:400 13px/1.6 ' + FONT + ';color:' + C.ink3 + '">참석이 어려우시면 <a href="' + x.cancelUrl + '" style="color:' + C.ink3 + ';text-decoration:underline">사전등록 취소</a>를 눌러 주세요. 다른 분께 자리가 돌아갑니다. 참석자 변경은 이 메일에 회신해 주세요.</p>' : '';
-  const header = '<tr><td bgcolor="#060a10" style="background:#060a10;border-radius:15px 15px 0 0">' +
-    '<img src="' + x.site + 'assets/mail/' + (m.hero || 'header-bar.jpg?v=4') + '" width="600" alt="전자주주총회 플랫폼 시연 설명회 · 2026.11.30 13:30 · 페어몬트 앰배서더 서울 지하 1층(B1) 그랜드볼룸 · IR KUDOS" ' +
-    'style="display:block;width:100%;max-width:600px;height:auto;border:0;border-radius:15px 15px 0 0;color:#ffffff;font:700 15px/1.6 ' + FONT + '"></td></tr>';
+  // 헤더 이미지: width·height를 고정해 두면 이미지가 차단된 메일(Outlook 등)에서도 같은 크기의 어두운 칸에 대체 문구가 넉넉히 보임
+  const hH = m.hero ? 254 : 120;
+  const header = '<tr><td bgcolor="#060a10" align="center" valign="middle" height="' + hH + '" style="background:#060a10;border-radius:15px 15px 0 0;height:' + hH + 'px;text-align:center">' +
+    '<img src="' + x.site + 'assets/mail/' + (m.hero || 'header-bar.jpg?v=4') + '" width="600" height="' + hH + '" alt="전자주주총회 플랫폼 시연 설명회 · 11.30(월) 13:30" ' +
+    'style="display:block;width:100%;max-width:600px;height:auto;border:0;border-radius:15px 15px 0 0;color:#ffffff;text-align:center;font:700 17px/' + hH + 'px ' + FONT + '"></td></tr>';
   return '<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
     '<meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light"><title>' + esc_(m.subject) + '</title>' +
     '<style>@media (max-width:620px){.px{padding-left:24px!important;padding-right:24px!important}.h1{font-size:22px!important}}</style></head>' +
