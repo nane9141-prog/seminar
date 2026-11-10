@@ -1,12 +1,12 @@
 -- ============================================================
 -- 기업별 좌석 수 예외 (11.10): companies.seat_limit 가 있으면 기업당 2명 대신 그 값을 적용
--- 테스트용 기업: IR큐더스(아이알큐더스) · 5석  → 테스트 후 backend/test-cleanup.sql 로 정리
+-- 테스트용 기업: IR큐더스(아이알큐더스) · 6석  → 테스트 후 backend/test-cleanup.sql 로 정리
 -- ============================================================
 alter table public.companies add column if not exists seat_limit int;
 
 insert into public.companies(code, name, market, eligible, seat_limit)
-values ('TEST', 'IR큐더스(아이알큐더스)', '테스트', true, 5)
-on conflict (code) do update set name = excluded.name, market = excluded.market, eligible = true, seat_limit = 5;
+values ('TEST', 'IR큐더스(아이알큐더스)', '테스트', true, 6)
+on conflict (code) do update set name = excluded.name, market = excluded.market, eligible = true, seat_limit = 6;
 
 create or replace function public.list_companies()
 returns table (id bigint, name text, code text, market text, remaining int)
