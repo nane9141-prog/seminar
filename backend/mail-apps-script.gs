@@ -27,11 +27,11 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 const ZERO = '00000000-0000-0000-0000-000000000000';
 const EV = {
   title: '전자주주총회 플랫폼 시연 설명회',
-  date: '2026년 11월 30일(월)', time: '13:00 등록 · 13:30 ~ 18:00',
+  date: '2026년 11월 30일(월)', time: '12:30 등록 · 13:00 ~ 17:45',
   place: '페어몬트 앰배서더 서울 지하 1층(B1) 그랜드볼룸', addr: '서울특별시 영등포구 여의대로 108',
   map: 'https://map.naver.com/p/search/%ED%8E%98%EC%96%B4%EB%AA%AC%ED%8A%B8%20%EC%95%B0%EB%B0%B0%EC%84%9C%EB%8D%94%20%EC%84%9C%EC%9A%B8',
   gcal: 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=%EC%A0%84%EC%9E%90%EC%A3%BC%EC%A3%BC%EC%B4%9D%ED%9A%8C%ED%94%8C%EB%9E%AB%ED%8F%BC%20%EC%8B%9C%EC%97%B0%20%EC%84%A4%EB%AA%85%ED%9A%8C&dates=20261130T043000Z/20261130T090000Z&location=%ED%8E%98%EC%96%B4%EB%AA%AC%ED%8A%B8%20%EC%95%B0%EB%B0%B0%EC%84%9C%EB%8D%94%20%EC%84%9C%EC%9A%B8%20B1',
-  start: '20261130T043000Z', end: '20261130T090000Z',
+  start: '20261130T040000Z', end: '20261130T084500Z',
   phone: '02-6011-2000', mail: 'agm@irkudos.co.kr'
 };
 const C = { ink: '#0f1524', ink2: '#3d4556', ink3: '#7a8294', line: '#e3e7ef', soft: '#f4f6fb', blue: '#2f6bff', navy: '#141a6e', page: '#ffffff', box: '#e6e9ef' };
@@ -139,7 +139,7 @@ function compose_(p) {
   const D = {
     confirmed: {
       chip: 'done', subject: '[IR큐더스] 전자주주총회 플랫폼 시연 설명회 참석이 확정되었습니다',
-      pre: '11월 30일(월) 오후 1시부터 페어몬트 앰배서더 서울 지하 1층에서 등록을 시작합니다.',
+      pre: '11월 30일(월) 낮 12시 30분부터 페어몬트 앰배서더 서울 지하 1층에서 등록을 시작합니다.',
       head: esc_(p.name) + '님, 참석이 확정되었습니다',
       lead: '신청해 주셔서 감사합니다. 전자주주총회 준비에 필요한 법률·실무 쟁점과, 모의 전자주주총회로 확인하는 실제 운영 과정을 준비했습니다. 아래 일정과 참석 안내를 확인해 주세요.',
       card: 'full', btns: [['캘린더에 추가', EV.gcal, 1], ['오시는 길', EV.map, 0]], guide: full, cancel: true, ics: true
@@ -164,12 +164,12 @@ function compose_(p) {
     },
     reminder: {
       chip: 'd1', subject: '[IR큐더스] 11월 30일(월) 전자주주총회 플랫폼 시연 설명회 참석 안내',
-      pre: '11월 30일(월) 13:00부터 등록합니다. 주주PASS 설치와 주차 안내를 확인해 주세요.',
+      pre: '11월 30일(월) 12:30부터 등록합니다. 주주PASS 설치와 주차 안내를 확인해 주세요.',
       head: '다음 주 월요일,<br>설명회에서 뵙겠습니다',
       salute: esc_(p.company) + ' ' + honor + '께',
-      lead: '전자주주총회 플랫폼 시연 설명회가 <b>11월 30일(월) 오후 1시 30분</b>에 열립니다. 등록은 오후 1시부터입니다.<br>' +
+      lead: '전자주주총회 플랫폼 시연 설명회가 <b>11월 30일(월) 오후 1시</b>에 열립니다. 등록은 낮 12시 30분부터입니다.<br>' +
         '장소와 참석 준비사항을 다시 안내해 드리니, 행사 전에 확인해 주시기 바랍니다.',
-      sign: 'IR큐더스 드림', letter: true, hero: 'header-remind.jpg?v=5',
+      sign: 'IR큐더스 드림', letter: true, hero: 'header-remind.jpg?v=6',
       card: 'full', btns: [['오시는 길', EV.map, 1]].concat(appLinks.length ? [['주주PASS 설치', appLinks[0][1], 0]] : []),
       guide: ['check', 'timetable'], cancel: true, ics: true
     },
@@ -185,7 +185,7 @@ function compose_(p) {
         '주주명부와 의안 설정부터 출석 확인, 표결, 결과 집계까지 통합시스템의 운영 과정을 시연합니다. ' +
         '참석자께서는 현장 출석이나 전자 출석으로 모의 전자주주총회에 참여해 직접 투표하실 수 있습니다.<br><br>' +
         '바쁘시더라도 참석하시어 자리를 빛내 주시기 바랍니다.',
-      sign: 'IR큐더스 드림', letter: true, hero: 'header.jpg',
+      sign: 'IR큐더스 드림', letter: true, hero: 'header.jpg?v=6',
       card: 'invite', btns: [['사전등록하기', inviteUrl, 1], ['상세 보기', site, 0]],
       note: '사전등록은 <b>기업별 최대 2명</b>, 선착순 <b>300명</b>까지 받으며 <b>11월 27일(금) 18:00</b>에 마감합니다. 정원이 차면 일찍 마감될 수 있습니다. 위 버튼으로 신청하시면 회사와 성함이 미리 입력되어 있습니다.',
       guide: ['timetable'], foot: '본 메일은 전자주주총회 의무화 대상 상장회사 담당자께 보내드리는 초청 메일입니다. 수신을 원치 않으시면 이 메일에 회신해 주세요. 메일 열람과 링크 클릭 여부는 설명회 안내 목적으로만 확인합니다.'
@@ -222,7 +222,7 @@ function build_(m, p, x) {
   // 헤더 이미지: width·height를 고정해 두면 이미지가 차단된 메일(Outlook 등)에서도 같은 크기의 어두운 칸에 대체 문구가 넉넉히 보임
   const hH = m.hero ? 254 : 120;
   const header = '<tr><td bgcolor="#060a10" align="center" valign="middle" height="' + hH + '" style="background:#060a10;border-radius:15px 15px 0 0;height:' + hH + 'px;text-align:center">' +
-    '<img src="' + x.site + 'assets/mail/' + (m.hero || 'header-bar.jpg?v=4') + '" width="600" height="' + hH + '" alt="전자주주총회 플랫폼 시연 설명회 · 11.30(월) 13:30" ' +
+    '<img src="' + x.site + 'assets/mail/' + (m.hero || 'header-bar.jpg?v=6') + '" width="600" height="' + hH + '" alt="전자주주총회 플랫폼 시연 설명회 · 11.30(월) 13:00" ' +
     'style="display:block;width:100%;max-width:600px;height:auto;border:0;border-radius:15px 15px 0 0;color:#ffffff;text-align:center;font:700 17px/' + hH + 'px ' + FONT + '"></td></tr>';
   return '<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
     '<meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light"><title>' + esc_(m.subject) + '</title>' +
@@ -283,24 +283,26 @@ function guide_(m, x) {
     ? ' ' + link('설치하기', x.appLinks[0][1])
     : '';
   const G = {
-    entry: ['입장 안내', '별도의 입장권이나 QR코드는 필요 없습니다. 행사 당일 오후 1시부터 지하 1층 등록 데스크에서 성함과 소속을 말씀해 주세요. 확인 후 명찰을 드립니다.'],
+    entry: ['입장 안내', '별도의 입장권이나 QR코드는 필요 없습니다. 행사 당일 낮 12시 30분부터 지하 1층 등록 데스크에서 성함과 소속을 말씀해 주세요. 확인 후 명찰을 드립니다.'],
     app: ['시연 투표 참여', '현장 출석이나 전자 출석 중 한 가지 방식으로 참여하실 수 있습니다.<br><b>현장 출석</b> <b>주주PASS</b> 앱을 미리 설치하고 본인인증을 마쳐 주세요. 당일 등록 데스크에서 NFC 태그로 출석을 등록하시면 됩니다.<br><b>전자 출석</b> 당일 등록 데스크에서 알려드리는 경로로 출석하실 수 있습니다.<br>설치·인증에 문제가 있으면 등록 데스크에서 도와드립니다.' + app],
     parking: ['주차', '페어몬트 호텔 주차장을 이용하시고, 등록 데스크에서 주차 지원을 등록해 주세요. 더현대 서울 주차장은 지원되지 않습니다.'],
-    program: ['행사 프로그램', '13:30 개회 · 13:40 법률·실무 세션 · 15:30 통합 솔루션 소개 및 운영 시연 · 17:25 질의응답 및 폐회']
+    program: ['행사 프로그램', '13:00 개회 · 13:10 축사 · 13:20 한국주주총회연구소 출범식 · 13:25 법률·실무 세션 · 15:15 통합 솔루션 소개 및 모의 전자주주총회 시연 · 17:10 질의응답 및 폐회']
   };
   let h = '';
   m.guide.forEach(k => {
     if (k === 'check') {
-      const items = [['13:00', '지하 1층 등록 데스크에서 성함·소속 확인 후 명찰 수령'], ['투표 참여', '현장 출석: 주주PASS 앱 설치·본인인증 후 등록 데스크에서 NFC 태그로 출석 등록 / 전자 출석: 등록 데스크에서 안내하는 경로로 접속' + app], ['주차', '페어몬트 호텔 주차장 이용 후 등록 데스크에서 주차 지원 등록 (더현대 서울 주차장은 지원 불가)']];
+      const items = [['12:30', '지하 1층 등록 데스크에서 성함·소속 확인 후 명찰 수령'], ['투표 참여', '현장 출석: 주주PASS 앱 설치·본인인증 후 등록 데스크에서 NFC 태그로 출석 등록 / 전자 출석: 등록 데스크에서 안내하는 경로로 접속' + app], ['주차', '페어몬트 호텔 주차장 이용 후 등록 데스크에서 주차 지원 등록 (더현대 서울 주차장은 지원 불가)']];
       h += '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:28px 0 0">' + items.map((it, i) =>
         '<tr><td style="width:28px;vertical-align:top;padding:8px 0"><span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:' + C.blue + ';color:#ffffff;font:700 12px/20px ' + FONT + ';text-align:center">' + (i + 1) + '</span></td>' +
         '<td style="padding:8px 0;font:400 14px/1.6 ' + FONT + ';color:' + C.ink2 + '"><b style="color:' + C.ink + '">' + it[0] + '</b> &nbsp;' + it[1] + '</td></tr>').join('') + '</table>';
     } else if (k === 'timetable') {
-      const tt = [['13:00', '등록 및 입장', ''], ['13:30', '개회 및 행사 안내', ''],
-        ['13:40', '전자주주총회 제도 도입 및 진행 관련 주요 실무 쟁점', '김승준 변호사 · 김앤장 법률사무소'],
-        ['14:35', '상법 개정과 전자주총이 몰고 올 기업 경영의 지각변동', '권재열 연구소장 · 한국주주총회연구소'],
-        ['15:30', '전자주주총회 도입·운영 방안 및 통합 솔루션 소개', '박성용 본부장 · IR큐더스'],
-        ['16:10', '전자주주총회 운영 시연 및 표결 참여', '박성용 본부장 · IR큐더스'], ['17:25', '사전 질문 및 현장 질의응답, 경품 추첨 및 폐회', '']];
+      const tt = [['12:30', '등록 및 입장', ''], ['13:00', '개회 및 행사 안내', ''],
+        ['13:10', '축사', '김광록 회장 · 한국기업법학회 / 정우용 정책부회장 · 한국상장회사협의회'],
+        ['13:20', '한국주주총회연구소 출범식', '권재열 교수 · 경희대 법학전문대학원'],
+        ['13:25', '전자주주총회 제도 도입 및 진행 관련 주요 실무 쟁점', '김승준 변호사 · 김앤장 법률사무소'],
+        ['14:20', '상법 개정과 전자주총이 몰고 올 기업 경영의 지각변동', '권재열 교수 · 경희대 법학전문대학원'],
+        ['15:15', '전자주주총회 도입·운영 방안 및 통합 솔루션 소개', '박성용 본부장 · IR큐더스'],
+        ['15:55', '모의 전자주주총회 시연', '박성용 본부장 · IR큐더스'], ['17:10', '사전 질문 및 현장 질의응답, 경품 추첨 및 폐회', '']];
       h += '<p style="margin:32px 0 10px;font:700 15px/1.4 ' + FONT + ';color:' + C.ink + '">타임테이블</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0">' + tt.map(t =>
         '<tr><td style="width:56px;vertical-align:top;padding:9px 0;border-top:1px solid ' + C.line + ';font:600 13px/1.5 ' + FONT + ';color:' + C.blue + '">' + t[0] + '</td>' +
         '<td style="padding:9px 0;border-top:1px solid ' + C.line + ';font:600 14px/1.5 ' + FONT + ';color:' + C.ink + '">' + t[1] +
@@ -320,7 +322,7 @@ function ics_(p) {
     'DTSTAMP:' + Utilities.formatDate(new Date(), 'UTC', "yyyyMMdd'T'HHmmss'Z'"),
     'DTSTART:' + EV.start, 'DTEND:' + EV.end, 'SUMMARY:' + EV.title,
     'LOCATION:' + EV.place + ' (' + EV.addr + ')',
-    'DESCRIPTION:13:00부터 지하 1층 등록 데스크에서 성함과 소속 확인 후 명찰 수령.',
+    'DESCRIPTION:12:30부터 지하 1층 등록 데스크에서 성함과 소속 확인 후 명찰 수령.',
     'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
 }
 function text1_(s) { return String(s || '').replace(/\s+/g, ' ').trim(); }
