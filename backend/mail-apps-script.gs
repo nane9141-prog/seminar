@@ -187,7 +187,7 @@ function compose_(p) {
       salute: esc_(p.company) + ' ' + honor + '께',
       lead: '전자주주총회 플랫폼 시연 설명회가 <b>11월 30일(월) 오후 1시</b>에 열립니다. 등록은 낮 12시 30분부터입니다.<br>' +
         '장소와 참석 준비사항을 다시 안내해 드리니, 행사 전에 확인해 주시기 바랍니다.',
-      sign: 'IR큐더스 드림', letter: true, hero: 'header-remind.jpg?v=11',
+      sign: 'IR큐더스 드림', letter: true, hero: 'header-remind.jpg?v=12',
       card: 'full', btns: [['오시는 길', EV.map, 1]].concat(appLinks.length ? [['주주PASS 설치', appLinks[0][1], 0]] : []),
       guide: ['check', 'timetable'], cancel: true, ics: true
     },
