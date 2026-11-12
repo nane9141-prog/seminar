@@ -159,6 +159,7 @@ section{padding-block:140px}
 .app__ways>div{display:grid;grid-template-columns:84px minmax(0,1fr);gap:12px}
 .app__ways dt{font-weight:700;color:var(--fg)}
 .app__ways dd{margin:0}
+.app__btn{margin-top:12px;min-height:44px;padding:0 20px;font-size:15px}
 .app__n{margin-top:12px;font-weight:600;color:var(--fg)}
 .app small{display:block;margin-top:4px;color:var(--fg-3);font-size:13px}
 @media (max-width:640px){.app__ways>div{grid-template-columns:1fr;gap:2px}}
@@ -583,11 +584,9 @@ html.rg-lock{overflow:hidden}
           <p>현장 출석이나 전자 출석으로 모의 전자주주총회에 참여해 직접 투표하실 수 있습니다. (두 방식 중 한가지로 선택)</p>
           <dl class="app__ways">
             <div><dt>현장 출석</dt><dd>‘주주PASS’ 앱을 설치하고 본인인증을 마친 뒤, 등록 데스크에서 NFC 태그로 출석을 등록해 주세요.<br>투표는 행사장 안에서만 할 수 있습니다.</dd></div>
-            <div><dt>전자 출석</dt><dd>등록 데스크에서 알려드리는 경로로 접속해 주세요.</dd></div>
+            <div><dt>전자 출석</dt><dd>등록 데스크에서 알려드리는 경로로 접속해 주세요.<br><a class="btn btn--ghost app__btn" id="appLink" href="https://kudos.agmlive.co.kr/appstore/juju-pass/redirect" target="_blank" rel="noopener">주주PASS 설치하기<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a></dd></div>
           </dl>
-          <small style="margin-top:12px">설치 · 인증 · 접속 문의는 등록 데스크에서 도와드립니다.</small>
         </div>
-        <a class="btn btn--ghost" id="appLink" href="https://kudos.agmlive.co.kr/appstore/juju-pass/redirect" target="_blank" rel="noopener">주주PASS 설치하기<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
       </div>
     </div>
   </section>
@@ -611,7 +610,7 @@ html.rg-lock{overflow:hidden}
       <p class="reg__p">신청서에 남겨주신 사전 질문은 질의응답 시간에 우선적으로 다룹니다.</p>
       <a class="btn" href="#register" id="formLink">사전등록하기</a>
       <dl class="facts">
-        <div><dt>참가 대상</dt><dd>전자주주총회 의무화 대상 상장회사의 주주총회 · IR · 법무 담당자<small class="fact-note">2027년 1월 1일부터 최근 사업연도 말 자산총액 2조 원 이상 상장회사 의무화</small></dd></div>
+        <div><dt>참가 대상</dt><dd>전자주주총회 의무화 대상 상장회사의 주주총회 · IR · 법무 담당자<small class="fact-note">자산총액 2조 원 이상 상장회사</small></dd></div>
         <div><dt>정원</dt><dd>총 300명<small class="fact-note">정원에 도달하면 신청이 마감됩니다</small></dd></div>
         <div><dt>기업별 인원</dt><dd>최대 2명<small class="fact-note">신청 가능한 인원은 회사 검색 결과에서 확인하실 수 있습니다</small></dd></div>
         <div><dt>신청 마감</dt><dd>11월 27일(금) 18:00<small class="fact-note">정원에 도달하면 그 전에 마감됩니다</small></dd></div>
