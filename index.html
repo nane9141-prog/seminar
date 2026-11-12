@@ -773,7 +773,7 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
     const d=Math.min(devicePixelRatio||1,2),w=c.clientWidth,h=c.clientHeight;
     c.width=w*d;c.height=h*d;x.setTransform(d,0,0,d,0,0);x.clearRect(0,0,w,h);
     // city blocks: a loose grid, the roads are the gaps
-    const cols=[0,.27,.44,.62,.82,1.02],rows=[0,.22,.44,.66,.85,1.02],g=14;  // 9호선(x .27)·5호선(y .66)이 블록 사이 길 위로
+    const cols=[0,.27,.44,.82,1.02],rows=[0,.22,.44,.66,.85,1.02],g=14;  // 9호선(x .27)·5호선(y .66)이 블록 사이 길 위로
     x.fillStyle=K.block;
     for(let i=0;i<cols.length-1;i++)for(let j=0;j<rows.length-1;j++){
       const X=cols[i]*w+g/2,Y=rows[j]*h+g/2,W=(cols[i+1]-cols[i])*w-g,H=(rows[j+1]-rows[j])*h-g;
