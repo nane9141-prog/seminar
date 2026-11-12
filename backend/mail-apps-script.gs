@@ -246,14 +246,15 @@ function build_(m, p, x) {
   return '<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
     '<meta name="color-scheme" content="light dark"><meta name="supported-color-schemes" content="light dark"><title>' + esc_(m.subject) + '</title>' +
     '<style>@media (max-width:620px){.px{padding-left:24px!important;padding-right:24px!important}.h1{font-size:22px!important}' +
-    // 모바일: 바깥 여백·테두리 없이 화면 가득 (카드가 떠 보이지 않게)
+    // 흰 바탕은 따로 칠하지 않음(메일 앱 기본 바탕 사용) — Gmail 앱 등이 다크 모드에서 바탕을 어둡게 바꿀 수 있도록
+  // 모바일: 바깥 여백·테두리 없이 화면 가득 (카드가 떠 보이지 않게)
     '.wrap{padding:0!important}.card{border:0!important;border-radius:0!important}.hd,.hd img,.ft{border-radius:0!important}' +
     // 이미지 차단 시 대체 문구 칸: PC는 600×254(120) 그대로, 모바일은 화면 폭 비율에 맞춰 줄임
     '.hdi,.hdb{font-size:13px!important}.hdi{line-height:40vw!important}.hdb{line-height:19vw!important}}</style></head>' +
-    '<body style="margin:0;padding:0;background:' + C.page + ';-webkit-text-size-adjust:100%;word-break:keep-all">' +
+    '<body style="margin:0;padding:0;-webkit-text-size-adjust:100%;word-break:keep-all">' +
     '<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent">' + m.pre + '&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;</div>' +
-    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="' + C.page + '" style="background:' + C.page + '"><tr><td class="wrap" align="center" style="padding:32px 12px">' +
-    '<table class="card" role="presentation" width="600" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="width:100%;max-width:600px;background:#ffffff;border:1px solid ' + C.box + ';border-radius:16px;border-collapse:separate;overflow:hidden">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td class="wrap" align="center" style="padding:32px 12px">' +
+    '<table class="card" role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;border:1px solid ' + C.box + ';border-radius:16px;border-collapse:separate;overflow:hidden">' +
     header +
     '<tr><td class="px" style="padding:' + (inv ? '44px 40px 44px' : '36px 40px 44px') + '">' +
     (inv ? '<div style="text-align:center">' : '') + chip +
