@@ -1120,7 +1120,7 @@ if('IntersectionObserver' in window)new IntersectionObserver(e=>{visible=e[0].is
       state=st;companies=list.map(c=>({...c,n:norm(c.name),ch:cho(norm(c.name))}));
       if(st.app_url){const a=document.getElementById('appLink');if(a)a.href=st.app_url;}
       if(!st.open||st.remaining<=0){renderClosed(st);return;}
-      sub.innerHTML=esc(SUB0)+' · 잔여 <b>'+st.remaining+'</b>석';
+      sub.innerHTML=esc(SUB0);
       const inp=formEl&&formEl.querySelector('#rgCo');
       if(inp){inp.disabled=false;inp.placeholder='회사명 또는 종목코드 검색';if(document.activeElement===inp)search();}
       if(picked){const p=companies.find(c=>c.id===picked.id);if(p){picked=p;showPicked();}}
