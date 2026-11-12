@@ -240,18 +240,20 @@ function build_(m, p, x) {
   // 헤더 이미지: img에 width·height 속성을 두어 이미지가 차단된 메일(Outlook 등)에서도 같은 크기의 어두운 칸에 대체 문구가 보이게 함.
   // 칸(td)에는 높이를 고정하지 않음 — 모바일에서 이미지가 줄어들 때 아래에 검은 여백이 남지 않도록
   const hH = m.hero ? 254 : 120;
-  const header = '<tr><td bgcolor="#060a10" align="center" valign="middle" style="background:#060a10;border-radius:15px 15px 0 0;text-align:center;line-height:0;font-size:0">' +
+  const header = '<tr><td class="hd" bgcolor="#060a10" align="center" valign="middle" style="background:#060a10;border-radius:15px 15px 0 0;text-align:center;line-height:0;font-size:0">' +
     '<img src="' + x.site + 'assets/mail/' + (m.hero || 'header-bar.jpg?v=6') + '" width="600" height="' + hH + '" alt="전자주주총회 플랫폼 시연 설명회 · 11.30(월) 13:00" class="' + (m.hero ? 'hdi' : 'hdb') + '" ' +
     'style="display:block;width:100%;max-width:600px;height:auto;border:0;border-radius:15px 15px 0 0;color:#ffffff;text-align:center;font:700 17px/' + hH + 'px ' + FONT + '"></td></tr>';
   return '<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
     '<meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light"><title>' + esc_(m.subject) + '</title>' +
     '<style>@media (max-width:620px){.px{padding-left:24px!important;padding-right:24px!important}.h1{font-size:22px!important}' +
+    // 모바일: 바깥 여백·테두리 없이 화면 가득 (카드가 떠 보이지 않게)
+    '.wrap{padding:0!important}.card{border:0!important;border-radius:0!important}.hd,.hd img,.ft{border-radius:0!important}' +
     // 이미지 차단 시 대체 문구 칸: PC는 600×254(120) 그대로, 모바일은 화면 폭 비율에 맞춰 줄임
     '.hdi,.hdb{font-size:13px!important}.hdi{line-height:40vw!important}.hdb{line-height:19vw!important}}</style></head>' +
     '<body style="margin:0;padding:0;background:' + C.page + ';-webkit-text-size-adjust:100%;word-break:keep-all">' +
     '<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent">' + m.pre + '&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;</div>' +
-    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="' + C.page + '" style="background:' + C.page + '"><tr><td align="center" style="padding:32px 12px">' +
-    '<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#ffffff;border:1px solid ' + C.box + ';border-radius:16px;border-collapse:separate;overflow:hidden">' +
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="' + C.page + '" style="background:' + C.page + '"><tr><td class="wrap" align="center" style="padding:32px 12px">' +
+    '<table class="card" role="presentation" width="600" cellpadding="0" cellspacing="0" bgcolor="#ffffff" style="width:100%;max-width:600px;background:#ffffff;border:1px solid ' + C.box + ';border-radius:16px;border-collapse:separate;overflow:hidden">' +
     header +
     '<tr><td class="px" style="padding:' + (inv ? '44px 40px 44px' : '36px 40px 44px') + '">' +
     (inv ? '<div style="text-align:center">' : '') + chip +
@@ -262,7 +264,7 @@ function build_(m, p, x) {
     (inv ? '</div>' : '') +
     (inv ? card_(m, p) + btns + note : note + card_(m, p) + btns) + guide_(m, x) + cancel +
     '</td></tr>' +
-    '<tr><td class="px" style="padding:24px 40px 28px;border-top:1px solid ' + C.line + ';background:#fafbfd;border-radius:0 0 15px 15px">' +
+    '<tr><td class="px ft" bgcolor="#fafbfd" style="padding:24px 40px 28px;border-top:1px solid ' + C.line + ';background:#fafbfd;border-radius:0 0 15px 15px">' +
     '<p style="margin:0;font:800 12px/1 ' + FONT + ';letter-spacing:.08em;color:' + C.ink + '">IR KUDOS</p>' +
     '<p style="margin:10px 0 0;font:400 12px/1.7 ' + FONT + ';color:' + C.ink3 + '">문의 <a href="mailto:' + EV.mail + '" style="color:' + C.ink3 + '">' + EV.mail + '</a> · 대표번호 ' + EV.phone +
     '<br>' + (m.foot || '본 메일은 ' + EV.title + ' 사전등록 신청자에게 발송되는 안내 메일입니다.') + '</p>' +
@@ -273,7 +275,8 @@ function btn_(b) {
   const style = b[2]
     ? 'background:' + C.blue + ';color:#ffffff;border:1px solid ' + C.blue
     : 'background:#ffffff;color:' + C.ink + ';border:1px solid #cfd5e1';
-  return '<td style="padding:0 8px 8px 0"><a href="' + b[1] + '" target="_blank" style="display:inline-block;padding:14px 22px;border-radius:10px;font:700 15px/1 ' + FONT + ';text-decoration:none;' + style + '">' + b[0] + '</a></td>';
+  const bg = b[2] ? C.blue : '#ffffff';
+  return '<td style="padding:0 8px 8px 0"><table role="presentation" cellpadding="0" cellspacing="0"><tr><td bgcolor="' + bg + '" style="background:' + bg + ';border-radius:10px"><a href="' + b[1] + '" target="_blank" style="display:inline-block;padding:14px 22px;border-radius:10px;font:700 15px/1 ' + FONT + ';text-decoration:none;' + style + '">' + b[0] + '</a></td></tr></table></td>';
 }
 
 function row_(k, v) {
@@ -294,7 +297,7 @@ function card_(m, p) {
     row_('일시', EV.date + sub(EV.time)),
     row_('장소', m.card === 'full' ? EV.place + sub(EV.addr) : EV.place)
   ];
-  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:28px 0 0;background:' + C.soft + ';border-radius:12px"><tr><td style="padding:16px 20px">' +
+  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="' + C.soft + '" style="margin:28px 0 0;background:' + C.soft + ';border-radius:12px"><tr><td bgcolor="' + C.soft + '" style="padding:16px 20px;background:' + C.soft + ';border-radius:12px">' +
     '<table role="presentation" width="100%" cellpadding="0" cellspacing="0">' + rows.join('') + '</table></td></tr></table>';
 }
 
