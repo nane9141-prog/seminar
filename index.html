@@ -21,15 +21,15 @@
   color-scheme: light;
   --bg:#ffffff; --card:#f4f6f9; --card-2:#e8ecf1; --line:#e1e6ec;
   --fg:#141820; --fg-2:#4a5260; --fg-3:#8a93a0;
-  --blue:#6cb0fe;      /* 타이틀·강조 텍스트 (CTA 버튼은 --blue-2 유지) */
-  --blue-2:#2f6bff;    /* 버튼 */
-  --blue-3:#1d54d8;
+  --blue:#0071f3;      /* 타이틀·강조 텍스트 */
+  --blue-2:#0071f3;    /* 버튼 */
+  --blue-3:#005ed0;
   --chip-ink:#ffffff;
   --wrap:1200px; --wide:1200px;
   --font:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
   /* 약도 스크립트용 토큰 */
   --color-ink:#141820; --color-map-block:#e8ecf1; --color-rule-on-ink:#d8dee6; --color-on-ink:#141820; --color-on-ink-muted:#8a93a0;
-  --color-accent:#2f6bff; --color-line5:#996cac; --color-line9:#bdb092; --font-body:var(--font);
+  --color-accent:#0071f3; --color-line5:#996cac; --color-line9:#bdb092; --font-body:var(--font);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:72px;-webkit-text-size-adjust:100%}
@@ -111,7 +111,7 @@ section{padding-block:140px}
 .count b.is-tick{animation:cdFlash 1.4s ease-out}
 @keyframes cdOut{to{transform:translateY(-105%);opacity:0;filter:blur(3px)}}
 @keyframes cdIn{from{transform:translateY(105%);opacity:0;filter:blur(3px)}}
-@keyframes cdFlash{0%,30%{color:var(--blue);text-shadow:0 0 18px rgba(108,176,254,.55)}100%{text-shadow:0 0 0 rgba(108,176,254,0)}}
+@keyframes cdFlash{0%,30%{color:var(--blue);text-shadow:0 0 18px rgba(0,113,243,.5)}100%{text-shadow:0 0 0 rgba(0,113,243,0)}}
 @media (prefers-reduced-motion:reduce){.count .dg i,.count b.is-tick{animation:none}.count .dg i.o{display:none}}
 .intro .btn{margin-top:44px}
 
@@ -176,7 +176,7 @@ section{padding-block:140px}
 
 /* Benefits */
 .ben{margin-top:64px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.ben div{background:var(--card);border-radius:16px;padding:28px;min-height:200px;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;background-image:radial-gradient(120% 90% at 100% 0%,rgba(108,176,254,.18),transparent 60%)}
+.ben div{background:var(--card);border-radius:16px;padding:28px;min-height:200px;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;background-image:radial-gradient(120% 90% at 100% 0%,rgba(0,113,243,.12),transparent 60%)}
 .ben span{font-size:14px;font-weight:700;color:var(--fg-3)}
 .ben h3{font-size:21px;font-weight:700;letter-spacing:-.02em}
 .ben p{font-size:15px;color:var(--fg-2)}
@@ -373,7 +373,7 @@ footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;c
 
 /* ---------- 사전등록 모달 ---------- */
 html.rg-lock{overflow:hidden}
-.rg{--blue:#2160f3;overflow:hidden;padding:0;border:0;background:transparent;color:var(--fg);max-width:none;max-height:none;width:100%;height:100%;margin:0;inset:0}
+.rg{overflow:hidden;padding:0;border:0;background:transparent;color:var(--fg);max-width:none;max-height:none;width:100%;height:100%;margin:0;inset:0}
 .rg::backdrop{background:rgba(15,22,36,.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .rg__box{position:relative;margin:max(32px,6vh) auto;width:min(600px,calc(100% - 32px));background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 30px 80px rgba(15,22,36,.22);display:flex;flex-direction:column;max-height:calc(100% - max(64px,12vh))}
 #rgView{display:flex;flex-direction:column;flex:1 1 auto;min-height:0}
@@ -436,7 +436,7 @@ html.rg-lock{overflow:hidden}
 .hp{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden}
 /* 결과 */
 .rg__done{padding:36px 32px 36px;text-align:center}
-.rg__done .ic{width:64px;height:64px;margin:0 auto 20px;border-radius:50%;display:grid;place-items:center;background:rgba(108,176,254,.14);color:var(--blue)}
+.rg__done .ic{width:64px;height:64px;margin:0 auto 20px;border-radius:50%;display:grid;place-items:center;background:rgba(0,113,243,.1);color:var(--blue)}
 .rg__done .ic.warn{background:rgba(245,158,11,.14);color:#c77700}
 .rg__done .ic svg{width:30px;height:30px}
 .rg__done h3{font-size:24px;font-weight:800;letter-spacing:-.02em}
