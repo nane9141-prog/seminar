@@ -253,12 +253,7 @@ footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;c
   section{padding-block:104px}
   .stages,.ben{grid-template-columns:minmax(0,1fr)}
   .steps{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .spk{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:72%;overflow-x:auto;scroll-snap-type:x mandatory;margin-inline:-24px;padding-inline:24px;scroll-padding-inline:24px;scrollbar-width:none}
-  .spk::-webkit-scrollbar{display:none}
-  .spk li{scroll-snap-align:start}
-  .spk{cursor:grab;touch-action:pan-y}
-  .spk.is-drag{cursor:grabbing;scroll-snap-type:none;user-select:none}
-  .spk,.spk *{-webkit-user-drag:none;user-select:none;-webkit-user-select:none}
+  .spk{grid-template-columns:repeat(2,minmax(0,1fr))}
   .loc{grid-template-columns:minmax(0,1fr)}
   .map{min-height:280px}
 }
@@ -292,7 +287,7 @@ footer{border-top:1px solid var(--line);padding-block:56px 72px;font-size:14px;c
   .tagbox,.app{padding:24px 20px}
   .tagrow{grid-template-columns:minmax(0,1fr);gap:10px}
   .app .btn{width:100%}
-  .spk{grid-auto-columns:82%;margin-inline:-20px;padding-inline:20px;scroll-padding-inline:20px}
+  .spk{grid-template-columns:1fr;gap:16px}
   .steps{grid-template-columns:minmax(0,1fr)}
   .facts{padding:4px 20px}
   .facts div{grid-template-columns:80px minmax(0,1fr)}
