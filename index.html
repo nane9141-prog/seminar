@@ -773,11 +773,11 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
     const d=Math.min(devicePixelRatio||1,2),w=c.clientWidth,h=c.clientHeight;
     c.width=w*d;c.height=h*d;x.setTransform(d,0,0,d,0,0);x.clearRect(0,0,w,h);
     // city blocks: a loose grid, the roads are the gaps
-    const cols=[0,.2,.44,.62,.82,1.02],rows=[0,.24,.5,.74,1.02],g=14;
-    x.strokeStyle=K.rule;x.lineWidth=1;x.fillStyle=K.block;
+    const cols=[0,.27,.44,.62,.82,1.02],rows=[0,.22,.44,.66,.85,1.02],g=14;  // 9호선(x .27)·5호선(y .66)이 블록 사이 길 위로
+    x.fillStyle=K.block;
     for(let i=0;i<cols.length-1;i++)for(let j=0;j<rows.length-1;j++){
       const X=cols[i]*w+g/2,Y=rows[j]*h+g/2,W=(cols[i+1]-cols[i])*w-g,H=(rows[j+1]-rows[j])*h-g;
-      rr(X,Y,W,H,4);x.fill();x.stroke();
+      rr(X,Y,W,H,4);x.fill();
     }
     // subway (참고 약도 기준): 5호선 가로 — 여의도 · 여의나루 / 9호선 세로 — 국회의사당 · 여의도 · 샛강
     const y5=h*.66,x9=w*.27,sw=w<520?5:6;
