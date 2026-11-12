@@ -785,7 +785,7 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
     x.strokeStyle=K.l9;x.beginPath();x.moveTo(x9,-10);x.lineTo(x9,h+10);x.stroke();
     x.strokeStyle=K.l5;x.beginPath();x.moveTo(-10,y5);x.lineTo(w+10,y5);x.stroke();
     // venue block: 위 더현대 서울 / 아래 페어몬트 앰배서더 서울
-    const vx=w*.44,vw=w*.32,vy=h*.12,vh=y5-18-h*.12,half=vh/2,gap=3;
+    const vw=w*.32,vx=w*.63-vw/2,  /* 아래 합친 블록(.44~.82) 가로 중앙 */vy=h*.12,vh=y5-18-h*.12,half=vh/2,gap=3;
     x.fillStyle='#fff';rr(vx,vy,vw,half-gap/2,6);x.fill();
     x.strokeStyle='rgba(20,24,32,.28)';x.lineWidth=1.5;x.stroke();
     x.fillStyle=K.accent;rr(vx,vy+half+gap/2,vw,half-gap/2,6);x.fill();
