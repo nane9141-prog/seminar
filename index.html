@@ -813,8 +813,7 @@ document.getElementById('copyAddr').addEventListener('click',async e=>{
     pill(x9,h*.79,'9호선',K.l9,K.ink,K);
     // the avenue and the caveat
     x.fillStyle=K.muted;x.font='400 12px '+K.body;
-    x.save();x.translate(w*.41,h*.42);x.rotate(-Math.PI/2);x.textAlign='center';x.fillText('여의대로',0,0);x.restore();x.textAlign='left';
-    x.fillText('개략 약도',16,h-16);
+        x.fillText('개략 약도',16,h-16);
   }
   draw();addEventListener('resize',draw);
   if(document.fonts)document.fonts.ready.then(draw);
