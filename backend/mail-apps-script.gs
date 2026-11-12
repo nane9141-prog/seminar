@@ -241,11 +241,13 @@ function build_(m, p, x) {
   // 칸(td)에는 높이를 고정하지 않음 — 모바일에서 이미지가 줄어들 때 아래에 검은 여백이 남지 않도록
   const hH = m.hero ? 254 : 120;
   const header = '<tr><td bgcolor="#060a10" align="center" valign="middle" style="background:#060a10;border-radius:15px 15px 0 0;text-align:center;line-height:0;font-size:0">' +
-    '<img src="' + x.site + 'assets/mail/' + (m.hero || 'header-bar.jpg?v=6') + '" width="600" height="' + hH + '" alt="전자주주총회 플랫폼 시연 설명회 · 11.30(월) 13:00" ' +
+    '<img src="' + x.site + 'assets/mail/' + (m.hero || 'header-bar.jpg?v=6') + '" width="600" height="' + hH + '" alt="전자주주총회 플랫폼 시연 설명회 · 11.30(월) 13:00" class="' + (m.hero ? 'hdi' : 'hdb') + '" ' +
     'style="display:block;width:100%;max-width:600px;height:auto;border:0;border-radius:15px 15px 0 0;color:#ffffff;text-align:center;font:700 17px/' + hH + 'px ' + FONT + '"></td></tr>';
   return '<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
     '<meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light"><title>' + esc_(m.subject) + '</title>' +
-    '<style>@media (max-width:620px){.px{padding-left:24px!important;padding-right:24px!important}.h1{font-size:22px!important}}</style></head>' +
+    '<style>@media (max-width:620px){.px{padding-left:24px!important;padding-right:24px!important}.h1{font-size:22px!important}' +
+    // 이미지 차단 시 대체 문구 칸: PC는 600×254(120) 그대로, 모바일은 화면 폭 비율에 맞춰 줄임
+    '.hdi,.hdb{font-size:13px!important}.hdi{line-height:40vw!important}.hdb{line-height:19vw!important}}</style></head>' +
     '<body style="margin:0;padding:0;background:' + C.page + ';-webkit-text-size-adjust:100%;word-break:keep-all">' +
     '<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent">' + m.pre + '&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;</div>' +
     '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="' + C.page + '" style="background:' + C.page + '"><tr><td align="center" style="padding:32px 12px">' +
