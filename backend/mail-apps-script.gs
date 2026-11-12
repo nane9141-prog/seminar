@@ -236,7 +236,7 @@ function build_(m, p, x) {
   const chip = '<span style="display:inline-block;padding:5px 10px;border-radius:6px;background:' + ch[0] + ';color:' + ch[1] + ';font:700 12px/1 ' + FONT + '">' + ch[2] + '</span>';
   const note = m.note ? '<p style="margin:20px 0 0;padding:14px 16px;border-radius:10px;' + (inv ? 'text-align:center;' : '') + 'background:' + (m.chip === 'wait' ? '#fff8ec' : C.soft) + ';font:400 14px/1.6 ' + FONT + ';color:' + C.ink2 + '">' + m.note + '</p>' : '';
   const btns = m.btns.length ? '<table role="presentation" cellpadding="0" cellspacing="0"' + (inv ? ' align="center" style="margin:28px auto 0"' : ' style="margin:28px 0 0"') + '><tr>' + m.btns.map(btn_).join('') + '</tr></table>' : '';
-  const cancel = m.cancel ? '<p style="margin:32px 0 0;font:400 13px/1.6 ' + FONT + ';color:' + C.ink3 + '">참석이 어려우시면 <a href="' + x.cancelUrl + '" style="color:' + C.ink3 + ';text-decoration:underline">사전등록 취소</a>를 눌러 주세요. 다른 분께 자리가 돌아갑니다. 참석자 변경은 이 메일에 회신해 주세요.</p>' : '';
+  const cancel = m.cancel ? '<p style="margin:32px 0 0;font:400 13px/1.6 ' + FONT + ';color:' + C.ink3 + '">참석이 어려우시면 <a href="' + x.cancelUrl + '" style="color:#000000;font-weight:700;text-decoration:underline">사전등록 취소</a>를 눌러 주세요. 다른 분께 자리가 돌아갑니다. 참석자 변경은 이 메일에 회신해 주세요.</p>' : '';
   // 헤더 이미지: img에 width·height 속성을 두어 이미지가 차단된 메일(Outlook 등)에서도 같은 크기의 어두운 칸에 대체 문구가 보이게 함.
   // 칸(td)에는 높이를 고정하지 않음 — 모바일에서 이미지가 줄어들 때 아래에 검은 여백이 남지 않도록
   const hH = m.hero ? 254 : 120;
@@ -319,7 +319,7 @@ function guide_(m, x) {
       h += '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:28px 0 0">' + items.map((it, i) =>
         '<tr><td style="width:28px;vertical-align:top;padding:8px 0"><span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:' + C.blue + ';color:#ffffff;font:700 12px/20px ' + FONT + ';text-align:center">' + (i + 1) + '</span></td>' +
         '<td style="padding:8px 0;font:400 14px/1.6 ' + FONT + ';color:' + C.ink2 + '"><b style="color:' + C.ink + '">' + it[0] + '</b> &nbsp;' + it[1] + '</td></tr>').join('') + '</table>';
-    } else if (k === 'timetable') {
+    } else if (k === 'timetable' || k === 'program') {
       const tt = [['12:30', '등록 및 입장', ''], ['13:00', '개회 및 행사 안내', ''],
         ['13:10', '축사', '김광록 회장 · 한국기업법학회 / 정우용 전 정책부회장 · 한국상장회사협의회'],
         ['13:20', '한국주주총회연구소 출범식', '권재열 한국주주총회연구소장 · 경희대 법학전문대학원 교수'],
@@ -328,7 +328,7 @@ function guide_(m, x) {
         ['14:40', 'Proxymity, 글로벌 의결권 행사 인프라의 혁신과 미래', 'Scott Oakland · Proxymity, Head of APAC'],
         ['15:10', '전자주주총회 도입·운영 방안 및 통합 솔루션 소개', '박성용 본부장 · IR큐더스'],
         ['15:55', '모의 전자주주총회 시연', '박성용 본부장 · IR큐더스'], ['17:30', '사전 질문 및 현장 질의응답', '']];
-      h += '<p style="margin:32px 0 10px;font:700 15px/1.4 ' + FONT + ';color:' + C.ink + '">타임테이블</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0">' + tt.map(t =>
+      h += '<p style="margin:' + (k === 'program' ? '24px' : '32px') + ' 0 10px;font:700 15px/1.4 ' + FONT + ';color:' + C.ink + '">' + (k === 'program' ? '행사 프로그램' : '타임테이블') + '</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0">' + tt.map(t =>
         '<tr><td style="width:56px;vertical-align:top;padding:9px 0;border-top:1px solid ' + C.line + ';font:600 13px/1.5 ' + FONT + ';color:' + C.blue + '">' + t[0] + '</td>' +
         '<td style="padding:9px 0;border-top:1px solid ' + C.line + ';font:600 14px/1.5 ' + FONT + ';color:' + C.ink + '">' + t[1] +
         (t[2] ? '<br><span style="font-weight:400;font-size:13px;color:' + C.ink3 + '">' + t[2] + '</span>' : '') + '</td></tr>').join('') + '</table>';
