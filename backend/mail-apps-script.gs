@@ -11,7 +11,7 @@
  * 4. 배포 → 새 배포 → 웹 앱 / 실행: 나 / 액세스: 모든 사용자 → URL 복사
  * 5. Supabase settings 테이블 mail_webhook_url 에 그 URL 입력
  *
- * 6. (초청 메일 반송 확인) 함수 installBounceCheck 를 한 번 실행 → 권한 승인. 10분마다 반송 메일을 읽어 관리자 페이지에 표시
+ * 6. (초청 메일 반송 확인) 함수 installBounceCheck 를 한 번 실행 → 권한 승인. 5분마다 반송 메일을 읽어 관리자 페이지에 표시
  *    코드를 고친 뒤에는 배포 → 배포 관리 → 수정 → 버전 '새 버전'으로 저장 (웹훅 URL 유지)
  *
  * 초청 메일 추적: 발송 성공/실패·반송은 아래 SB_URL로 보고, 열람은 메일 속 1px 이미지가 이 웹 앱(doGet)을 부를 때 기록
@@ -84,29 +84,47 @@ function rpc_(fn, body) {
   } catch (err) { console.warn('rpc ' + fn + ' 실패: ' + err); }
 }
 
-/* ---------- 반송 확인: 10분마다 받은편지함의 반송 메일을 읽어 보고 ---------- */
+/* ---------- 반송 확인: 5분마다 받은편지함의 반송 메일을 읽어 보고 ----------
+ * 없는 주소·도메인은 발송 자체는 '성공'으로 끝나고, 몇 초~몇 분 뒤 반송 메일(mailer-daemon)로 돌아옵니다.
+ * 반송 메일은 원래 보낸 메일과 같은 스레드로 묶이므로, 스레드가 아니라 반송 메시지 단위로 처리합니다
+ * (같은 주소로 재발송했다가 다시 반송돼도 잡히도록 처리한 메시지 ID를 기억). */
 const BOUNCE_LABEL = '설명회-반송확인';
 function checkBounces() {
+  const props = PropertiesService.getScriptProperties();
+  const me = String(props.getProperty('FROM') || Session.getEffectiveUser().getEmail() || EV.mail).toLowerCase();
+  let seen = [];
+  try { seen = JSON.parse(props.getProperty('BOUNCE_SEEN') || '[]'); } catch (_) {}
   const label = GmailApp.getUserLabelByName(BOUNCE_LABEL) || GmailApp.createLabel(BOUNCE_LABEL);
-  const threads = GmailApp.search('from:(mailer-daemon OR postmaster) newer_than:7d -label:' + BOUNCE_LABEL, 0, 50);
+  const threads = GmailApp.search('from:(mailer-daemon OR postmaster) newer_than:3d', 0, 100);
+  let n = 0;
   threads.forEach(th => {
     th.getMessages().forEach(msg => {
+      if (!/mailer-daemon|postmaster/i.test(msg.getFrom())) return;   // 같은 스레드의 원본 메일은 건너뜀
+      const id = msg.getId();
+      if (seen.indexOf(id) >= 0) return;
       const body = msg.getPlainBody() || '';
       let to = (msg.getHeader('X-Failed-Recipients') || '').split(',').map(x => x.trim()).filter(Boolean);
       if (!to.length) {
-        const m = body.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g) || [];
-        to = m.filter(a => !/mailer-daemon|postmaster|googlemail|irkudos\.co\.kr/i.test(a));
+        const fr = body.match(/(?:Final|Original)-Recipient:\s*rfc822;\s*([^\s<>]+@[^\s<>]+)/i);
+        if (fr) to = [fr[1]];
       }
-      const reason = (body.match(/(5\d\d[ -][^\n]{0,160})/) || body.match(/([^\n]*(?:not found|does not exist|찾을 수 없|존재하지 않)[^\n]*)/i) || [, '반송'])[1].trim();
-      [...new Set(to.map(a => a.toLowerCase()))].forEach(a => report_({ p_status: 'bounced', p_email: a, p_error: reason }));
+      if (!to.length) {
+        const m = body.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g) || [];
+        to = m.filter(a => !/mailer-daemon|postmaster|googlemail\.com/i.test(a) && a.toLowerCase() !== me && a.toLowerCase() !== EV.mail);
+      }
+      const reason = (body.match(/(5\d\d[ -][^\n]{0,160})/) || body.match(/([^\n]*(?:not found|does not exist|couldn't be found|찾을 수 없|존재하지 않)[^\n]*)/i) || [, '반송'])[1].trim();
+      [...new Set(to.map(a => a.toLowerCase()))].forEach(a => { report_({ p_status: 'bounced', p_email: a, p_error: reason }); n++; });
+      seen.push(id);
     });
     th.addLabel(label);
   });
+  props.setProperty('BOUNCE_SEEN', JSON.stringify(seen.slice(-400)));
+  console.log('반송 보고 ' + n + '건');
 }
-/** 한 번만 실행: checkBounces 를 10분마다 자동 실행 */
+/** 한 번만 실행: checkBounces 를 5분마다 자동 실행 */
 function installBounceCheck() {
   ScriptApp.getProjectTriggers().filter(t => t.getHandlerFunction() === 'checkBounces').forEach(t => ScriptApp.deleteTrigger(t));
-  ScriptApp.newTrigger('checkBounces').timeBased().everyMinutes(10).create();
+  ScriptApp.newTrigger('checkBounces').timeBased().everyMinutes(5).create();
   checkBounces();
 }
 
