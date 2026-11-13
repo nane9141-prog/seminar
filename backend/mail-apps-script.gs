@@ -153,7 +153,7 @@ function compose_(p) {
   const appLinks = appLinks_(L);
   const inviteUrl = site + '?invite=' + (p.invite_token || '') + '#register';
   const honor = esc_(p.name) + (p.title ? ' ' + esc_(p.title) : '') + '님';
-  const full = ['entry', 'app', 'parking', 'program'];
+  const full = ['entry', 'parking', 'program'];
   const D = {
     confirmed: {
       chip: 'done', subject: '[IR큐더스] 전자주주총회 플랫폼 시연 설명회 참석이 확정되었습니다',
@@ -182,13 +182,13 @@ function compose_(p) {
     },
     reminder: {
       chip: 'd1', subject: '[IR큐더스] 11월 30일(월) 전자주주총회 플랫폼 시연 설명회 참석 안내',
-      pre: '11월 30일(월) 12:30부터 등록합니다. 주주PASS 설치와 주차 안내를 확인해 주세요.',
+      pre: '11월 30일(월) 12:30부터 등록합니다. 입장과 주차 안내를 확인해 주세요.',
       head: '다음 주 월요일,<br>설명회에서 뵙겠습니다',
       salute: esc_(p.company) + ' ' + honor + '께',
       lead: '전자주주총회 플랫폼 시연 설명회가 <b>11월 30일(월) 오후 1시</b>에 열립니다. 등록은 낮 12시 30분부터입니다.<br>' +
         '장소와 참석 준비사항을 다시 안내해 드리니, 행사 전에 확인해 주시기 바랍니다.',
       sign: 'IR큐더스 드림', letter: true, hero: 'header-remind.jpg?v=13',
-      card: 'full', btns: [['오시는 길', EV.map, 1]].concat(appLinks.length ? [['주주PASS 설치', appLinks[0][1], 0]] : []),
+      card: 'full', btns: [['오시는 길', EV.map, 1]],
       guide: ['check', 'timetable'], cancel: true, ics: true
     },
     invite: {
@@ -200,12 +200,11 @@ function compose_(p) {
         '2027년 1월 1일부터 최근 사업연도 말 자산총액 2조 원 이상 상장회사는 전자주주총회를 개최해야 합니다. ' +
         '이에 전자주주총회 도입을 준비하시는 기업 담당자분들을 위해 시연 설명회를 마련했습니다.<br><br>' +
         '전문가와 함께 개정 상법의 주요 내용과 전자주주총회 준비에 필요한 법률·실무 쟁점을 살펴보고, ' +
-        '주주명부와 의안 설정부터 출석 확인, 표결, 결과 집계까지 통합시스템의 운영 과정을 시연합니다. ' +
-        '참석자께서는 현장 출석이나 전자 출석으로 모의 전자주주총회에 참여해 직접 투표하실 수 있습니다.<br><br>' +
+        '주주명부와 의안 설정부터 출석 확인, 표결, 결과 집계까지 통합시스템의 운영 과정을 시연합니다.<br><br>' +
         '바쁘시더라도 참석하시어 자리를 빛내 주시기 바랍니다.',
       sign: 'IR큐더스 드림', letter: true, hero: 'header.jpg?v=6',
       card: 'invite', btns: [['사전등록하기', inviteUrl, 1], ['상세 보기', site, 0]],
-      note: '사전등록은 <b>기업별 최대 2명</b>, 선착순 <b>300명</b>까지 받으며 <b>11월 27일(금) 18:00</b>에 마감합니다. 정원이 차면 일찍 마감될 수 있습니다. 위 버튼으로 신청하시면 회사와 성함이 미리 입력되어 있습니다.',
+      note: '사전등록은 <b>기업별 최대 2명</b>, 선착순 <b>300명</b>까지 받으며 참가비는 무료입니다. 정원이 차면 신청이 마감됩니다. 위 버튼으로 신청하시면 회사와 성함이 미리 입력되어 있습니다.',
       guide: ['timetable'], foot: '본 메일은 전자주주총회 의무화 대상 상장회사 담당자께 보내드리는 초청 메일입니다. 수신을 원치 않으시면 이 메일에 회신해 주세요. 메일 열람과 링크 클릭 여부는 설명회 안내 목적으로만 확인합니다.'
     },
     thanks: {
@@ -292,7 +291,7 @@ function card_(m, p) {
     row_('일시', EV.date + sub(EV.time)),
     row_('장소', EV.place + sub(EV.addr)),
     row_('대상', '전자주주총회 의무화 대상 상장회사' + sub('최근 사업연도 말 자산총액 2조 원 이상')),
-    row_('신청', '11월 27일(금) 18:00 마감' + sub('기업별 최대 2명 · 선착순 300명'))
+    row_('신청', '기업별 최대 2명 · 선착순 300명' + sub('참가비 무료'))
   ] : [
     row_('신청자', esc_(p.company) + ' · ' + esc_(p.name) + (p.title ? ' ' + esc_(p.title) : '')),
     row_('일시', EV.date + sub(EV.time)),
@@ -316,7 +315,7 @@ function guide_(m, x) {
   let h = '';
   m.guide.forEach(k => {
     if (k === 'check') {
-      const items = [['12:30', '지하 1층 등록 데스크에서 성함·소속 확인 후 명찰 수령'], ['투표 참여', '현장 출석: 주주PASS 앱 설치·본인인증 후 등록 데스크에서 NFC 태그로 출석 등록 / 전자 출석: 등록 데스크에서 안내하는 경로로 접속' + app], ['주차', '페어몬트 호텔 주차장 이용 후 등록 데스크에서 주차 지원 등록 (더현대 서울 주차장은 지원 불가)']];
+      const items = [['12:30', '지하 1층 등록 데스크에서 성함·소속 확인 후 명찰 수령'], ['주차', '페어몬트 호텔 주차장 이용 후 등록 데스크에서 주차 지원 등록 (더현대 서울 주차장은 지원 불가)']];
       h += '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:28px 0 0">' + items.map((it, i) =>
         '<tr><td style="width:28px;vertical-align:top;padding:8px 0"><span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:' + C.blue + ';color:#ffffff;font:700 12px/20px ' + FONT + ';text-align:center">' + (i + 1) + '</span></td>' +
         '<td style="padding:8px 0;font:400 14px/1.6 ' + FONT + ';color:' + C.ink2 + '"><b style="color:' + C.ink + '">' + it[0] + '</b> &nbsp;' + it[1] + '</td></tr>').join('') + '</table>';
@@ -332,7 +331,8 @@ function guide_(m, x) {
       h += '<p style="margin:' + (k === 'program' ? '24px' : '32px') + ' 0 10px;font:700 15px/1.4 ' + FONT + ';color:' + C.ink + '">' + (k === 'program' ? '행사 프로그램' : '타임테이블') + '</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0">' + tt.map(t =>
         '<tr><td style="width:56px;vertical-align:top;padding:9px 0;border-top:1px solid ' + C.line + ';font:600 13px/1.5 ' + FONT + ';color:' + C.blue + '">' + t[0] + '</td>' +
         '<td style="padding:9px 0;border-top:1px solid ' + C.line + ';font:600 14px/1.5 ' + FONT + ';color:' + C.ink + '">' + t[1] +
-        (t[2] ? '<br><span style="font-weight:400;font-size:13px;color:' + C.ink3 + '">' + t[2] + '</span>' : '') + '</td></tr>').join('') + '</table>';
+        (t[2] ? '<br><span style="font-weight:400;font-size:13px;color:' + C.ink3 + '">' + t[2] + '</span>' : '') + '</td></tr>').join('') + '</table>' +
+        '<p style="margin:10px 0 0;font:400 13px/1.6 ' + FONT + ';color:' + C.ink3 + '">상기 프로그램 일정은 변동될 수 있습니다.</p>';
     } else {
       h += '<p style="margin:24px 0 4px;font:700 15px/1.4 ' + FONT + ';color:' + C.ink + '">' + G[k][0] + '</p>' +
         '<p style="margin:0;font:400 14px/1.7 ' + FONT + ';color:' + C.ink2 + '">' + G[k][1] + '</p>';
