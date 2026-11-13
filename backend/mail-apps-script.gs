@@ -142,7 +142,20 @@ function send_(p) {
   const opts = { htmlBody: html, name: SENDER_NAME, replyTo: EV.mail };
   if (props.getProperty('FROM')) opts.from = props.getProperty('FROM');
   if (m.ics) opts.attachments = [Utilities.newBlob(ics_(p), 'text/calendar', 'seminar.ics')];
-  GmailApp.sendEmail(p.email, m.subject, m.text, opts);
+  // 여러 요청이 동시에 들어와도 Gmail 발송은 한 번에 하나씩 (동시 요청 한도 초과 방지),
+  // 일시적인 한도 오류는 잠시 쉬었다가 최대 4번까지 다시 시도
+  const lock = LockService.getScriptLock();
+  lock.waitLock(120000);
+  try {
+    for (let n = 0; ; n++) {
+      try { GmailApp.sendEmail(p.email, m.subject, m.text, opts); break; }
+      catch (err) {
+        if (n >= 3 || !/too many|concurrent|rate|try again|temporar/i.test(String(err && err.message || err))) throw err;
+        Utilities.sleep(2000 * (n + 1));
+      }
+    }
+    Utilities.sleep(300);
+  } finally { lock.releaseLock(); }
 }
 
 /* ---------- 메일별 내용 ---------- */

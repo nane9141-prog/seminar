@@ -321,16 +321,19 @@ td.nw{white-space:nowrap}
     return Date.now()-new Date(i.invited_at)>5*60e3?['fail','확인 필요']:['wait','발송 중'];
   }
   const isBad=i=>i.invited_at&&['fail'].includes(sendSt(i)[0]);
+  // 다시 보낼 수 있는 실패: 발송 실패 또는 5분 넘게 결과가 없는 건 (반송·사전등록 확정은 제외)
+  const canRetry=i=>isBad(i)&&i.send_status!=='bounced'&&invState(i)!=='reg';
   function invState(i){const r=regOf(i);return r&&r.status==='confirmed'?'reg':i.invited_at?'sent':'todo';}
   const invByEmail=()=>new Set(invitees.map(i=>i.email));
   function renderInviteBar(){
     const n=invitees.length,sent=invitees.filter(i=>i.send_status==='sent').length,reg=invitees.filter(i=>invState(i)==='reg').length;
-    const todo=invitees.filter(i=>invState(i)==='todo').length,out=invitees.filter(i=>!i.company_id).length,bad=invitees.filter(isBad).length;
+    const todo=invitees.filter(i=>invState(i)==='todo').length,retry=invitees.filter(canRetry).length,out=invitees.filter(i=>!i.company_id).length,bad=invitees.filter(isBad).length;
     const op=invitees.filter(i=>i.opened_at).length,ck=invitees.filter(i=>i.clicked_at).length,pc=x=>sent?` (${Math.round(x/sent*100)}%)`:'';
     $('#mailbar').innerHTML=
       `<span>초청 대상 <b>${n}명</b> · 발송 완료 <b>${sent}</b>${bad?` · <span style="color:var(--bad)">실패·반송 <b>${bad}</b></span>`:''} · 열람 <b>${op}</b>${pc(op)} · 사이트 방문 <b>${ck}</b>${pc(ck)} · 사전등록 확정 <b>${reg}</b>${out?` · <span style="color:var(--bad)">대상 기업 외 ${out}명</span>`:''}</span>`+
       `<span class="sep"></span><button class="btn btn--ghost btn--sm" id="invAddBtn" type="button">명단 추가</button>`+
       `<button class="btn btn--ghost btn--sm" id="invTest" type="button">테스트 메일</button>`+
+      (retry?`<button class="btn btn--ghost btn--sm" id="invRetry" type="button">실패 ${retry}명 다시 보내기</button>`:'')+
       `<button class="btn btn--sm" id="invSend" type="button" ${todo?'':'disabled'}>${todo?`미발송 ${todo}명에게 초청 메일 보내기`:'보낼 대상 없음'}</button>`;
   }
   function visibleInv(){
@@ -370,13 +373,22 @@ td.nw{white-space:nowrap}
 </tr>`;}).join('')}</tbody></table>`:'<div class="empty">해당하는 초청 대상이 없습니다</div>');
   }
   async function sendInvites(ids,label){
-    // Apps Script 동시 실행 한도를 넘지 않게 10명씩 나눠 보냄
+    // Gmail·Apps Script 동시 실행 한도(Too many concurrent requests)를 넘지 않게
+    // 5명씩 보내고, 그 5명의 발송 결과가 돌아온 뒤(최대 60초) 다음 묶음을 보냄
     let done=0;const btns=document.querySelectorAll('#mailbar button,#tw [data-ia]');btns.forEach(b=>b.disabled=true);
-    for(let k=0;k<ids.length;k+=10){
-      const {data,error}=await sb.rpc('admin_send_invites',{p_ids:ids.slice(k,k+10)});
+    const N=5,sleep=ms=>new Promise(r=>setTimeout(r,ms));
+    for(let k=0;k<ids.length;k+=N){
+      const part=ids.slice(k,k+N);
+      const {data,error}=await sb.rpc('admin_send_invites',{p_ids:part});
       if(error){toast('발송 중 오류: '+error.message,true);break;}
       done+=data;toast(`${label} 발송 중… ${done} / ${ids.length}`);
-      if(k+10<ids.length)await new Promise(r=>setTimeout(r,2500));
+      if(k+N>=ids.length)break;
+      for(let t=0;t<30;t++){
+        await sleep(2000);
+        const {data:st}=await sb.from('invitees').select('send_status').in('id',part);
+        if(st&&!st.some(x=>x.send_status==='queued'))break;
+      }
+      await sleep(1000);
     }
     toast(`초청 메일 ${done}건 발송을 요청했습니다`);await load(true);
   }
@@ -546,6 +558,11 @@ td.nw{white-space:nowrap}
       const to=prompt('초청 메일 테스트를 받을 이메일 주소를 입력해 주세요','agm@irkudos.co.kr');if(!to)return;
       const {error}=await sb.rpc('admin_send_invite_test',{p_email:to});
       error?toast(error.message,true):toast(`${to}로 테스트 초청 메일을 보냈습니다`);return;
+    }
+    if(e.target.id==='invRetry'){
+      const ids=invitees.filter(canRetry).map(i=>i.id);
+      if(!confirm(`발송에 실패한 ${ids.length}명에게 초청 메일을 다시 보낼까요?`))return;
+      sendInvites(ids,'재발송');return;
     }
     if(e.target.id==='invSend'){
       const ids=invitees.filter(i=>invState(i)==='todo').map(i=>i.id),out=invitees.filter(i=>invState(i)==='todo'&&!i.company_id).length;
