@@ -66,11 +66,11 @@ main{padding:24px;max-width:1600px;margin:0 auto;display:grid;gap:20px}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
 th{position:sticky;top:0;z-index:1;background:#202020;font-size:12px;color:var(--fg-3);font-weight:700;white-space:nowrap}
-th[data-sort]{cursor:pointer;user-select:none}
-th[data-sort]:hover{color:var(--fg)}
-th[data-sort]::after{content:"↕";margin-left:4px;opacity:.35}
-th[data-sort][aria-sort=ascending]::after{content:"↑";opacity:1;color:var(--blue)}
-th[data-sort][aria-sort=descending]::after{content:"↓";opacity:1;color:var(--blue)}
+th[data-sort],th[data-isort]{cursor:pointer;user-select:none}
+th[data-sort]:hover,th[data-isort]:hover{color:var(--fg)}
+th[data-sort]::after,th[data-isort]::after{content:"↕";margin-left:4px;opacity:.35}
+th[data-sort][aria-sort=ascending]::after,th[data-isort][aria-sort=ascending]::after{content:"↑";opacity:1;color:var(--blue)}
+th[data-sort][aria-sort=descending]::after,th[data-isort][aria-sort=descending]::after{content:"↓";opacity:1;color:var(--blue)}
 /* 수동 반려 메일 */
 .rjd{border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--fg);padding:0;width:min(560px,calc(100vw - 32px))}
 .rjd::backdrop{background:rgba(0,0,0,.6)}
@@ -228,7 +228,7 @@ td.nw{white-space:nowrap}
   const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const ST={confirmed:'확정',pending:'승인 대기',rejected:'반려',cancelled:'취소'};
   const RJ={ineligible:'대상 기준 미충족',company_full:'기업당 2자리 마감',capacity_full:'전체 정원 마감'};
-  let rows=[],settings={},filter='all',timer=null,invitees=[],cos=[],invF='all',sortK=null,sortD=1,rjRow=null;
+  let rows=[],settings={},filter='all',timer=null,invitees=[],cos=[],invF='all',sortK=null,sortD=1,iSortK=null,iSortD=1,rjRow=null;
 
   function toast(msg,bad){const t=$('#toast');t.textContent=msg;t.className='toast'+(bad?' bad':'');t.hidden=false;clearTimeout(t._t);t._t=setTimeout(()=>t.hidden=true,bad?6000:2500);}
   const fmtPhone=p=>p&&p.length===11?p.slice(0,3)+'-'+p.slice(3,7)+'-'+p.slice(7):p&&p.length===10?p.slice(0,3)+'-'+p.slice(3,6)+'-'+p.slice(6):p||'';
@@ -351,12 +351,22 @@ td.nw{white-space:nowrap}
       return !q||[i.company_name,i.name,i.email,i.phone,i.dept,i.title].some(v=>norm(v).includes(q));
     });
   }
+  // 초청 대상 표 정렬: 같은 열을 다시 누르면 내림차순 → 한 번 더 누르면 해제
+  const MAILRANK={'발송 완료':0,'발송 중':1,'확인 필요':2,'실패':3,'반송':4,'미발송':5};
+  const REGRANK={confirmed:0,pending:1,approved:1,rejected:2,cancelled:3};
+  const ISORT={co:i=>i.company_name||'',name:i=>i.name||'',mail:i=>MAILRANK[sendSt(i)[1]]??9,
+    reg:i=>{const r=regOf(i);return r?(REGRANK[r.status]??5):9;},memo:i=>i.note?i.note:'\uffff'};
+  function sortInv(list){
+    if(!iSortK)return list;const f=ISORT[iSortK];
+    return [...list].sort((a,b)=>{const x=f(a),y=f(b);const c=typeof x==='string'?x.localeCompare(y,'ko'):x-y;return (c||a.id-b.id)*iSortD;});
+  }
+  const ith=(k,l)=>`<th data-isort="${k}" aria-sort="${iSortK===k?(iSortD>0?'ascending':'descending'):'none'}">${l}</th>`;
   function renderInvites(){
-    const list=visibleInv(),c=f=>{const o=invF;invF=f;const n=visibleInv().length;invF=o;return n;};
+    const list=sortInv(visibleInv()),c=f=>{const o=invF;invF=f;const n=visibleInv().length;invF=o;return n;};
     const F=[['all','전체'],['todo','미발송'],['sent','발송'],['bad','실패·반송'],['opened','열람'],['clicked','방문 후 미등록'],['noreg','발송 후 미등록'],['reg','등록 확정'],['out','대상 기업 외']];
     const chips=`<div class="subf" style="padding:12px 12px 0">${F.map(([k,v])=>`<button type="button" data-invf="${k}" aria-pressed="${invF===k}">${v} ${c(k)}</button>`).join('')}</div>`;
     if(!invitees.length){$('#tw').innerHTML='<div class="empty">초청 대상이 없습니다. 위의 <b>명단 추가</b>로 엑셀 명단을 붙여넣어 주세요.</div>';return;}
-    $('#tw').innerHTML=chips+(list.length?`<table><thead><tr><th>회사</th><th>이름</th><th>부서 · 직급</th><th>연락처</th><th>초청 메일</th><th>사전등록</th><th>메모</th><th></th></tr></thead><tbody>${list.map(i=>{
+    $('#tw').innerHTML=chips+(list.length?`<table><thead><tr>${ith('co','회사')}${ith('name','이름')}<th>부서 · 직급</th><th>연락처</th>${ith('mail','초청 메일')}${ith('reg','사전등록')}${ith('memo','메모')}<th></th></tr></thead><tbody>${list.map(i=>{
       const r=regOf(i),co=cos.find(x=>x.id===i.company_id);
       return `<tr data-inv="${i.id}">
   <td>${esc(i.company_name)}${i.company_id?`<span class="sub">${esc(co?co.market+' '+co.code:'')}</span>`:'<span class="tag out">대상 기업 외</span>'}</td>
@@ -595,6 +605,8 @@ td.nw{white-space:nowrap}
   });
   $('#tw').addEventListener('click',async e=>{
     const f=e.target.closest('[data-invf]');if(f){invF=f.dataset.invf;renderInvites();return;}
+    const ts=e.target.closest('th[data-isort]');
+    if(ts){const k=ts.dataset.isort;if(iSortK===k){if(iSortD===1)iSortD=-1;else{iSortK=null;iSortD=1;}}else{iSortK=k;iSortD=1;}renderInvites();return;}
     const b=e.target.closest('[data-ia]');if(!b)return;
     const id=+b.closest('tr').dataset.inv,i=invitees.find(x=>x.id===id);
     if(b.dataset.ia==='send'){
