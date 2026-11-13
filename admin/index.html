@@ -78,7 +78,7 @@ th[data-sort][aria-sort=descending]::after,th[data-isort][aria-sort=descending]:
 .rjd h2{margin:0;font-size:17px}
 .rjd .who{margin:-6px 0 0;color:var(--fg-3);font-size:13px}
 .rjd label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--fg-2)}
-.rjd input[type=text],.rjd textarea{width:100%;padding:10px 12px;border:1px solid #3a3a3a;border-radius:8px;background:#111;font:400 14px/1.6 inherit;color:var(--fg)}
+.rjd input[type=text],.rjd input[type=email],.rjd input[type=tel],.rjd textarea{width:100%;padding:10px 12px;border:1px solid #3a3a3a;border-radius:8px;background:#111;font:400 14px/1.6 inherit;color:var(--fg)}
 .rjd textarea{min-height:200px;resize:vertical}
 .rjd input:focus,.rjd textarea:focus{outline:0;border-color:var(--blue)}
 .rjd .tpl{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--fg-3)}
@@ -87,6 +87,10 @@ th[data-sort][aria-sort=descending]::after,th[data-isort][aria-sort=descending]:
 .rjd .chk{display:flex;gap:8px;align-items:center;font-weight:500}
 .rjd .ft{display:flex;justify-content:flex-end;gap:8px}
 .rjd .hint{margin:0;font-size:12px;color:var(--fg-3)}
+.rjd .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rjd .req{color:var(--blue);font-weight:400}
+#mrDlg textarea{min-height:80px}
+@media (max-width:560px){.rjd .two{grid-template-columns:1fr}}
 tbody tr:hover{background:#1f1f1f}
 td.num{color:var(--fg-3);white-space:nowrap}
 td .sub{display:block;color:var(--fg-3);font-size:12px}
@@ -216,6 +220,19 @@ td.nw{white-space:nowrap}
       <div class="ft"><button class="btn btn--ghost" type="button" id="rjClose">닫기</button><button class="btn btn--bad" type="submit" id="rjSend">반려 메일 보내기</button></div>
     </form>
   </dialog>
+  <dialog class="rjd" id="mrDlg">
+    <form id="mrForm" method="dialog">
+      <h2>참석자 수동 등록</h2>
+      <p class="who">운영자가 직접 등록하면 바로 참석 확정됩니다. 마감 · 접수 중지와 상관없이 등록할 수 있습니다.</p>
+      <label>소속 회사 <span class="req">필수</span><input type="text" id="mrCo" list="mrCoList" autocomplete="off" placeholder="회사명 검색 또는 직접 입력" required><datalist id="mrCoList"></datalist><span class="hint" id="mrCoHint">대상 기업 목록에서 고르면 기업별 좌석이 함께 관리됩니다</span></label>
+      <div class="two"><label>이름 <span class="req">필수</span><input type="text" id="mrName" maxlength="40" required></label><label>휴대폰 <span class="req">필수</span><input type="tel" id="mrPhone" maxlength="13" placeholder="010-0000-0000" required></label></div>
+      <div class="two"><label>부서<input type="text" id="mrDept" maxlength="60"></label><label>직급<input type="text" id="mrTitle" maxlength="40"></label></div>
+      <label>이메일 <span class="req">필수</span><input type="email" id="mrEmail" maxlength="120" required></label>
+      <label>메모<input type="text" id="mrMemo" maxlength="200" placeholder="예: 전화 신청, VIP 초청"></label>
+      <label class="chk"><input type="checkbox" id="mrMail" checked> 참석 확정 메일 보내기 (일정 · 장소 · 취소 링크 · 캘린더 일정 포함)</label>
+      <div class="ft"><button class="btn btn--ghost" type="button" id="mrClose">닫기</button><button class="btn" type="submit" id="mrSave">등록하기</button></div>
+    </form>
+  </dialog>
 </div>
 <div class="toast" id="toast" role="status" hidden></div>
 
@@ -263,7 +280,7 @@ td.nw{white-space:nowrap}
       sb.from('registrations').select('*,companies(code,market)').order('created_at',{ascending:false}),
       sb.from('settings').select('key,value'),
       sb.from('invitees').select('*').order('id',{ascending:true}),
-      cos.length?Promise.resolve({data:cos}):sb.from('companies').select('id,name,code,market,eligible')
+      cos.length?Promise.resolve({data:cos}):sb.from('companies').select('id,name,code,market,eligible,seat_limit')
     ]);
     if(r.error){toast('불러오지 못했습니다: '+r.error.message,true);return;}
     rows=r.data;settings=Object.fromEntries((s.data||[]).map(x=>[x.key,x.value]));
@@ -293,6 +310,7 @@ td.nw{white-space:nowrap}
     const remPend=rows.filter(r=>r.status==='confirmed'&&!r.reminded_at).length,remDone=rows.filter(r=>r.reminded_at).length;
     const thPend=rows.filter(r=>r.status==='confirmed'&&r.attended&&!r.thanked_at).length,thDone=rows.filter(r=>r.thanked_at).length;
     $('#mailbar').innerHTML=
+      `<button class="btn btn--sm" id="manualReg" type="button">+ 수동 등록</button><span class="sep"></span>`+
       `<span>D-3 리마인드 <b>11/27(금) 14:00 자동 발송</b> (18:10 마감 직후 늦은 신청자 추가 발송) · 발송 ${remDone}명${remPend&&remDone?` · 미발송 ${remPend}명`:''}</span>`+
       (remDone&&remPend?`<button class="btn btn--ghost btn--sm" id="remindNow" type="button">미발송 ${remPend}명 지금 보내기</button>`:'')+
       `<span class="sep"></span><span>현장 참석 <b>${att}</b> / 확정 ${conf}명</span>`+
@@ -441,6 +459,41 @@ td.nw{white-space:nowrap}
   }
   $('#rjDlg').querySelector('.tpl').addEventListener('click',e=>{const b=e.target.closest('[data-t]');if(!b)return;$('#rjBody').value=RJ_BODY(RJT[b.dataset.t]);});
   $('#rjClose').addEventListener('click',()=>$('#rjDlg').close());
+
+  /* --- 수동 등록 --- */
+  const coOf=v=>{const k=norm(v);return k?cos.find(c=>norm(c.name)===k||c.code===String(v).trim()):null;};
+  function openManual(){
+    $('#mrForm').reset();$('#mrMail').checked=true;
+    $('#mrCoList').innerHTML=cos.map(c=>`<option value="${esc(c.name)}">${esc((c.market||'')+' '+(c.code||''))}</option>`).join('');
+    mrHint();$('#mrDlg').showModal();$('#mrCo').focus();
+  }
+  function mrHint(){
+    const v=$('#mrCo').value.trim(),c=coOf(v),h=$('#mrCoHint');
+    if(!v){h.textContent='대상 기업 목록에서 고르면 기업별 좌석이 함께 관리됩니다';h.style.color='';return;}
+    if(c){const used=rows.filter(r=>r.status==='confirmed'&&r.company_id===c.id).length,lim=c.seat_limit||+(settings.per_company||2);
+      h.textContent=`${c.eligible?'대상 기업':'대상 기준 외 기업'} · 확정 ${used} / ${lim}명`;h.style.color=used>=lim?'var(--bad)':'';}
+    else{h.textContent='대상 기업 목록에 없는 회사입니다. 입력한 이름 그대로 등록됩니다';h.style.color='var(--bad)';}
+  }
+  $('#mrCo').addEventListener('input',mrHint);
+  $('#mrPhone').addEventListener('input',e=>{const d=e.target.value.replace(/\D/g,'').slice(0,11);e.target.value=d.replace(/^(\d{3})(\d{1,4})?(\d{1,4})?$/,(m,a,b,c)=>[a,b,c].filter(Boolean).join('-'));});
+  $('#mrClose').addEventListener('click',()=>$('#mrDlg').close());
+  $('#mrForm').addEventListener('submit',async e=>{
+    e.preventDefault();
+    const co=$('#mrCo').value.trim(),c=coOf(co);
+    if(!c&&!confirm(`"${co}"은(는) 대상 기업 목록에 없는 회사입니다. 그대로 등록할까요?`))return;
+    const p={company_id:c?c.id:null,company_name:c?c.name:co,name:$('#mrName').value.trim(),dept:$('#mrDept').value.trim(),title:$('#mrTitle').value.trim(),
+      phone:$('#mrPhone').value,email:$('#mrEmail').value.trim(),memo:$('#mrMemo').value.trim()};
+    const mail=$('#mrMail').checked,btn=$('#mrSave');btn.disabled=true;
+    try{
+      let {data,error}=await sb.rpc('admin_register',{p,p_send_mail:mail,p_force:false});
+      if(!error&&data&&!data.ok){
+        if(!confirm(data.msg+'\n그래도 등록할까요?'))return;
+        ({data,error}=await sb.rpc('admin_register',{p,p_send_mail:mail,p_force:true}));
+      }
+      if(error){toast(error.message,true);return;}
+      $('#mrDlg').close();toast(`No. ${data.reg_no} ${data.name}님을 등록했습니다${mail?' · 확정 메일 발송':''}`);await load(true);
+    }finally{btn.disabled=false;}
+  });
   $('#rjForm').addEventListener('submit',async e=>{
     e.preventDefault();if(!rjRow)return;
     const t=$('#rjTitle').value.trim(),body=$('#rjBody').value.trim(),cancel=$('#rjCancel').checked&&!$('#rjCancel').disabled;
@@ -579,6 +632,7 @@ td.nw{white-space:nowrap}
       if(!confirm(`초청 메일을 아직 받지 않은 ${ids.length}명에게 보낼까요?`+(out?`\n\n대상 기업 목록에 없는 회사 ${out}명이 포함되어 있습니다.`:'')+'\n이미 사전등록(확정)한 분은 자동으로 빠집니다.'))return;
       sendInvites(ids,'초청 메일');return;
     }
+    if(e.target.id==='manualReg'){openManual();return;}
     if(e.target.id==='remindNow'){
       const n=rows.filter(r=>r.status==='confirmed'&&!r.reminded_at).length;
       if(!confirm(`리마인드 메일을 아직 받지 않은 확정자 ${n}명에게 지금 보낼까요?`))return;
