@@ -280,7 +280,7 @@ td.nw{white-space:nowrap}
       sb.from('registrations').select('*,companies(code,market)').order('created_at',{ascending:false}),
       sb.from('settings').select('key,value'),
       sb.from('invitees').select('*').order('id',{ascending:true}),
-      cos.length?Promise.resolve({data:cos}):sb.from('companies').select('id,name,code,market,eligible,seat_limit')
+      cos.length?Promise.resolve({data:cos}):sb.from('companies').select('id,name,code,market,eligible,seat_limit,aliases')
     ]);
     if(r.error){toast('불러오지 못했습니다: '+r.error.message,true);return;}
     rows=r.data;settings=Object.fromEntries((s.data||[]).map(x=>[x.key,x.value]));
@@ -431,7 +431,7 @@ td.nw{white-space:nowrap}
       const rest=c.filter((_,i)=>i!==ei),phone=rest.find(x=>/^0\d{1,2}[-\s]?\d{3,4}[-\s]?\d{4}$/.test(x))||'';
       const [company,name,title,dept]=c.slice(0,ei).concat(['','','','']);
       if(!company||!name){bad.push(l);return;}
-      const k=norm(company),co=cos.find(x=>x.eligible&&(norm(x.name)===k||x.code===company.replace(/\D/g,'')));
+      const k=norm(company),co=cos.find(x=>x.eligible&&(norm(x.name)===k||(x.aliases||[]).some(a=>norm(a)===k)||x.code===company.replace(/\D/g,'')));
       out.push({company_name:co?co.name:company,company_id:co?co.id:null,name,title:title||null,dept:dept||null,email:lc(c[ei]),phone:phone.replace(/\D/g,'')||null});
     });
     const seen=new Set();return {list:out.filter(x=>!seen.has(x.email)&&seen.add(x.email)),bad};
@@ -461,7 +461,7 @@ td.nw{white-space:nowrap}
   $('#rjClose').addEventListener('click',()=>$('#rjDlg').close());
 
   /* --- 수동 등록 --- */
-  const coOf=v=>{const k=norm(v);return k?cos.find(c=>norm(c.name)===k||c.code===String(v).trim()):null;};
+  const coOf=v=>{const k=norm(v);return k?cos.find(c=>norm(c.name)===k||(c.aliases||[]).some(a=>norm(a)===k)||c.code===String(v).trim()):null;};
   function openManual(){
     $('#mrForm').reset();$('#mrMail').checked=true;
     $('#mrCoList').innerHTML=cos.map(c=>`<option value="${esc(c.name)}">${esc((c.market||'')+' '+(c.code||''))}</option>`).join('');

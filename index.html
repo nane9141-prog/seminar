@@ -1190,7 +1190,7 @@ if('IntersectionObserver' in window)new IntersectionObserver(e=>{visible=e[0].is
   async function load(){
     try{
       const [st,list]=await Promise.all([rpc('event_status'),rpc('list_companies')]);
-      state=st;companies=list.map(c=>({...c,n:norm(c.name),ch:cho(norm(c.name))}));
+      state=st;companies=list.map(c=>{const al=(c.aliases||[]).map(norm);return {...c,n:norm(c.name),ch:cho(norm(c.name)),an:al,ach:al.map(cho)};});
       if(st.app_url){const a=document.getElementById('appLink');if(a)a.href=st.app_url;}
       if(!st.open||st.remaining<=0){renderClosed(st);return;}
       sub.innerHTML=esc(SUB0);
@@ -1256,8 +1256,10 @@ if('IntersectionObserver' in window)new IntersectionObserver(e=>{visible=e[0].is
       if(q){
         const a=[],b=[];
         companies.forEach(c=>{
-          const hit=isCho?c.ch.includes(q):(c.n.includes(q)||c.code.includes(q));
-          if(hit)((isCho?c.ch.startsWith(q):c.n.startsWith(q))?a:b).push(c);
+          // 다른 이름(예: 현대자동차 → 현대차)으로 검색해도 찾음
+          const hit=isCho?(c.ch.includes(q)||c.ach.some(x=>x.includes(q))):(c.n.includes(q)||c.code.includes(q)||c.an.some(x=>x.includes(q)));
+          const top=isCho?(c.ch.startsWith(q)||c.ach.some(x=>x.startsWith(q))):(c.n.startsWith(q)||c.an.some(x=>x.startsWith(q)));
+          if(hit)(top?a:b).push(c);
         });
         res=a.concat(b).slice(0,30);
       }
