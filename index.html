@@ -1160,13 +1160,27 @@ if('IntersectionObserver' in window)new IntersectionObserver(e=>{visible=e[0].is
   const norm=s=>String(s).toLowerCase().replace(/\s|\(주\)|㈜|주식회사/g,'');
 
   /* --- 열기/닫기 --- */
+  // 모달이 열린 동안 뒤 페이지를 고정. iOS는 overflow:hidden만으로는 뒤 페이지가 움직여
+  // 키보드가 올라올 때 입력칸 커서가 칸 밖(아래)으로 밀려 보이므로 body를 그 자리에 고정함
+  let lockY=0;
+  function lockScroll(){
+    const r=document.documentElement;if(r.classList.contains('rg-lock'))return;
+    lockY=window.scrollY;r.classList.add('rg-lock');
+    Object.assign(document.body.style,{position:'fixed',top:-lockY+'px',left:'0',right:'0',width:'100%'});
+  }
+  function unlockScroll(){
+    const r=document.documentElement;if(!r.classList.contains('rg-lock'))return;
+    r.classList.remove('rg-lock');
+    Object.assign(document.body.style,{position:'',top:'',left:'',right:'',width:''});
+    r.style.scrollBehavior='auto';window.scrollTo(0,lockY);r.style.scrollBehavior='';
+  }
   function open(){
-    if(!dlg.open){dlg.showModal();document.documentElement.classList.add('rg-lock');}
+    if(!dlg.open){dlg.showModal();lockScroll();}
     if(!formEl)renderForm();
     load();
   }
   function close(){dlg.close();}
-  dlg.addEventListener('close',()=>document.documentElement.classList.remove('rg-lock'));
+  dlg.addEventListener('close',unlockScroll);
   dlg.addEventListener('click',e=>{if(e.target.closest('[data-close]'))close();});
   document.querySelectorAll('a[href="#register"]').forEach(a=>{
     if(a.closest('.top nav,.gnb'))return; // 메뉴 링크는 섹션 이동 유지
@@ -1366,14 +1380,14 @@ if('IntersectionObserver' in window)new IntersectionObserver(e=>{visible=e[0].is
   if(tok!==null&&!/^[0-9a-f-]{36}$/i.test(tok)){
     /* 형식이 맞지 않는 취소 링크(테스트 메일 등)도 안내를 띄운다 */
     history.replaceState(null,'',location.pathname+location.hash);
-    dlg.showModal();document.documentElement.classList.add('rg-lock');
+    dlg.showModal();lockScroll();
     view.innerHTML=`<div class="rg__bd"><div class="rg__done"><div class="ic warn">${ICON.info}</div>
       <h3>취소할 신청을 찾지 못했습니다</h3><p>유효하지 않은 취소 링크입니다. 등록 안내 이메일의 링크를 다시 눌러 주시거나 ${CONTACT}로 문의해 주세요.</p></div></div>
       <div class="rg__ft"><button class="btn btn--ghost" type="button" data-close>닫기</button></div>`;
   }
   else if(tok&&/^[0-9a-f-]{36}$/i.test(tok)){
     history.replaceState(null,'',location.pathname+location.hash);
-    dlg.showModal();document.documentElement.classList.add('rg-lock');
+    dlg.showModal();lockScroll();
     view.innerHTML=`<div class="rg__bd"><div class="rg__done"><div class="ic warn">${ICON.info}</div>
       <h3>사전등록을 취소하시겠어요?</h3><p>취소하면 다른 분께 자리가 돌아갑니다.<br>다시 참석하려면 새로 신청해야 하며, 그때 잔여석이 있어야 등록됩니다.</p></div></div>
       <div class="rg__ft" style="display:grid;gap:8px"><button class="btn" type="button" id="rgCancelGo">사전등록 취소하기</button><button class="btn btn--ghost" type="button" data-close>유지하기</button></div>`;
