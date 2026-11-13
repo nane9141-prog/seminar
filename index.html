@@ -409,6 +409,10 @@ html.rg-lock{overflow:hidden}
 .rg label.f small.hint{flex-basis:100%;color:var(--fg-3)}
 /* 회사 검색 */
 .cs{position:relative}
+/* iOS Safari: type=search 기본 모양(내부 여백·돋보기·지우기 버튼) 때문에 커서가 칸 안에서 밀리는 현상 방지 */
+.rg input[type=search]{-webkit-appearance:none;appearance:none;letter-spacing:0;box-sizing:border-box}
+.rg input[type=search]::-webkit-search-decoration,.rg input[type=search]::-webkit-search-cancel-button,.rg input[type=search]::-webkit-search-results-button{-webkit-appearance:none;display:none}
+.rg input{letter-spacing:0}
 .cs__sel{display:flex;align-items:center;gap:12px;min-height:50px;padding:10px 10px 10px 16px;border:1px solid var(--blue);border-radius:12px;background:#eef3ff}
 .cs__sel b{font-size:16px}
 .cs__sel span{font-size:13px;color:var(--fg-3)}
