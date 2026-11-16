@@ -110,6 +110,8 @@ td.nw{white-space:nowrap}
 .empty{padding:48px;text-align:center;color:var(--fg-3)}
 .co td{vertical-align:middle}
 .co .full{color:var(--fg-3)}
+.co .muted{color:var(--fg-3)}
+.co .bad{color:var(--bad)}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:50;max-width:min(560px,calc(100% - 32px));padding:12px 18px;border-radius:10px;background:#2b2b2b;border:1px solid #3a3a3a;font-size:14px;box-shadow:0 12px 30px rgba(0,0,0,.4)}
 .toast.bad{background:#3a1d1d;border-color:#5a2a2a}
 .setting{display:flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;background:var(--card);border:1px solid var(--line);border-radius:10px;font-size:13px;color:var(--fg-2)}
@@ -245,7 +247,7 @@ td.nw{white-space:nowrap}
   const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const ST={confirmed:'확정',pending:'승인 대기',rejected:'반려',cancelled:'취소'};
   const RJ={ineligible:'대상 기준 미충족',company_full:'기업당 2자리 마감',capacity_full:'전체 정원 마감'};
-  let rows=[],settings={},filter='all',timer=null,invitees=[],cos=[],invF='all',sortK=null,sortD=1,iSortK=null,iSortD=1,rjRow=null;
+  let rows=[],settings={},filter='all',timer=null,invitees=[],cos=[],invF='all',coF='all',coView=[],sortK=null,sortD=1,iSortK=null,iSortD=1,rjRow=null;
 
   function toast(msg,bad){const t=$('#toast');t.textContent=msg;t.className='toast'+(bad?' bad':'');t.hidden=false;clearTimeout(t._t);t._t=setTimeout(()=>t.hidden=true,bad?6000:2500);}
   const fmtPhone=p=>p&&p.length===11?p.slice(0,3)+'-'+p.slice(3,7)+'-'+p.slice(7):p&&p.length===10?p.slice(0,3)+'-'+p.slice(3,6)+'-'+p.slice(6):p||'';
@@ -544,17 +546,31 @@ td.nw{white-space:nowrap}
     return '';
   }
 
+  // 기업별: 의무화 대상 기업 전체를 보여주고, 초청 메일 · 사전등록 현황을 함께 표시
+  // (초청 메일을 보내지 않은 대상 기업도 여기서 확인)
   function renderCompanies(){
     const q=norm($('#q').value),per=+settings.per_company||2,map=new Map();
+    cos.filter(c=>c.eligible).forEach(c=>map.set('c'+c.id,{name:c.name,code:(c.market||'')+' '+(c.code||''),lim:c.seat_limit||per,al:c.aliases||[],inv:0,sent:0,conf:[],pend:[],tgt:true}));
+    invitees.forEach(i=>{const m=i.company_id&&map.get('c'+i.company_id);if(m){m.inv++;if(i.invited_at)m.sent++;}});
     rows.filter(r=>r.status==='confirmed'||r.status==='pending').forEach(r=>{
       const k=r.company_id?'c'+r.company_id:'m'+norm(r.company_name);
-      if(!map.has(k))map.set(k,{name:r.company_name,code:r.companies?r.companies.market+' '+r.companies.code:'직접입력',conf:[],pend:[]});
+      if(!map.has(k))map.set(k,{name:r.company_name,code:r.companies?r.companies.market+' '+r.companies.code:'대상 기업 외',lim:per,al:[],inv:0,sent:0,conf:[],pend:[],tgt:false});
       map.get(k)[r.status==='confirmed'?'conf':'pend'].push(r.name);
     });
-    const list=[...map.values()].filter(c=>!q||norm(c.name).includes(q)).sort((a,b)=>b.conf.length-a.conf.length||a.name.localeCompare(b.name,'ko'));
-    if(!list.length){$('#tw').innerHTML='<div class="empty">신청한 기업이 없습니다</div>';return;}
-    $('#tw').innerHTML=`<table class="co"><thead><tr><th>회사</th><th>구분</th><th>확정</th><th>확정자</th></tr></thead><tbody>${list.map(c=>`
-<tr><td><b>${esc(c.name)}</b></td><td class="nw">${esc(c.code)}</td><td class="nw ${c.conf.length>=per?'full':''}">${c.conf.length} / ${per}${c.conf.length>=per?' · 마감':''}</td><td>${esc(c.conf.join(', '))}</td></tr>`).join('')}</tbody></table>`;
+    const all=[...map.values()].filter(c=>!q||norm(c.name).includes(q)||c.al.some(a=>norm(a).includes(q))||c.code.includes(q));
+    const F=[['all','대상 기업 전체',c=>c.tgt],['noinv','초청 안 한 기업',c=>c.tgt&&!c.sent],['inv','초청 메일 보냄',c=>c.tgt&&c.sent>0],
+      ['reg','신청 있음',c=>c.conf.length+c.pend.length>0],['noreg','신청 없음',c=>c.tgt&&!c.conf.length&&!c.pend.length],
+      ['full','마감',c=>c.conf.length>=c.lim],['out','대상 기업 외',c=>!c.tgt]];
+    const cur=F.find(f=>f[0]===coF)||F[0];
+    const chips=`<div class="subf" style="padding:12px 12px 0">${F.map(([k,v,fn])=>`<button type="button" data-cof="${k}" aria-pressed="${cur[0]===k}">${v} ${all.filter(fn).length}</button>`).join('')}`+
+      `<button type="button" class="btn btn--ghost btn--sm" id="coCsv" style="margin-left:auto">CSV 내보내기</button></div>`;
+    const list=all.filter(cur[2]).sort((a,b)=>b.conf.length-a.conf.length||b.sent-a.sent||a.name.localeCompare(b.name,'ko'));
+    coView=list;
+    $('#tw').innerHTML=chips+(list.length?`<table class="co"><thead><tr><th>회사</th><th>구분</th><th>초청 메일</th><th>확정</th><th>확정자 · 대기</th></tr></thead><tbody>${list.map(c=>`
+<tr><td><b>${esc(c.name)}</b></td><td class="nw">${esc(c.code)}</td>
+<td class="nw">${!c.tgt?'<span class="muted">-</span>':c.sent?`발송 ${c.sent}명${c.inv>c.sent?` <span class="muted">· 미발송 ${c.inv-c.sent}</span>`:''}`:c.inv?`<span class="muted">명단 ${c.inv}명 · 미발송</span>`:'<span class="bad">초청 안 함</span>'}</td>
+<td class="nw ${c.conf.length>=c.lim?'full':''}">${c.conf.length} / ${c.lim}${c.conf.length>=c.lim?' · 마감':''}</td>
+<td>${esc(c.conf.join(', '))}${c.pend.length?` <span class="muted">(대기 ${esc(c.pend.join(', '))})</span>`:''}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">해당하는 기업이 없습니다</div>');
   }
 
   /* --- 처리 --- */
@@ -573,6 +589,14 @@ td.nw{white-space:nowrap}
   const LABEL={approved:'승인',rejected:'반려',cancelled:'취소'};
   $('#tw').addEventListener('click',async e=>{
     const q=e.target.closest('.q');if(q){q.classList.toggle('open');return;}
+    const cf=e.target.closest('[data-cof]');if(cf){coF=cf.dataset.cof;renderCompanies();return;}
+    if(e.target.id==='coCsv'){
+      const head=['회사','구분','초청 명단','초청 발송','확정','좌석','확정자','대기'];
+      const lines=[head].concat(coView.map(c=>[c.name,c.code.trim(),c.inv,c.sent,c.conf.length,c.lim,c.conf.join(' / '),c.pend.join(' / ')]));
+      const csv='\ufeff'+lines.map(l=>l.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+      const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+      a.download='기업별_'+(document.querySelector('[data-cof][aria-pressed=true]')?.textContent.replace(/\s*\d+$/,'')||'전체')+'.csv';a.click();return;
+    }
     const th=e.target.closest('th[data-sort]');
     if(th){const k=th.dataset.sort;if(sortK===k){if(sortD===1)sortD=-1;else{sortK=null;sortD=1;}}else{sortK=k;sortD=1;}renderRows();return;}
     const b=e.target.closest('[data-a]');if(!b)return;
