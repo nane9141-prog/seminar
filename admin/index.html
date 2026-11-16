@@ -66,11 +66,11 @@ main{padding:24px;max-width:1600px;margin:0 auto;display:grid;gap:20px}
 table{width:100%;border-collapse:collapse;font-size:13px}
 th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
 th{position:sticky;top:0;z-index:1;background:#202020;font-size:12px;color:var(--fg-3);font-weight:700;white-space:nowrap}
-th[data-sort],th[data-isort]{cursor:pointer;user-select:none}
-th[data-sort]:hover,th[data-isort]:hover{color:var(--fg)}
-th[data-sort]::after,th[data-isort]::after{content:"↕";margin-left:4px;opacity:.35}
-th[data-sort][aria-sort=ascending]::after,th[data-isort][aria-sort=ascending]::after{content:"↑";opacity:1;color:var(--blue)}
-th[data-sort][aria-sort=descending]::after,th[data-isort][aria-sort=descending]::after{content:"↓";opacity:1;color:var(--blue)}
+th[data-sort],th[data-isort],th[data-csort]{cursor:pointer;user-select:none}
+th[data-sort]:hover,th[data-isort]:hover,th[data-csort]:hover{color:var(--fg)}
+th[data-sort]::after,th[data-isort]::after,th[data-csort]::after{content:"↕";margin-left:4px;opacity:.35}
+th[data-sort][aria-sort=ascending]::after,th[data-isort][aria-sort=ascending]::after,th[data-csort][aria-sort=ascending]::after{content:"↑";opacity:1;color:var(--blue)}
+th[data-sort][aria-sort=descending]::after,th[data-isort][aria-sort=descending]::after,th[data-csort][aria-sort=descending]::after{content:"↓";opacity:1;color:var(--blue)}
 /* 수동 반려 메일 */
 .rjd{border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--fg);padding:0;width:min(560px,calc(100vw - 32px))}
 .rjd::backdrop{background:rgba(0,0,0,.6)}
@@ -247,7 +247,7 @@ td.nw{white-space:nowrap}
   const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const ST={confirmed:'확정',pending:'승인 대기',rejected:'반려',cancelled:'취소'};
   const RJ={ineligible:'대상 기준 미충족',company_full:'기업당 2자리 마감',capacity_full:'전체 정원 마감'};
-  let rows=[],settings={},filter='all',timer=null,invitees=[],cos=[],invF='all',coF='all',coView=[],sortK=null,sortD=1,iSortK=null,iSortD=1,rjRow=null;
+  let rows=[],settings={},filter='all',timer=null,invitees=[],cos=[],invF='all',coF='all',coView=[],cSortK=null,cSortD=1,sortK=null,sortD=1,iSortK=null,iSortD=1,rjRow=null;
 
   function toast(msg,bad){const t=$('#toast');t.textContent=msg;t.className='toast'+(bad?' bad':'');t.hidden=false;clearTimeout(t._t);t._t=setTimeout(()=>t.hidden=true,bad?6000:2500);}
   const fmtPhone=p=>p&&p.length===11?p.slice(0,3)+'-'+p.slice(3,7)+'-'+p.slice(7):p&&p.length===10?p.slice(0,3)+'-'+p.slice(3,6)+'-'+p.slice(6):p||'';
@@ -564,9 +564,13 @@ td.nw{white-space:nowrap}
     const cur=F.find(f=>f[0]===coF)||F[0];
     const chips=`<div class="subf" style="padding:12px 12px 0">${F.map(([k,v,fn])=>`<button type="button" data-cof="${k}" aria-pressed="${cur[0]===k}">${v} ${all.filter(fn).length}</button>`).join('')}`+
       `<button type="button" class="btn btn--ghost btn--sm" id="coCsv" style="margin-left:auto">CSV 내보내기</button></div>`;
-    const list=all.filter(cur[2]).sort((a,b)=>b.conf.length-a.conf.length||b.sent-a.sent||a.name.localeCompare(b.name,'ko'));
+    // 열 정렬: 회사(가나다) · 초청 메일(초청 안 함 → 명단만 → 발송 인원 순) · 확정(인원 순). 다시 누르면 내림차순, 한 번 더 누르면 해제
+    const CS={co:c=>c.name,mail:c=>c.sent?c.sent:(c.inv?-.5:-1),conf:c=>c.conf.length+c.pend.length/100};
+    const base=(a,b)=>b.conf.length-a.conf.length||b.sent-a.sent||a.name.localeCompare(b.name,'ko');
+    const list=all.filter(cur[2]).sort(cSortK?(a,b)=>{const f=CS[cSortK],x=f(a),y=f(b);const c=typeof x==='string'?x.localeCompare(y,'ko'):x-y;return (c||a.name.localeCompare(b.name,'ko'))*cSortD;}:base);
+    const cth=(k,l)=>`<th data-csort="${k}" aria-sort="${cSortK===k?(cSortD>0?'ascending':'descending'):'none'}">${l}</th>`;
     coView=list;
-    $('#tw').innerHTML=chips+(list.length?`<table class="co"><thead><tr><th>회사</th><th>구분</th><th>초청 메일</th><th>확정</th><th>확정자 · 대기</th></tr></thead><tbody>${list.map(c=>`
+    $('#tw').innerHTML=chips+(list.length?`<table class="co"><thead><tr>${cth('co','회사')}<th>구분</th>${cth('mail','초청 메일')}${cth('conf','확정')}<th>확정자 · 대기</th></tr></thead><tbody>${list.map(c=>`
 <tr><td><b>${esc(c.name)}</b></td><td class="nw">${esc(c.code)}</td>
 <td class="nw">${!c.tgt?'<span class="muted">-</span>':c.sent?`발송 ${c.sent}명${c.inv>c.sent?` <span class="muted">· 미발송 ${c.inv-c.sent}</span>`:''}`:c.inv?`<span class="muted">명단 ${c.inv}명 · 미발송</span>`:'<span class="bad">초청 안 함</span>'}</td>
 <td class="nw ${c.conf.length>=c.lim?'full':''}">${c.conf.length} / ${c.lim}${c.conf.length>=c.lim?' · 마감':''}</td>
@@ -590,6 +594,8 @@ td.nw{white-space:nowrap}
   $('#tw').addEventListener('click',async e=>{
     const q=e.target.closest('.q');if(q){q.classList.toggle('open');return;}
     const cf=e.target.closest('[data-cof]');if(cf){coF=cf.dataset.cof;renderCompanies();return;}
+    const ct=e.target.closest('th[data-csort]');
+    if(ct){const k=ct.dataset.csort;if(cSortK===k){if(cSortD===1)cSortD=-1;else{cSortK=null;cSortD=1;}}else{cSortK=k;cSortD=1;}renderCompanies();return;}
     if(e.target.id==='coCsv'){
       const head=['회사','구분','초청 명단','초청 발송','확정','좌석','확정자','대기'];
       const lines=[head].concat(coView.map(c=>[c.name,c.code.trim(),c.inv,c.sent,c.conf.length,c.lim,c.conf.join(' / '),c.pend.join(' / ')]));
