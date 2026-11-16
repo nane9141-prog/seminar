@@ -343,6 +343,13 @@ td.nw{white-space:nowrap}
   }
   const isBad=i=>i.invited_at&&['fail'].includes(sendSt(i)[0]);
   // 다시 보낼 수 있는 실패: 발송 실패 또는 5분 넘게 결과가 없는 건 (반송·사전등록 확정은 제외)
+  // 재발송 대상: 초청 메일을 이미 보냈고(반송 제외) 본인은 아직 사전등록하지 않았으며, 회사 좌석이 남은 대상 기업
+  function resendList(){
+    const per=+settings.per_company||2,used=new Map();
+    rows.filter(r=>r.status==='confirmed'&&r.company_id).forEach(r=>used.set(r.company_id,(used.get(r.company_id)||0)+1));
+    const lim=id=>{const c=cos.find(x=>x.id===id);return (c&&c.seat_limit)||per;};
+    return invitees.filter(i=>i.company_id&&i.invited_at&&i.send_status!=='bounced'&&!['confirmed','pending'].includes((regOf(i)||{}).status)&&(used.get(i.company_id)||0)<lim(i.company_id));
+  }
   const canRetry=i=>isBad(i)&&i.send_status!=='bounced'&&invState(i)!=='reg';
   function invState(i){const r=regOf(i);return r&&r.status==='confirmed'?'reg':i.invited_at?'sent':'todo';}
   const invByEmail=()=>new Set(invitees.map(i=>i.email));
@@ -355,6 +362,7 @@ td.nw{white-space:nowrap}
       `<span class="sep"></span><button class="btn btn--ghost btn--sm" id="invAddBtn" type="button">명단 추가</button>`+
       `<button class="btn btn--ghost btn--sm" id="invTest" type="button">테스트 메일</button>`+
       (retry?`<button class="btn btn--ghost btn--sm" id="invRetry" type="button">실패 ${retry}명 다시 보내기</button>`:'')+
+      (()=>{const n=resendList().length;return n?`<button class="btn btn--ghost btn--sm" id="invResend" type="button" title="이미 초청 메일을 받았지만 아직 사전등록하지 않은 사람 중, 좌석이 남은 기업만">미등록 ${n}명 재발송</button>`:'';})()+
       `<button class="btn btn--sm" id="invSend" type="button" ${todo?'':'disabled'}>${todo?`미발송 ${todo}명에게 초청 메일 보내기`:'보낼 대상 없음'}</button>`;
   }
   function visibleInv(){
@@ -655,6 +663,11 @@ td.nw{white-space:nowrap}
       const to=prompt('초청 메일 테스트를 받을 이메일 주소를 입력해 주세요','agm@irkudos.co.kr');if(!to)return;
       const {error}=await sb.rpc('admin_send_invite_test',{p_email:to});
       error?toast(error.message,true):toast(`${to}로 테스트 초청 메일을 보냈습니다`);return;
+    }
+    if(e.target.id==='invResend'){
+      const list=resendList(),ids=list.map(i=>i.id),cosN=new Set(list.map(i=>i.company_id)).size;
+      if(!confirm(`초청 메일을 받았지만 아직 사전등록하지 않은 ${ids.length}명(${cosN}개 기업)에게 다시 보낼까요?\n· 좌석이 다 찬 기업, 반송된 주소, 대상 기업 외는 제외됩니다.`))return;
+      sendInvites(ids,'재발송');return;
     }
     if(e.target.id==='invRetry'){
       const ids=invitees.filter(canRetry).map(i=>i.id);
