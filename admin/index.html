@@ -112,6 +112,7 @@ td.nw{white-space:nowrap}
 .co .full{color:var(--fg-3)}
 .co .muted{color:var(--fg-3)}
 .co .bad{color:var(--bad)}
+.co .self{color:var(--blue);font-weight:600}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:50;max-width:min(560px,calc(100% - 32px));padding:12px 18px;border-radius:10px;background:#2b2b2b;border:1px solid #3a3a3a;font-size:14px;box-shadow:0 12px 30px rgba(0,0,0,.4)}
 .toast.bad{background:#3a1d1d;border-color:#5a2a2a}
 .setting{display:flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;background:var(--card);border:1px solid var(--line);border-radius:10px;font-size:13px;color:var(--fg-2)}
@@ -550,16 +551,19 @@ td.nw{white-space:nowrap}
   // (초청 메일을 보내지 않은 대상 기업도 여기서 확인)
   function renderCompanies(){
     const q=norm($('#q').value),per=+settings.per_company||2,map=new Map();
-    cos.filter(c=>c.eligible).forEach(c=>map.set('c'+c.id,{name:c.name,code:(c.market||'')+' '+(c.code||''),lim:c.seat_limit||per,al:c.aliases||[],inv:0,sent:0,conf:[],pend:[],tgt:true}));
+    // 초청 메일을 받은 이메일 — 이 목록에 없는 신청자는 '초청 없이 신청'
+    const invited=new Set(invitees.filter(i=>i.invited_at).map(i=>String(i.email||'').toLowerCase()));
+    cos.filter(c=>c.eligible).forEach(c=>map.set('c'+c.id,{name:c.name,code:(c.market||'')+' '+(c.code||''),lim:c.seat_limit||per,al:c.aliases||[],inv:0,sent:0,conf:[],pend:[],self:[],tgt:true}));
     invitees.forEach(i=>{const m=i.company_id&&map.get('c'+i.company_id);if(m){m.inv++;if(i.invited_at)m.sent++;}});
     rows.filter(r=>r.status==='confirmed'||r.status==='pending').forEach(r=>{
       const k=r.company_id?'c'+r.company_id:'m'+norm(r.company_name);
-      if(!map.has(k))map.set(k,{name:r.company_name,code:r.companies?r.companies.market+' '+r.companies.code:'대상 기업 외',lim:per,al:[],inv:0,sent:0,conf:[],pend:[],tgt:false});
-      map.get(k)[r.status==='confirmed'?'conf':'pend'].push(r.name);
+      if(!map.has(k))map.set(k,{name:r.company_name,code:r.companies?r.companies.market+' '+r.companies.code:'대상 기업 외',lim:per,al:[],inv:0,sent:0,conf:[],pend:[],self:[],tgt:false});
+      const m=map.get(k);m[r.status==='confirmed'?'conf':'pend'].push(r.name);
+      if(!invited.has(String(r.email||'').toLowerCase()))m.self.push(r.name);
     });
     const all=[...map.values()].filter(c=>!q||norm(c.name).includes(q)||c.al.some(a=>norm(a).includes(q))||c.code.includes(q));
     const F=[['all','대상 기업 전체',c=>c.tgt],['noinv','초청 안 한 기업',c=>c.tgt&&!c.sent],['inv','초청 메일 보냄',c=>c.tgt&&c.sent>0],
-      ['reg','신청 있음',c=>c.conf.length+c.pend.length>0],['noreg','신청 없음',c=>c.tgt&&!c.conf.length&&!c.pend.length],
+      ['reg','신청 있음',c=>c.conf.length+c.pend.length>0],['self','초청 없이 신청',c=>c.self.length>0],['noreg','신청 없음',c=>c.tgt&&!c.conf.length&&!c.pend.length],
       ['full','마감',c=>c.conf.length>=c.lim],['out','대상 기업 외',c=>!c.tgt]];
     const cur=F.find(f=>f[0]===coF)||F[0];
     const chips=`<div class="subf" style="padding:12px 12px 0">${F.map(([k,v,fn])=>`<button type="button" data-cof="${k}" aria-pressed="${cur[0]===k}">${v} ${all.filter(fn).length}</button>`).join('')}`+
@@ -572,9 +576,9 @@ td.nw{white-space:nowrap}
     coView=list;
     $('#tw').innerHTML=chips+(list.length?`<table class="co"><thead><tr>${cth('co','회사')}<th>구분</th>${cth('mail','초청 메일')}${cth('conf','확정')}<th>확정자 · 대기</th></tr></thead><tbody>${list.map(c=>`
 <tr><td><b>${esc(c.name)}</b></td><td class="nw">${esc(c.code)}</td>
-<td class="nw">${!c.tgt?'<span class="muted">-</span>':c.sent?`발송 ${c.sent}명${c.inv>c.sent?` <span class="muted">· 미발송 ${c.inv-c.sent}</span>`:''}`:c.inv?`<span class="muted">명단 ${c.inv}명 · 미발송</span>`:'<span class="bad">초청 안 함</span>'}</td>
+<td class="nw">${!c.tgt?'<span class="muted">-</span>':c.sent?`발송 ${c.sent}명${c.inv>c.sent?` <span class="muted">· 미발송 ${c.inv-c.sent}</span>`:''}`:c.inv?`<span class="muted">명단 ${c.inv}명 · 미발송</span>`:'<span class="bad">초청 안 함</span>'}${c.self.length?`<br><span class="self">초청 없이 신청 ${c.self.length}명</span>`:''}</td>
 <td class="nw ${c.conf.length>=c.lim?'full':''}">${c.conf.length} / ${c.lim}${c.conf.length>=c.lim?' · 마감':''}</td>
-<td>${esc(c.conf.join(', '))}${c.pend.length?` <span class="muted">(대기 ${esc(c.pend.join(', '))})</span>`:''}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">해당하는 기업이 없습니다</div>');
+<td>${c.conf.map(n=>c.self.includes(n)?`<span class="self">${esc(n)}</span>`:esc(n)).join(', ')}${c.pend.length?` <span class="muted">(대기 ${esc(c.pend.join(', '))})</span>`:''}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">해당하는 기업이 없습니다</div>');
   }
 
   /* --- 처리 --- */
@@ -597,8 +601,8 @@ td.nw{white-space:nowrap}
     const ct=e.target.closest('th[data-csort]');
     if(ct){const k=ct.dataset.csort;if(cSortK===k){if(cSortD===1)cSortD=-1;else{cSortK=null;cSortD=1;}}else{cSortK=k;cSortD=1;}renderCompanies();return;}
     if(e.target.id==='coCsv'){
-      const head=['회사','구분','초청 명단','초청 발송','확정','좌석','확정자','대기'];
-      const lines=[head].concat(coView.map(c=>[c.name,c.code.trim(),c.inv,c.sent,c.conf.length,c.lim,c.conf.join(' / '),c.pend.join(' / ')]));
+      const head=['회사','구분','초청 명단','초청 발송','확정','좌석','확정자','대기','초청 없이 신청'];
+      const lines=[head].concat(coView.map(c=>[c.name,c.code.trim(),c.inv,c.sent,c.conf.length,c.lim,c.conf.join(' / '),c.pend.join(' / '),c.self.join(' / ')]));
       const csv='\ufeff'+lines.map(l=>l.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\r\n');
       const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
       a.download='기업별_'+(document.querySelector('[data-cof][aria-pressed=true]')?.textContent.replace(/\s*\d+$/,'')||'전체')+'.csv';a.click();return;
