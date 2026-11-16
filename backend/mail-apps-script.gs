@@ -134,7 +134,10 @@ function send_(p) {
   const props = PropertiesService.getScriptProperties();
   let html = m.html;
   // 초청 메일 열람 확인용 1px 이미지 (이 웹 앱 주소 + ?o=토큰)
-  if (p.type === 'invite' && UUID_RE.test(p.invite_token || '') && p.invite_token !== ZERO) {
+  // 기본 꺼짐(11.16): script.google.com 주소의 숨은 이미지는 기업 메일 보안(Outlook·Exchange 등)이
+  // 피싱 의심으로 격리하는 경우가 많아 수신율을 떨어뜨림. 꼭 필요할 때만 스크립트 속성 TRACK_OPEN=1
+  if (props.getProperty('TRACK_OPEN') === '1' &&
+      p.type === 'invite' && UUID_RE.test(p.invite_token || '') && p.invite_token !== ZERO) {
     let url = '';
     try { url = ScriptApp.getService().getUrl(); } catch (_) {}
     if (url) html = html.replace('</body>', '<img src="' + url + '?o=' + p.invite_token + '" width="1" height="1" alt="" style="display:block;width:1px;height:1px;border:0;opacity:0"></body>');
