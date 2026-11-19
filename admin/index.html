@@ -264,7 +264,7 @@ td.nw{white-space:nowrap}
     if(!ok){await sb.auth.signOut();showLogin('운영자 권한이 없는 계정입니다.');return;}
     $('#login').hidden=true;$('#app').hidden=false;$('#me').textContent=who(session.user.email);
     await load();
-    clearInterval(timer);timer=setInterval(()=>{if(!document.hidden)load(true);},30000);
+    clearInterval(timer);timer=setInterval(()=>{if(!document.hidden)load(true);},15000);
   }
   function showLogin(err){$('#app').hidden=true;$('#login').hidden=false;const e=$('#loginErr');e.textContent=err||'';e.hidden=!err;}
   $('#loginForm').addEventListener('submit',async e=>{
@@ -278,6 +278,7 @@ td.nw{white-space:nowrap}
   $('#logout').addEventListener('click',async()=>{clearInterval(timer);await sb.auth.signOut();showLogin();});
 
   /* --- 데이터 --- */
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&timer)load(true);});
   async function load(quiet){
     const [r,s,iv,co]=await Promise.all([
       sb.from('registrations').select('*,companies(code,market)').order('created_at',{ascending:false}),
