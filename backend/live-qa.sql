@@ -164,3 +164,16 @@ begin
 end $$;
 revoke all on function public.admin_qa_reset(text) from public, anon;
 grant execute on function public.admin_qa_reset(text) to authenticated;
+
+-- 질문 페이지 회사 목록: 사전 신청(확정·대기)한 회사 이름 + 다른 이름
+create or replace function public.ask_companies() returns jsonb
+language sql stable security definer set search_path = public as $$
+  select coalesce(jsonb_agg(jsonb_build_object('name',name,'aliases',aliases) order by name),'[]'::jsonb)
+  from (
+    select distinct on (coalesce(c.name, r.company_name))
+           coalesce(c.name, r.company_name) as name, coalesce(c.aliases,'{}') as aliases
+    from registrations r left join companies c on c.id = r.company_id
+    where r.status in ('confirmed','pending')
+  ) t
+$$;
+grant execute on function public.ask_companies() to anon, authenticated;
