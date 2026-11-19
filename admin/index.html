@@ -275,7 +275,7 @@ td.nw{white-space:nowrap}
     if(error){showLogin('아이디 또는 비밀번호를 확인해 주세요.');return;}
     f.pw.value='';boot();
   });
-  $('#logout').addEventListener('click',async()=>{clearInterval(timer);await sb.auth.signOut();showLogin();});
+  $('#logout').addEventListener('click',async()=>{clearInterval(timer);timer=null;await sb.auth.signOut();showLogin();});
 
   /* --- 데이터 --- */
   document.addEventListener('visibilitychange',()=>{if(!document.hidden&&timer)load(true);});
