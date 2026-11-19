@@ -21,7 +21,7 @@ h1,h2,h3,p{margin:0}
 /* 상단 바 */
 .top{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
 .top__in{max-width:640px;margin:0 auto;display:flex;align-items:center;height:56px;padding:0 20px}
-.brand{display:block;color:var(--fg);font-size:15px;font-weight:700;letter-spacing:-.02em;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.brand{display:block;color:var(--fg);font-size:18px;font-weight:700;letter-spacing:-.02em;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .top__m{margin-left:auto;padding-left:12px;flex:none;font-size:13px;font-weight:600;color:var(--fg-3)}
 /* 본문 */
 .wrap{max-width:640px;margin:0 auto;padding:32px 20px calc(40px + env(safe-area-inset-bottom,0px))}
@@ -58,14 +58,29 @@ input:focus,textarea:focus{outline:0;border-color:var(--blue)}
 .cs__sel b{font-size:16px}
 .cs__sel span{font-size:13px;color:var(--fg-3)}
 .cs__sel button{margin-left:auto;border:0;background:#dbe5ff;color:var(--blue);border-radius:8px;padding:8px 12px;font:600 13px/1 var(--font);cursor:pointer}
-/* 질문 대상 — 사이트 신청서 select와 같은 모양 */
-select{width:100%;min-height:50px;padding:12px 44px 12px 16px;border:1px solid #d5dbe3;border-radius:12px;background:#fff;color:var(--fg);font:500 16px/1.4 var(--font);letter-spacing:0;appearance:none;-webkit-appearance:none;cursor:pointer;transition:border-color .15s;
-  background-image:linear-gradient(45deg,transparent 50%,#8a8a8a 50%),linear-gradient(135deg,#8a8a8a 50%,transparent 50%);background-position:calc(100% - 22px) 22px,calc(100% - 16px) 22px;background-size:6px 6px;background-repeat:no-repeat}
-select:focus{outline:0;border-color:var(--blue)}
-select:invalid,select.ph{color:#a3abb6}
-.sesd{padding:12px 16px;border-radius:12px;background:var(--card);font-size:14px;line-height:1.55;color:var(--fg-2)}
-.sesd b{display:block;color:var(--fg);font-size:15px;font-weight:700}
-.sesd em{font-style:normal;color:var(--blue);font-weight:500;margin-right:6px}
+/* 질문 대상 — 커스텀 드롭다운 (회사 검색 목록 .cs__list와 같은 모양) */
+.dd{position:relative}
+.dd__btn{display:block;width:100%;min-height:50px;padding:12px 44px 12px 16px;border:1px solid #d5dbe3;border-radius:12px;background:#fff;color:var(--fg);font:500 16px/1.4 var(--font);letter-spacing:0;text-align:left;cursor:pointer;transition:border-color .15s;-webkit-appearance:none;appearance:none;position:relative}
+.dd__btn::after{content:"";position:absolute;right:18px;top:50%;width:8px;height:8px;margin-top:-6px;border-right:2px solid #8a93a0;border-bottom:2px solid #8a93a0;transform:rotate(45deg);transition:transform .2s}
+.dd__btn[aria-expanded=true]{border-color:var(--blue)}
+.dd__btn[aria-expanded=true]::after{transform:rotate(-135deg);margin-top:-2px;border-color:var(--blue)}
+.dd__btn:focus{outline:0;border-color:var(--blue)}
+.dd__btn.ph .dd__v{color:#a3abb6}
+.dd__v{display:block}
+.dd__v em,.dd__list em{font-style:normal;color:var(--blue);font-weight:500;margin-right:6px}
+.dd__s{display:block;margin-top:2px;font-size:13px;font-weight:400;color:var(--fg-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dd__list{position:absolute;z-index:4;left:0;right:0;top:calc(100% + 6px);margin:0;padding:6px;list-style:none;background:#fff;border:1px solid var(--line);border-radius:12px;max-height:min(420px,60vh);overflow:auto;overscroll-behavior:contain;box-shadow:0 16px 40px rgba(15,22,36,.14)}
+.dd__list:focus{outline:0}
+.dd__list li{display:grid;grid-template-columns:minmax(0,1fr) 20px;gap:10px;align-items:center;padding:12px;border-radius:8px;cursor:pointer}
+.dd__list li+li{margin-top:2px}
+.dd__list b{display:block;font-size:15px;font-weight:700;line-height:1.4}
+.dd__list small{display:block;margin-top:2px;font-size:13px;color:var(--fg-3);line-height:1.45}
+.dd__list li.act{background:#f4f6f9}
+.dd__list li[aria-selected=true]{background:var(--tint)}
+.dd__list li svg{width:18px;height:18px;color:var(--blue);visibility:hidden}
+.dd__list li[aria-selected=true] svg{visibility:visible}
+.dd__list li.sep{border-bottom:1px solid var(--line);border-radius:8px 8px 0 0;margin-bottom:4px;padding-bottom:14px}
+.dd.bad .dd__btn{border-color:#e5484d}
 /* 안내 · 버튼 */
 .note{padding:16px;border-radius:12px;background:var(--card);font-size:13px;color:var(--fg-3);line-height:1.6}
 .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:52px;padding:0 28px;border-radius:999px;border:0;background:var(--blue);color:#fff;font:700 16px/1 var(--font);cursor:pointer;transition:background-color .2s;-webkit-appearance:none}
@@ -117,17 +132,11 @@ select:invalid,select.ph{color:#a3abb6}
       <span class="err" id="eNm" hidden></span>
     </div>
     <div class="fs">
-      <label class="lb" for="ses">질문 대상 <i>*</i><small>어느 발표에 대한 질문인지 골라 주세요</small></label>
-      <select id="ses" name="session">
-        <option value="" selected disabled>선택해 주세요</option>
-        <option value="all">전체 · 특정 세션 없음</option>
-        <option value="s1">Session 1 · 김승준</option>
-        <option value="s2">Session 2 · 권재열</option>
-        <option value="s3">Session 3 · Scott Oakland</option>
-        <option value="s4">Session 4 · 박성용</option>
-        <option value="demo">플랫폼 시연 · 박성용</option>
-      </select>
-      <p class="sesd" id="sesd" hidden></p>
+      <label class="lb" id="sesLb" for="ses">질문 대상 <i>*</i><small>어느 발표에 대한 질문인지 골라 주세요</small></label>
+      <div class="dd" id="dd">
+        <button type="button" class="dd__btn ph" id="ses" aria-haspopup="listbox" aria-expanded="false" aria-controls="sesList" aria-labelledby="sesLb ses"><span class="dd__v">선택해 주세요</span></button>
+        <ul class="dd__list" id="sesList" role="listbox" tabindex="-1" aria-labelledby="sesLb" hidden></ul>
+      </div>
       <span class="err" id="eSes" hidden></span>
     </div>
     <div class="fs">
@@ -154,7 +163,6 @@ select:invalid,select.ph{color:#a3abb6}
     <p>참여해 주셔서 감사합니다.<br>질의응답은 17:30부터 진행합니다.</p>
   </section>
 
-  <p class="ft">전자주주총회 플랫폼 시연 설명회 · IR큐더스</p>
 </main>
 <script>
 (function(){
@@ -213,10 +221,29 @@ select:invalid,select.ph{color:#a3abb6}
   const cnt=()=>{const n=$('#bd').value.length;$('#cnt').textContent=n+' / 500';};
   $('#bd').addEventListener('input',()=>{cnt();$('#bd').classList.remove('bad');err('Bd');});
   $('#nm').addEventListener('input',()=>{$('#nm').classList.remove('bad');err('Nm');});
-  const SD={all:['','전체 · 특정 세션 없음','전자주주총회 전반, 도입 · 운영 문의'],s1:['Session 1.','전자주주총회 제도 도입 및 진행 관련 주요 실무 쟁점','김승준 · 김앤장 법률사무소, 변호사 · 13:25'],s2:['Session 2.','상법 개정과 전자주총이 몰고 올 기업 경영의 지각변동','권재열 · 한국주주총회연구소장 · 13:55'],s3:['Session 3.','Proxymity, 글로벌 의결권 행사 인프라의 혁신과 미래','Scott Oakland · Proxymity, Head of APAC · 14:40'],s4:['Session 4.','전자주주총회 도입 · 운영 방안 및 통합 솔루션 소개','박성용 · IR큐더스, 본부장 · 15:10'],demo:['','전자주주총회 플랫폼 시연','박성용 · IR큐더스, 본부장 · 15:55']};
-  const sesSel=$('#ses');
-  function sesView(){const v=sesSel.value,d=SD[v];sesSel.classList.toggle('ph',!v);$('#sesd').hidden=!d;if(d)$('#sesd').innerHTML='<b>'+(d[0]?'<em>'+d[0]+'</em>':'')+esc(d[1])+'</b>'+esc(d[2]);}
-  sesSel.addEventListener('change',()=>{sesSel.classList.remove('bad');err('Ses');sesView();});sesView();
+  const SD=[['all','','전체 · 특정 세션 없음','전자주주총회 전반, 도입 · 운영 문의'],['s1','Session 1.','김승준','전자주주총회 제도 도입 및 진행 관련 주요 실무 쟁점'],['s2','Session 2.','권재열','상법 개정과 전자주총이 몰고 올 기업 경영의 지각변동'],['s3','Session 3.','Scott Oakland','Proxymity, 글로벌 의결권 행사 인프라의 혁신과 미래'],['s4','Session 4.','박성용','전자주주총회 도입 · 운영 방안 및 통합 솔루션 소개'],['demo','','플랫폼 시연 · 박성용','전자주주총회 플랫폼 시연']];
+  const CK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  const ddBtn=$('#ses'),ddList=$('#sesList');let ddAct=0;
+  const sesSel={value:'',focus:()=>ddBtn.focus()};
+  ddList.innerHTML=SD.map((d,i)=>'<li role="option" id="so'+i+'" data-v="'+d[0]+'" aria-selected="false"'+(i===0?' class="sep"':'')+'><span><b>'+(d[1]?'<em>'+d[1]+'</em>':'')+esc(d[2])+'</b><small>'+esc(d[3])+'</small></span>'+CK+'</li>').join('');
+  const opts=[...ddList.children];
+  function sesView(){const i=SD.findIndex(d=>d[0]===sesSel.value),d=SD[i];ddBtn.classList.toggle('ph',!d);
+    ddBtn.innerHTML=d?'<span class="dd__v">'+(d[1]?'<em>'+d[1]+'</em>':'')+esc(d[2])+'</span><span class="dd__s">'+esc(d[3])+'</span>':'<span class="dd__v">선택해 주세요</span>';
+    opts.forEach((o,j)=>o.setAttribute('aria-selected',j===i));}
+  function ddMark(){opts.forEach((o,j)=>o.classList.toggle('act',j===ddAct));ddList.setAttribute('aria-activedescendant','so'+ddAct);opts[ddAct].scrollIntoView({block:'nearest'});}
+  function ddOpen(o){ddList.hidden=!o;ddBtn.setAttribute('aria-expanded',o);if(o){ddAct=Math.max(0,SD.findIndex(d=>d[0]===sesSel.value));ddMark();ddList.focus({preventScroll:true});
+      const r=ddList.getBoundingClientRect();if(r.bottom>innerHeight)window.scrollBy({top:r.bottom-innerHeight+16,behavior:'smooth'});}}
+  function ddPick(i){sesSel.value=SD[i][0];sesView();ddOpen(false);ddBtn.focus();$('#dd').classList.remove('bad');err('Ses');}
+  ddBtn.addEventListener('click',()=>ddOpen(ddList.hidden));
+  ddBtn.addEventListener('keydown',e=>{if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();ddOpen(true);}});
+  ddList.addEventListener('keydown',e=>{
+    if(e.key==='ArrowDown'){e.preventDefault();ddAct=Math.min(ddAct+1,opts.length-1);ddMark();}
+    else if(e.key==='ArrowUp'){e.preventDefault();ddAct=Math.max(ddAct-1,0);ddMark();}
+    else if(e.key==='Enter'||e.key===' '){e.preventDefault();ddPick(ddAct);}
+    else if(e.key==='Escape'||e.key==='Tab'){if(e.key==='Escape')e.preventDefault();ddOpen(false);if(e.key==='Escape')ddBtn.focus();}});
+  ddList.addEventListener('click',e=>{const li=e.target.closest('li');if(li)ddPick(opts.indexOf(li));});
+  document.addEventListener('pointerdown',e=>{if(!ddList.hidden&&!e.target.closest('#dd'))ddOpen(false);});
+  sesView();
 
   rpc('ask_status').then(s=>show(s.open?'#f':'#closed')).catch(()=>show('#f'));
 
@@ -227,7 +254,7 @@ select:invalid,select.ph{color:#a3abb6}
     let first=null;
     if(!p.company){err('Co',MSG.company);inp.classList.add('bad');first=first||inp;}
     if(!p.name){err('Nm',MSG.name);$('#nm').classList.add('bad');first=first||$('#nm');}
-    if(!p.session){err('Ses',MSG.session);$('#ses').classList.add('bad');first=first||sesSel;}
+    if(!p.session){err('Ses',MSG.session);$('#dd').classList.add('bad');first=first||ddBtn;}
     if(p.body.length<5){err('Bd',MSG.body);$('#bd').classList.add('bad');first=first||$('#bd');}
     if(first){first.focus();first.scrollIntoView({block:'center',behavior:'smooth'});return;}
     const b=$('#sub');b.disabled=true;b.innerHTML='<span class="spin"></span>보내는 중';
