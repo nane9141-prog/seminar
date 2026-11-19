@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>현장 질문 | 전자주주총회 플랫폼 시연 설명회</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230071f3'/%3E%3Cpath d='M12 9l11 7-11 7z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{color-scheme:light;--fg:#141820;--fg-2:#4a5260;--fg-3:#8a93a0;--line:#e1e6ec;--card:#f4f6f9;--blue:#0071f3;--blue-3:#005ed0;--err:#d6403a;
+  --font:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:#fff;color:var(--fg);font:400 16px/1.6 var(--font);letter-spacing:-.01em;word-break:keep-all;-webkit-font-smoothing:antialiased}
+h1,h2,p{margin:0}
+.wrap{max-width:560px;margin:0 auto;padding:max(28px,env(safe-area-inset-top)) 20px max(40px,env(safe-area-inset-bottom))}
+.ey{font-size:13px;font-weight:600;color:var(--blue);letter-spacing:0}
+h1{font-size:26px;line-height:1.3;font-weight:700;margin-top:6px}
+.sub{color:var(--fg-2);font-size:15px;margin-top:8px}
+form{margin-top:28px;display:grid;gap:22px}
+.f{display:grid;gap:8px}
+.lb{font-size:15px;font-weight:600}
+.lb small{font-weight:400;color:var(--fg-3);margin-left:4px}
+input[type=text],textarea{width:100%;font:inherit;font-size:17px;letter-spacing:0;color:var(--fg);background:#fff;border:1px solid #cfd6df;border-radius:10px;padding:13px 14px;-webkit-appearance:none;appearance:none}
+input[type=text]:focus,textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(0,113,243,.15)}
+textarea{min-height:140px;resize:vertical;line-height:1.55}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cnt{font-size:13px;color:var(--fg-3);text-align:right;margin-top:-2px}
+.cnt.over{color:var(--err)}
+.ses{display:grid;grid-template-columns:1fr 1fr;gap:8px;border:0;margin:0;padding:0;min-width:0}
+.ses legend{padding:0;margin-bottom:8px}
+.ses label{position:relative;display:block;cursor:pointer}
+.ses input{position:absolute;opacity:0;inset:0;margin:0}
+.ses span{display:block;border:1px solid #cfd6df;border-radius:10px;padding:10px 12px;font-size:15px;line-height:1.35;min-height:100%}
+.ses span b{display:block;font-weight:600}
+.ses span i{font-style:normal;font-size:13px;color:var(--fg-3)}
+.ses input:checked+span{border-color:var(--blue);background:rgba(0,113,243,.06);box-shadow:inset 0 0 0 1px var(--blue)}
+.ses input:checked+span b{color:var(--blue)}
+.ses input:focus-visible+span{outline:2px solid var(--blue);outline-offset:2px}
+.ses .full{grid-column:1/-1}
+.note{font-size:13px;color:var(--fg-3);line-height:1.55}
+.btn{display:block;width:100%;font:inherit;font-size:17px;font-weight:600;color:#fff;background:var(--blue);border:0;border-radius:12px;padding:16px;cursor:pointer;-webkit-appearance:none}
+.btn:active{background:var(--blue-3)}
+.btn[disabled]{opacity:.5}
+.btn--ghost{background:var(--card);color:var(--fg)}
+.btn--ghost:active{background:#e8ecf1}
+.err{color:var(--err);font-size:14px;min-height:0}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.done,.closed{text-align:center;padding-top:40px}
+.done .ic{width:56px;height:56px;border-radius:50%;background:var(--blue);margin:0 auto 18px;display:grid;place-items:center}
+.done h2,.closed h2{font-size:22px;line-height:1.35}
+.done p,.closed p{color:var(--fg-2);margin-top:10px}
+.done .btn{margin-top:28px}
+.ft{margin-top:36px;font-size:12px;color:var(--fg-3);text-align:center}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <p class="ey">전자주주총회 플랫폼 시연 설명회</p>
+  <h1>현장 질문</h1>
+  <p class="sub" id="lead">질의응답 시간(17:30~18:00)에 연사가 답변합니다.<br>접수는 17:00에 마감합니다.</p>
+
+  <form id="f" novalidate hidden>
+    <div class="two">
+      <label class="f"><span class="lb">회사</span><input type="text" name="company" maxlength="60" autocomplete="organization" required></label>
+      <label class="f"><span class="lb">이름</span><input type="text" name="name" maxlength="30" autocomplete="name" required></label>
+    </div>
+    <fieldset class="ses">
+      <legend class="lb">질문 대상</legend>
+      <label class="full"><input type="radio" name="session" value="all" required><span><b>전체 · 공통</b><i>특정 세션이 아닌 질문</i></span></label>
+      <label><input type="radio" name="session" value="s1"><span><b>Session 1</b><i>김승준</i></span></label>
+      <label><input type="radio" name="session" value="s2"><span><b>Session 2</b><i>권재열</i></span></label>
+      <label><input type="radio" name="session" value="s3"><span><b>Session 3</b><i>Scott Oakland</i></span></label>
+      <label><input type="radio" name="session" value="s4"><span><b>Session 4</b><i>박성용</i></span></label>
+      <label class="full"><input type="radio" name="session" value="demo"><span><b>플랫폼 시연</b><i>박성용</i></span></label>
+    </fieldset>
+    <label class="f"><span class="lb">질문</span><textarea name="body" maxlength="500" required placeholder="궁금한 점을 적어 주세요."></textarea></label>
+    <p class="cnt" id="cnt">0 / 500</p>
+    <label class="hp" aria-hidden="true">비워 두세요<input type="text" name="hp" tabindex="-1" autocomplete="off"></label>
+    <p class="note">회사·이름은 질의응답 진행에만 쓰며, 질문과 함께 행사장 화면에 표시될 수 있습니다. 행사 후 30일 이내에 삭제합니다. 모든 질문에 답변드리지 못할 수 있습니다.</p>
+    <p class="err" id="err" role="alert"></p>
+    <button class="btn" type="submit" id="sub">질문 보내기</button>
+  </form>
+
+  <section class="done" id="done" hidden>
+    <div class="ic" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+    <h2>질문이 접수되었습니다</h2>
+    <p>질의응답 시간에 화면으로 안내해 드립니다.</p>
+    <button class="btn btn--ghost" type="button" id="again">다른 질문 남기기</button>
+  </section>
+
+  <section class="closed" id="closed" hidden>
+    <h2>현장 질문 접수가 마감되었습니다</h2>
+    <p>참여해 주셔서 감사합니다.</p>
+  </section>
+
+  <p class="ft">IR큐더스 · 한국주주총회연구소</p>
+</main>
+<script>
+(function(){
+  const API='https://zrhtqpzgubaqzsdaxhvt.supabase.co/rest/v1/rpc/',KEY='sb_publishable_JwET6KLGmdYBkOIIttgOOQ_HEpCKLar';
+  const $=s=>document.querySelector(s),f=$('#f');
+  const ls={get:k=>{try{return localStorage.getItem(k)||'';}catch(e){return '';}},set:(k,v)=>{try{localStorage.setItem(k,v);}catch(e){}}};
+  let dev=ls.get('ask-dev');if(!dev){dev=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2));ls.set('ask-dev',dev);}
+  const rpc=(fn,body)=>fetch(API+fn,{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json'},body:JSON.stringify(body||{})}).then(r=>{if(!r.ok)throw new Error(r.status);return r.json();});
+  const show=id=>{['#f','#done','#closed'].forEach(s=>$(s).hidden=s!==id);$('#lead').hidden=id==='#closed';};
+  const MSG={closed:'접수가 마감되었습니다.',company:'회사를 입력해 주세요.',name:'이름을 입력해 주세요.',session:'질문 대상을 선택해 주세요.',body:'질문을 5자 이상 입력해 주세요.',rate:'잠시 후 다시 보내 주세요.',dup:'같은 질문이 이미 접수되었습니다.'};
+
+  f.company.value=ls.get('ask-company');f.name.value=ls.get('ask-name');
+  const cnt=()=>{const n=f.body.value.length;$('#cnt').textContent=n+' / 500';$('#cnt').classList.toggle('over',n>500);};
+  f.body.addEventListener('input',cnt);
+
+  rpc('ask_status').then(s=>show(s.open?'#f':'#closed')).catch(()=>show('#f'));
+
+  f.addEventListener('submit',async e=>{
+    e.preventDefault();$('#err').textContent='';
+    const p={company:f.company.value.trim(),name:f.name.value.trim(),session:(f.querySelector('[name=session]:checked')||{}).value||'',body:f.body.value.trim(),device:dev,hp:f.hp.value};
+    const bad=!p.company?'company':!p.name?'name':!p.session?'session':p.body.length<5?'body':null;
+    if(bad){$('#err').textContent=MSG[bad];const el=bad==='session'?f.querySelector('[name=session]'):f[bad];el&&el.focus();return;}
+    $('#sub').disabled=true;$('#sub').textContent='보내는 중…';
+    try{
+      const r=await rpc('submit_question',{p});
+      if(r.ok){ls.set('ask-company',p.company);ls.set('ask-name',p.name);f.body.value='';cnt();show('#done');window.scrollTo(0,0);}
+      else if(r.error==='closed')show('#closed');
+      else $('#err').textContent=MSG[r.error]||'다시 시도해 주세요.';
+    }catch(err){$('#err').textContent='전송하지 못했습니다. 연결 상태를 확인하고 다시 눌러 주세요.';}
+    $('#sub').disabled=false;$('#sub').textContent='질문 보내기';
+  });
+  $('#again').addEventListener('click',()=>{show('#f');f.body.focus();});
+})();
+</script>
+</body>
+</html>
