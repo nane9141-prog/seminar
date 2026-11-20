@@ -39,7 +39,7 @@ form{margin-top:32px;display:grid;gap:28px}
 .lb{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 6px;font-size:14px;font-weight:600;color:var(--fg-2);padding:0}
 .lb i{font-style:normal;color:var(--blue)}
 .lb small{font-weight:400;color:var(--fg-3)}
-input[type=text],input[type=search],textarea{width:100%;min-height:50px;padding:12px 16px;border:1px solid #d5dbe3;border-radius:12px;background:#fff;color:var(--fg);font:500 16px/1.4 var(--font);letter-spacing:0;transition:border-color .15s;-webkit-appearance:none;appearance:none}
+input[type=text],input[type=search],input[type=email],textarea{width:100%;min-height:50px;padding:12px 16px;border:1px solid #d5dbe3;border-radius:12px;background:#fff;color:var(--fg);font:500 16px/1.4 var(--font);letter-spacing:0;transition:border-color .15s;-webkit-appearance:none;appearance:none}
 input[type=search]::-webkit-search-decoration,input[type=search]::-webkit-search-cancel-button{-webkit-appearance:none;display:none}
 textarea{min-height:140px;resize:vertical;line-height:1.6}
 input::placeholder,textarea::placeholder{color:#a3abb6}
@@ -133,6 +133,11 @@ input:focus,textarea:focus{outline:0;border-color:var(--blue)}
       <span class="err" id="eNm" hidden></span>
     </div>
     <div class="fs">
+      <label class="lb" for="em">이메일<small>선택 · 답변을 메일로 받고 싶을 때 입력해 주세요</small></label>
+      <input type="email" id="em" name="email" maxlength="120" autocomplete="email" inputmode="email" placeholder="name@company.com">
+      <span class="err" id="eEm" hidden></span>
+    </div>
+    <div class="fs">
       <label class="lb" id="sesLb" for="ses">질문 대상 <i>*</i><small>어느 발표에 대한 질문인지 골라 주세요</small></label>
       <div class="dd" id="dd">
         <button type="button" class="dd__btn ph" id="ses" aria-haspopup="listbox" aria-expanded="false" aria-controls="sesList" aria-labelledby="sesLb ses"><span class="dd__v">선택해 주세요</span></button>
@@ -146,7 +151,7 @@ input:focus,textarea:focus{outline:0;border-color:var(--blue)}
       <div style="display:flex;gap:8px"><span class="err" id="eBd" hidden></span><span class="cnt" id="cnt" style="margin-left:auto">0 / 500</span></div>
     </div>
     <div class="hp" aria-hidden="true"><label>홈페이지<input type="text" name="hp" tabindex="-1" autocomplete="off"></label></div>
-    <p class="note">회사 · 이름은 질의응답 진행에만 쓰며, 질문과 함께 행사장 화면에 표시될 수 있습니다. 행사 후 30일 이내에 삭제합니다. 시간 관계상 모든 질문에 답변드리지 못할 수 있습니다.</p>
+    <p class="note">회사 · 이름 · 이메일은 질의응답 진행과 답변 회신에만 쓰며, 회사 · 이름은 질문과 함께 행사장 화면에 표시될 수 있습니다. 행사 후 30일 이내에 삭제합니다. 시간 관계상 모든 질문에 답변드리지 못할 수 있습니다.</p>
     <div><p class="err" id="eAll" hidden style="margin-bottom:12px"></p><button class="btn" type="submit" id="sub">질문 보내기</button></div>
   </form>
 
@@ -174,7 +179,7 @@ input:focus,textarea:focus{outline:0;border-color:var(--blue)}
   let dev=ls.get('ask-dev');if(!dev){dev=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2));ls.set('ask-dev',dev);}
   const rpc=(fn,body)=>fetch(API+fn,{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json'},body:JSON.stringify(body||{})}).then(r=>{if(!r.ok)throw new Error(r.status);return r.json();});
   const SL={all:'전체',s1:'Session 1',s2:'Session 2',s3:'Session 3',s4:'Session 4 · 플랫폼 시연',demo:'Session 4 · 플랫폼 시연'};
-  const MSG={closed:'접수가 마감되었습니다.',company:'회사를 선택해 주세요',name:'이름을 입력해 주세요',session:'질문 대상을 선택해 주세요',body:'질문을 5자 이상 입력해 주세요',rate:'잠시 후 다시 보내 주세요.',dup:'같은 질문이 이미 접수되었습니다.'};
+  const MSG={closed:'접수가 마감되었습니다.',company:'회사를 선택해 주세요',name:'이름을 입력해 주세요',session:'질문 대상을 선택해 주세요',body:'질문을 5자 이상 입력해 주세요',email:'이메일 형식을 확인해 주세요',rate:'잠시 후 다시 보내 주세요.',dup:'같은 질문이 이미 접수되었습니다.'};
   function show(id){['#f','#done','#closed'].forEach(s=>$(s).hidden=s!==id);$('#hd').hidden=id!=='#f';window.scrollTo(0,0);}
   function err(k,t){const e=$('#e'+k);e.textContent=t||'';e.hidden=!t;}
 
@@ -218,9 +223,10 @@ input:focus,textarea:focus{outline:0;border-color:var(--blue)}
   list.addEventListener('click',e=>{const li=e.target.closest('li[data-i]');if(li)choose(items[+li.dataset.i]);});
 
   /* 이전 입력 기억 */
-  company=ls.get('ask-company');$('#nm').value=ls.get('ask-name');pickedView();
+  company=ls.get('ask-company');$('#nm').value=ls.get('ask-name');$('#em').value=ls.get('ask-email');pickedView();
   const cnt=()=>{const n=$('#bd').value.length;$('#cnt').textContent=n+' / 500';};
   $('#bd').addEventListener('input',()=>{cnt();$('#bd').classList.remove('bad');err('Bd');});
+  $('#em').addEventListener('input',()=>{$('#em').classList.remove('bad');err('Em');});
   $('#nm').addEventListener('input',()=>{$('#nm').classList.remove('bad');err('Nm');});
   const SD=[['all','','전체 · 특정 세션 없음','전자주주총회 전반, 도입 · 운영 문의'],['s1','Session 1.','김승준','전자주주총회 제도 도입 및 진행 관련 주요 실무 쟁점'],['s2','Session 2.','권재열','상법 개정과 전자주총이 몰고 올 기업 경영의 지각변동'],['s3','Session 3.','Scott Oakland','Proxymity, 글로벌 의결권 행사 인프라의 혁신과 미래'],['s4','Session 4.','박성용','전자주주총회 도입 · 운영 방안 및 통합 솔루션 소개 + 플랫폼 시연']];
   const CK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
@@ -251,20 +257,22 @@ input:focus,textarea:focus{outline:0;border-color:var(--blue)}
   f.addEventListener('submit',async e=>{
     e.preventDefault();err('All');
     if(!company&&inp.value.trim())company=inp.value.trim(),pickedView();
-    const p={company,name:$('#nm').value.trim(),session:sesSel.value||'',body:$('#bd').value.trim(),device:dev,hp:f.hp.value};
+    const p={company,name:$('#nm').value.trim(),session:sesSel.value||'',body:$('#bd').value.trim(),email:$('#em').value.trim(),device:dev,hp:f.hp.value};
     let first=null;
     if(!p.company){err('Co',MSG.company);inp.classList.add('bad');first=first||inp;}
     if(!p.name){err('Nm',MSG.name);$('#nm').classList.add('bad');first=first||$('#nm');}
     if(!p.session){err('Ses',MSG.session);$('#dd').classList.add('bad');first=first||ddBtn;}
+    if(p.email&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(p.email)){err('Em',MSG.email);$('#em').classList.add('bad');first=first||$('#em');}
     if(p.body.length<5){err('Bd',MSG.body);$('#bd').classList.add('bad');first=first||$('#bd');}
     if(first){first.focus();first.scrollIntoView({block:'center',behavior:'smooth'});return;}
     const b=$('#sub');b.disabled=true;b.innerHTML='<span class="spin"></span>보내는 중';
     try{
       const r=await rpc('submit_question',{p});
-      if(r.ok){ls.set('ask-company',p.company);ls.set('ask-name',p.name);
-        $('#sum').innerHTML=`<div><dt>보낸 사람</dt><dd>${esc(p.company)} ${esc(p.name)}</dd></div><div><dt>질문 대상</dt><dd>${SL[p.session]}</dd></div><div><dt>질문</dt><dd>${esc(p.body)}</dd></div>`;
+      if(r.ok){ls.set('ask-company',p.company);ls.set('ask-name',p.name);ls.set('ask-email',p.email);
+        $('#sum').innerHTML=`<div><dt>보낸 사람</dt><dd>${esc(p.company)} ${esc(p.name)}</dd></div>${p.email?'<div><dt>이메일</dt><dd>'+esc(p.email)+'</dd></div>':''}<div><dt>질문 대상</dt><dd>${SL[p.session]}</dd></div><div><dt>질문</dt><dd>${esc(p.body)}</dd></div>`;
         $('#bd').value='';cnt();sesSel.value='';sesView();show('#done');}
       else if(r.error==='closed')show('#closed');
+      else if(r.error==='email'){err('Em',MSG.email);$('#em').classList.add('bad');$('#em').focus();}
       else{err('All',MSG[r.error]||'다시 시도해 주세요.');}
     }catch(_){err('All','전송하지 못했습니다. 연결 상태를 확인하고 다시 눌러 주세요.');}
     b.disabled=false;b.textContent='질문 보내기';
