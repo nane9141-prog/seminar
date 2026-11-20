@@ -27,6 +27,7 @@ create table if not exists public.live_questions (
   updated_at  timestamptz not null default now()
 );
 create index if not exists lq_created on public.live_questions (created_at);
+alter table public.live_questions add column if not exists email text;   -- 선택: 답변 회신용
 
 create table if not exists public.qa_state (
   id          int primary key default 1 check (id = 1),
@@ -85,6 +86,7 @@ declare
   v_session text := coalesce(nullif(p->>'session',''),'all');
   v_body    text := btrim(coalesce(p->>'body',''));
   v_device  text := left(coalesce(p->>'device',''),64);
+  v_email   text := nullif(lower(btrim(coalesce(p->>'email',''))),'');
   v_id bigint; v_n int;
 begin
   if coalesce(p->>'hp','') <> '' then return jsonb_build_object('ok',true); end if;   -- 봇
@@ -95,6 +97,7 @@ begin
   if length(v_name) < 1 or length(v_name) > 30 then return jsonb_build_object('ok',false,'error','name'); end if;
   if v_session not in ('all','s1','s2','s3','s4','demo') then return jsonb_build_object('ok',false,'error','session'); end if;
   if length(v_body) < 5 or length(v_body) > 500 then return jsonb_build_object('ok',false,'error','body'); end if;
+  if v_email is not null and (length(v_email) > 120 or v_email !~ '^[^@\s]+@[^@\s]+\.[^@\s]+$') then return jsonb_build_object('ok',false,'error','email'); end if;
   if v_device <> '' then
     if (select count(*) from live_questions where device = v_device and created_at > now() - interval '1 minute') >= 3 then
       return jsonb_build_object('ok',false,'error','rate');
@@ -103,8 +106,8 @@ begin
       return jsonb_build_object('ok',false,'error','dup');
     end if;
   end if;
-  insert into live_questions(kind,company,name,session,body,device)
-    values ('live',v_company,v_name,v_session,v_body,nullif(v_device,''))
+  insert into live_questions(kind,company,name,session,body,device,email)
+    values ('live',v_company,v_name,v_session,v_body,nullif(v_device,''),v_email)
     returning id, n into v_id, v_n;
   return jsonb_build_object('ok',true,'n',v_n);
 end $$;
