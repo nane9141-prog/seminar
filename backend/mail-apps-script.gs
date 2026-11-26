@@ -29,6 +29,7 @@ const EV = {
   title: '전자주주총회 플랫폼 시연 설명회',
   date: '2026년 11월 30일(월)', time: '12:30 등록 · 13:00 ~ 18:00',
   place: '페어몬트 앰배서더 서울 지하 1층(B1) 그랜드볼룸', addr: '서울특별시 영등포구 여의대로 108',
+  app: 'https://kudos.agmlive.co.kr/appstore/juju-pass/redirect', // 현장 투표앱(주주PASS) 설치 — 기기별 자동 연결
   map: 'https://map.naver.com/p/search/%ED%8E%98%EC%96%B4%EB%AA%AC%ED%8A%B8%20%EC%95%B0%EB%B0%B0%EC%84%9C%EB%8D%94%20%EC%84%9C%EC%9A%B8',
   gcal: 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=%EC%A0%84%EC%9E%90%EC%A3%BC%EC%A3%BC%EC%B4%9D%ED%9A%8C%ED%94%8C%EB%9E%AB%ED%8F%BC%20%EC%8B%9C%EC%97%B0%20%EC%84%A4%EB%AA%85%ED%9A%8C&dates=20261130T043000Z/20261130T090000Z&location=%ED%8E%98%EC%96%B4%EB%AA%AC%ED%8A%B8%20%EC%95%B0%EB%B0%B0%EC%84%9C%EB%8D%94%20%EC%84%9C%EC%9A%B8%20B1',
   start: '20261130T040000Z', end: '20261130T090000Z',
@@ -201,7 +202,7 @@ function compose_(p) {
       lead: '전자주주총회 플랫폼 시연 설명회가 <b>11월 30일(월) 오후 1시</b>에 열립니다. 등록은 낮 12시 30분부터입니다.<br>' +
         '장소와 참석 준비사항을 다시 안내해 드리니, 행사 전에 확인해 주시기 바랍니다.',
       sign: 'IR큐더스 드림', letter: true, hero: 'header-remind.jpg?v=13',
-      card: 'full', btns: [['오시는 길', EV.map, 1]],
+      card: 'full', btns: [['오시는 길', EV.map, 1]], appqr: true,
       guide: ['check', 'timetable'], cancel: true, ics: true
     },
     invite: {
@@ -275,13 +276,25 @@ function build_(m, p, x) {
     '<p style="margin:12px 0 0;font:400 15px/1.75 ' + FONT + ';color:' + C.ink2 + '">' + m.lead + '</p>' +
     (m.sign ? '<p style="margin:20px 0 0;font:700 15px/1.6 ' + FONT + ';color:' + C.ink + '">' + m.sign + '</p>' : '') +
     (inv ? '</div>' : '') +
-    (inv ? card_(m, p) + btns + note : note + card_(m, p) + btns) + guide_(m, x) + cancel +
+    (inv ? card_(m, p) + btns + appqr_(m, x) + note : note + card_(m, p) + btns + appqr_(m, x)) + guide_(m, x) + cancel +
     '</td></tr>' +
     '<tr><td class="px ft" bgcolor="#fafbfd" style="padding:24px 40px 28px;border-top:1px solid ' + C.line + ';background:#fafbfd;border-radius:0 0 15px 15px">' +
     '<p style="margin:0;font:800 12px/1 ' + FONT + ';letter-spacing:.08em;color:' + C.ink + '">IR KUDOS</p>' +
     '<p style="margin:10px 0 0;font:400 12px/1.7 ' + FONT + ';color:' + C.ink3 + '">문의 <a href="mailto:' + EV.mail + '" style="color:' + C.ink3 + '">' + EV.mail + '</a> · 대표번호 ' + EV.phone +
     '<br>' + (m.foot || '본 메일은 ' + EV.title + ' 사전등록 신청자에게 발송되는 안내 메일입니다.') + '</p>' +
     '</td></tr></table></td></tr></table></body></html>';
+}
+
+// 현장 투표앱 설치 QR (D-3) — PC는 휴대폰으로 스캔, 모바일은 QR을 눌러 바로 설치
+function appqr_(m, x) {
+  if (!m.appqr) return '';
+  const u = EV.app;
+  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:28px 0 0;border:1px solid ' + C.box + ';border-radius:12px;border-collapse:separate"><tr><td align="center" style="padding:24px 20px;text-align:center">' +
+    '<p style="margin:0;font:700 16px/1.4 ' + FONT + ';color:' + C.ink + '">현장 투표앱 설치</p>' +
+    '<p style="margin:8px 0 0;font:400 14px/1.7 ' + FONT + ';color:' + C.ink2 + '">원활한 전자주총 시연 참석을 위해<br>현장 투표앱을 미리 설치해 주시기 바랍니다.</p>' +
+    '<a href="' + u + '" target="_blank" style="display:inline-block;margin:16px 0 0;text-decoration:none"><img src="' + x.site + 'assets/mail/app-qr.png?v=1" width="140" height="140" alt="현장 투표앱 설치 QR코드 (누르면 설치 화면으로 이동)" style="display:block;width:140px;height:140px;border:0;background:#ffffff;color:' + C.ink2 + ';font:400 12px/1.4 ' + FONT + '"></a>' +
+    '<p style="margin:12px 0 0;font:400 13px/1.6 ' + FONT + ';color:' + C.ink3 + '">PC에서는 휴대폰 카메라로 스캔하고,<br>휴대폰에서는 QR코드를 누르면 <a href="' + u + '" target="_blank" style="color:' + C.blue + ';font-weight:700;text-decoration:underline">바로 설치</a>할 수 있습니다.</p>' +
+    '</td></tr></table>';
 }
 
 function btn_(b) {
