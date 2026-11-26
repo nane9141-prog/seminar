@@ -290,7 +290,7 @@ function appqr_(m, x) {
   if (!m.appqr) return '';
   const u = EV.app;
   return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:28px 0 0;border:1px solid ' + C.box + ';border-radius:12px;border-collapse:separate"><tr><td align="center" style="padding:24px 20px;text-align:center">' +
-    '<p style="margin:0;font:700 17px/1.6 ' + FONT + ';color:' + C.ink + '">원활한 전자주총 시연 참석을 위해 현장 투표앱을<br>미리 설치해 주시기 바랍니다.</p>' +
+    '<p style="margin:0;font:700 17px/1.6 ' + FONT + ';color:' + C.ink + '">원활한 전자주총 시연 참석을 위해<br><span style="white-space:nowrap">현장 투표앱을 미리 설치해</span> <span style="white-space:nowrap">주시기 바랍니다.</span></p>' +
     '<a href="' + u + '" target="_blank" style="display:inline-block;margin:16px 0 0;text-decoration:none"><img src="' + x.site + 'assets/mail/app-qr.png?v=1" width="140" height="140" alt="현장 투표앱 설치 QR코드 (누르면 설치 화면으로 이동)" style="display:block;width:140px;height:140px;border:0;background:#ffffff;color:' + C.ink2 + ';font:400 12px/1.4 ' + FONT + '"></a>' +
     '<p style="margin:12px 0 0;font:400 13px/1.6 ' + FONT + ';color:' + C.ink3 + '">PC에서는 휴대폰 카메라로 스캔하고,<br>휴대폰에서는 QR코드를 누르면 <a href="' + u + '" target="_blank" style="color:' + C.blue + ';font-weight:700;text-decoration:underline">바로 설치</a>할 수 있습니다.</p>' +
     '</td></tr></table>';
